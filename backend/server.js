@@ -55,7 +55,16 @@ if (!MONGODB_URI) {
 const app = express();
 
 // Middleware
-app.use(cors()); // Allow all origins for development
+app.use(cors({
+  origin: [
+    'http://localhost:5173', 
+    'http://localhost:3000', 
+    'http://localhost:8080',
+    'https://airnexpro.store',
+    'https://www.airnexpro.store'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
