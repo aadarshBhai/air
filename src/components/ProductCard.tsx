@@ -40,12 +40,11 @@ const ProductCard = (props: ProductCardProps) => {
     <>
       <Card className="group overflow-hidden border-border hover:shadow-xl transition-all duration-300">
         <Link to={`/product/${props.id}`}>
-          <div className="overflow-hidden bg-muted/20" style={{ width: '2in', height: '2in', margin: '0 auto' }}>
+          <div className="overflow-hidden bg-muted/20 aspect-square sm:aspect-[4/3] lg:aspect-square">
             <img
               src={props.image}
               alt={props.name}
               className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             />
           </div>
         </Link>

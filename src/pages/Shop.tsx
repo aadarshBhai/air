@@ -13,6 +13,7 @@ const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   console.log('🛍️ Shop page - Current products:', products.map(p => ({ id: p.id, name: p.name })));
 
@@ -43,19 +44,32 @@ const Shop = () => {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
         {/* Search Bar */}
-        <div className="mb-8 flex justify-center">
+        <div className="mb-6 lg:mb-8 flex justify-center">
           <ProductSearch
             placeholder="Search products by name, category, or features..."
             onSearch={setSearchQuery}
-            className="max-w-xl w-full"
+            className="w-full max-w-md sm:max-w-lg lg:max-w-xl"
           />
         </div>
 
-        <div className="grid lg:grid-cols-4 gap-8">
+        {/* Mobile Filter Toggle */}
+        <div className="lg:hidden mb-6">
+          <button
+            onClick={() => setShowMobileFilters(!showMobileFilters)}
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg w-full justify-center"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            Filters
+          </button>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Filters Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className={`${showMobileFilters ? 'block' : 'hidden'} lg:block w-full lg:w-80 xl:w-96 flex-shrink-0`}>
             <div className="bg-card border border-border rounded-lg p-6">
               <h3 className="font-semibold mb-4">Filters</h3>
               
@@ -124,7 +138,7 @@ const Shop = () => {
           </div>
 
           {/* Products Grid */}
-          <div className="lg:col-span-3">
+          <div className="flex-1 min-w-0">
             <ProductGrid
               products={filteredProducts}
               title={filteredProducts.length === products.length ? "All Products" : "Filtered Results"}
