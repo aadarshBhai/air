@@ -25,6 +25,8 @@ const MONGODB_URI = process.env.MONGODB_URI ||
 
 const DB_NAME = process.env.DB_NAME || 'air';
 const PORT = process.env.PORT || 5000;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+const RECEIVER_EMAIL = process.env.RECEIVER_EMAIL || 'airnexpro@gmail.com';
 
 // Debug: Log environment variables (with sensitive info masked)
 console.log('Environment variables after loading:');
@@ -104,24 +106,42 @@ app.get('/', (req, res) => {
 
 // Test uploads directory
 app.get('/test-uploads', (req, res) => {
-  const uploadsPath = path.join(__dirname, 'uploads');
-  const exists = fs.existsSync(uploadsPath);
-  let files = [];
-  
-  if (exists) {
-    files = fs.readdirSync(uploadsPath);
+  try {
+    const uploadsPath = path.join(__dirname, 'uploads');
+    const exists = fs.existsSync(uploadsPath);
+    let files = [];
+    
+    if (exists) {
+      files = fs.readdirSync(uploadsPath);
+    }
+    
+    res.json({
+      uploadsPath,
+      exists,
+      files,
+      dirname: __dirname
+    });
+  } catch (error) {
+    console.error('Error checking uploads:', error);
+    res.status(500).json({ 
+      error: error.message,
+      uploadsPath: path.join(__dirname, 'uploads'),
+      dirname: __dirname
+    });
   }
-  
-  res.json({
-    uploadsPath,
-    exists,
-    files
-  });
 });
 
 // Admin routes (example)
 const adminRoutes = require('./routes/admin');
 app.use('/api/admin', adminRoutes);
+
+// Orders routes
+const ordersRoutes = require('./routes/orders');
+app.use('/api/orders', ordersRoutes);
+
+// Contact routes
+const contactRoutes = require('./routes/contact');
+app.use('/api/contact', contactRoutes);
 
 // Upload routes
 const uploadRoutes = require('./routes/upload');

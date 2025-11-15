@@ -56,16 +56,57 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
           pincode: formData.pincode,
         },
         paymentMethod: formData.paymentMethod,
-        paymentScreenshot: formData.paymentScreenshot,
+        paymentScreenshot: formData.paymentScreenshot ? {
+          name: formData.paymentScreenshot.name,
+          size: formData.paymentScreenshot.size,
+          type: formData.paymentScreenshot.type
+        } : null,
       };
+
+      // Save order to backend
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://air-couq.onrender.com'}/api/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newOrderData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save order');
+      }
+
+      // Upload payment screenshot if provided
+      if (formData.paymentScreenshot) {
+        const formDataUpload = new FormData();
+        formDataUpload.append('file', formData.paymentScreenshot);
+        formDataUpload.append('orderId', orderId);
+        formDataUpload.append('type', 'payment_screenshot');
+
+        try {
+          const uploadResponse = await fetch(`${import.meta.env.VITE_API_URL || 'https://air-couq.onrender.com'}/api/upload`, {
+            method: 'POST',
+            body: formDataUpload,
+          });
+          
+          if (uploadResponse.ok) {
+            const uploadResult = await uploadResponse.json();
+            console.log('Payment screenshot uploaded:', uploadResult.url);
+          }
+        } catch (uploadError) {
+          console.error('Failed to upload payment screenshot:', uploadError);
+          // Continue even if upload fails
+        }
+      }
 
       setOrderData(newOrderData);
       setOrderSubmitted(true);
       
-      toast.success("Order details ready! Please send to WhatsApp to complete your order.");
+      toast.success("Order placed successfully! We'll contact you soon.");
 
     } catch (error) {
-      toast.error("Failed to process order. Please try again.");
+      console.error('Order submission error:', error);
+      toast.error("Failed to place order. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -92,39 +133,53 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
       {orderSubmitted ? (
         <div className="space-y-6">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              
+              <h3 className="text-xl font-semibold text-green-600">Order Placed Successfully!</h3>
+              
+              <div className="bg-muted/30 p-4 rounded-lg">
+                <p className="text-sm text-muted-foreground mb-2">Order ID: <span className="font-mono font-semibold">{orderData.orderId}</span></p>
+                <p className="text-sm text-muted-foreground">We've received your order and will process it soon.</p>
+              </div>
+              
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">Order details:</p>
+                <div className="text-left bg-white p-3 rounded border">
+                  <p className="font-medium">{orderData.productName}</p>
+                  <p className="text-sm text-muted-foreground">₹{orderData.price}</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {orderData.customerInfo.fullName} - {orderData.customerInfo.phoneNumber}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {orderData.customerInfo.shippingAddress}, {orderData.customerInfo.city} - {orderData.customerInfo.pincode}
+                  </p>
+                </div>
+              </div>
+              
+              <Button 
+                onClick={() => {
+                  setOrderSubmitted(false);
+                  setOrderData(null);
+                  setFormData({
+                    fullName: "",
+                    email: "",
+                    phoneNumber: "",
+                    shippingAddress: "",
+                    city: "",
+                    pincode: "",
+                    paymentMethod: "upi",
+                    paymentScreenshot: null,
+                  });
+                }}
+              >
+                Create New Order
+              </Button>
             </div>
-            <h2 className="text-2xl font-bold mb-2">Order Details Ready!</h2>
-            <p className="text-muted-foreground mb-6">
-              Your order #{orderData?.orderId} has been prepared. Please send it to WhatsApp to complete your purchase.
-            </p>
-          </div>
-          
-          <WhatsAppOrderSender orderData={orderData} />
-          
-          <div className="text-center">
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setOrderSubmitted(false);
-                setOrderData(null);
-                setFormData({
-                  fullName: "",
-                  email: "",
-                  phoneNumber: "",
-                  shippingAddress: "",
-                  city: "",
-                  pincode: "",
-                  paymentMethod: "upi",
-                  paymentScreenshot: null,
-                });
-              }}
-            >
-              Create New Order
-            </Button>
           </div>
         </div>
       ) : (

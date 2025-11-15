@@ -9,24 +9,39 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
+    subject: "",
     message: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Create WhatsApp message with form data
-    const whatsappMessage = `*New Contact Form Submission*\n\n*Name:* ${formData.name}\n*Email:* ${formData.email}\n*Message:* ${formData.message}`;
-    
-    // Open WhatsApp with pre-filled message using correct number
-    const whatsappUrl = `https://wa.me/918434903291?text=${encodeURIComponent(whatsappMessage)}`;
-    window.open(whatsappUrl, '_blank');
-    
-    // Show success message and reset form
-    toast.success("Opening WhatsApp...", {
-      description: "Your message has been prepared for WhatsApp."
-    });
-    setFormData({ name: "", email: "", message: "" });
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      if (response.ok) {
+        toast.success("Message sent successfully!", {
+          description: "We'll get back to you soon."
+        });
+        setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+      } else {
+        const error = await response.json();
+        toast.error("Failed to send message", {
+          description: error.error || "Please try again later."
+        });
+      }
+    } catch (error) {
+      toast.error("Network error", {
+        description: "Please check your connection and try again."
+      });
+    }
   };
 
   return (
@@ -49,7 +64,7 @@ const Contact = () => {
           <div className="bg-card border border-border rounded-2xl p-8">
             <h2 className="text-2xl font-bold mb-6">Send us a Message</h2>
             <p className="text-sm text-muted-foreground mb-6">
-              Fill out the form below and we'll open WhatsApp with your message ready to send for quick response.
+              Fill out the form below and we'll get back to you as soon as possible.
             </p>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -78,6 +93,30 @@ const Contact = () => {
                 />
               </div>
               <div>
+                <label htmlFor="phone" className="block text-sm font-medium mb-2">
+                  Phone (Optional)
+                </label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder="Your phone number"
+                />
+              </div>
+              <div>
+                <label htmlFor="subject" className="block text-sm font-medium mb-2">
+                  Subject
+                </label>
+                <Input
+                  id="subject"
+                  value={formData.subject}
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  placeholder="What's this about?"
+                  required
+                />
+              </div>
+              <div>
                 <label htmlFor="message" className="block text-sm font-medium mb-2">
                   Message
                 </label>
@@ -91,7 +130,7 @@ const Contact = () => {
                 />
               </div>
               <Button type="submit" variant="cta" size="lg" className="w-full">
-                Send via WhatsApp
+                Send Message
               </Button>
             </form>
           </div>
@@ -147,7 +186,7 @@ const Contact = () => {
               </p>
               <div className="flex gap-4">
                 <a
-                  href="https://instagram.com/airnex"
+                  href="https://www.instagram.com/airnexpro?igsh=MTdxeGxtbmM3bm4yZw=="
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground transition-colors"

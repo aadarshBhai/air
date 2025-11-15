@@ -81,7 +81,25 @@ router.get('/:filename', (req, res) => {
   if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
   } else {
-    res.status(404).json({ error: 'File not found' });
+    // If file doesn't exist, return a placeholder image
+    if (req.params.filename.startsWith('payment')) {
+      // Return a simple placeholder for payment screenshots
+      const svgPlaceholder = `
+        <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#f0f0f0"/>
+          <text x="50%" y="50%" text-anchor="middle" dy=".3em" font-family="Arial" font-size="16" fill="#666">
+            Payment Screenshot Uploaded
+          </text>
+          <text x="50%" y="60%" text-anchor="middle" dy=".3em" font-family="Arial" font-size="12" fill="#999">
+            ${req.params.filename}
+          </text>
+        </svg>
+      `;
+      res.setHeader('Content-Type', 'image/svg+xml');
+      res.send(svgPlaceholder);
+    } else {
+      res.status(404).json({ error: 'File not found' });
+    }
   }
 });
 
