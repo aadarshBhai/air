@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductManager from "@/components/ProductManager";
 import OrdersManager from "@/components/OrdersManager";
+import ContactsManager from "@/components/ContactsManager";
 import { useProducts } from "@/contexts/ProductContext";
 
 const Admin = () => {
@@ -48,10 +49,11 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="contacts">Contacts</TabsTrigger>
             <TabsTrigger value="reviews">Reviews</TabsTrigger>
             <TabsTrigger value="coupons">Coupons</TabsTrigger>
           </TabsList>
@@ -81,6 +83,10 @@ const Admin = () => {
 
           <TabsContent value="orders">
             <OrdersManager />
+          </TabsContent>
+
+          <TabsContent value="contacts">
+            <ContactsManager />
           </TabsContent>
 
           <TabsContent value="reviews">
