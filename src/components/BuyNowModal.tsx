@@ -66,42 +66,47 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
       toast.dismiss();
       toast.success("Payment screenshot uploaded successfully!");
 
-      // Prepare WhatsApp message with all order details including screenshot URL
-      const message = `🛍️ *New Order Received*
+      // Save order to backend
+      const orderData = {
+        orderId,
+        productName: product.name,
+        price: product.price,
+        customerInfo: {
+          fullName: formData.fullName,
+          email: formData.email,
+          phoneNumber: formData.phone,
+          shippingAddress: formData.address,
+          city: formData.city,
+          pincode: formData.pincode,
+        },
+        paymentMethod: "upi",
+        paymentScreenshot: screenshotUrl,
+      };
 
-📦 *Product Details:*
-Product: ${product.name}
-Price: ₹${product.price}
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData)
+        });
 
-👤 *Customer Details:*
-Name: ${formData.fullName}
-Email: ${formData.email}
-Phone: ${formData.phone}
-
-📍 *Shipping Address:*
-Address: ${formData.address}
-City: ${formData.city}
-PIN Code: ${formData.pincode}
-
-💳 *Payment:*
-Status: Screenshot Uploaded
-Amount: ₹${product.price}
-
-📸 *Payment Screenshot:*
-${screenshotUrl}
-
-Note: Customer has uploaded payment screenshot for verification.`;
-
-      // Encode message for URL
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappNumber = "918434903291"; // Updated to correct number
-      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-
-      // Open WhatsApp
-      window.open(whatsappUrl, "_blank");
-
-      setStep("success");
-      toast.success("Order details sent to WhatsApp!");
+        if (response.ok) {
+          const savedOrder = await response.json();
+          setStep("success");
+          toast.success(`Order placed successfully! Order ID: ${orderId}`);
+        } else {
+          const error = await response.json();
+          toast.error("Failed to save order", {
+            description: error.error || "Please try again."
+          });
+        }
+      } catch (error) {
+        toast.error("Failed to save order", {
+          description: "Please check your connection and try again."
+        });
+      }
     } catch (error) {
       toast.dismiss();
       toast.error("Failed to upload screenshot. Please try again.");
