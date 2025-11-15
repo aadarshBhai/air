@@ -23,90 +23,131 @@ const readProducts = () => {
     const initialProducts = [
       {
         id: "1",
-        name: "N95 Mask Pro",
-        description: "Premium N95 respirator mask with 5-layer filtration system for maximum protection against airborne particles and pollutants.",
+        name: "N95 Anti-Pollution Mask Pro",
+        description: "Premium N95 mask with advanced filtration for maximum protection",
+        fullDescription: "Our flagship N95 mask provides superior protection against PM2.5, PM10, and harmful pollutants. Features a comfortable fit with adjustable straps and a replaceable filter system.",
         price: 499,
-        category: "masks",
-        image: "/images/n95-mask.jpg",
-        rating: 4.8,
-        reviews: 124,
+        originalPrice: 799,
+        image: "https://air-couq.onrender.com/uploads/product-mask.jpg",
+        category: "Masks",
+        rating: 5,
+        features: [
+          "99% filtration efficiency",
+          "Comfortable adjustable straps",
+          "Replaceable filter cartridges",
+          "Breathable material",
+          "CE certified"
+        ],
         inStock: true,
-        features: ["5-layer filtration", "99.97% efficiency", "Breathable design", "Adjustable nose clip"],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        createdAt: "2025-01-01T00:00:00Z",
+        updatedAt: "2025-01-01T00:00:00Z"
       },
       {
         id: "2",
         name: "Smart Air Purifier",
-        description: "Intelligent air purifier with HEPA filter and real-time air quality monitoring for clean indoor air.",
+        description: "Compact air purifier with HEPA filter and smart controls",
+        fullDescription: "Experience clean air with our smart air purifier featuring HEPA H13 filtration, air quality monitoring, and app control. Perfect for bedrooms and small offices.",
         price: 3999,
-        category: "purifiers",
-        image: "/images/air-purifier.jpg",
-        rating: 4.9,
-        reviews: 89,
+        originalPrice: 5999,
+        image: "https://air-couq.onrender.com/uploads/product-purifier.jpg",
+        category: "Air Purifiers",
+        rating: 5,
+        features: [
+          "HEPA H13 filtration",
+          "Real-time air quality display",
+          "Smart app control",
+          "Ultra-quiet operation",
+          "Energy efficient"
+        ],
         inStock: true,
-        features: ["HEPA filter", "Real-time monitoring", "Smart controls", "Silent operation"],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        createdAt: "2025-01-01T00:00:00Z",
+        updatedAt: "2025-01-01T00:00:00Z"
       },
       {
         id: "3",
-        name: "Sports Mask",
-        description: "Lightweight and breathable sports mask designed for active lifestyles with moisture-wicking technology.",
-        price: 299,
-        category: "masks",
-        image: "/images/sports-mask.jpg",
-        rating: 4.6,
-        reviews: 67,
+        name: "Professional Respirator Mask",
+        description: "Industrial-grade respirator with dual filter protection",
+        fullDescription: "Designed for maximum protection in high-pollution environments. Features dual filtration cartridges and a comfortable silicone face seal.",
+        price: 1299,
+        originalPrice: 1899,
+        image: "https://air-couq.onrender.com/uploads/product-respirator.jpg",
+        category: "Masks",
+        rating: 5,
+        features: [
+          "Dual filter cartridges",
+          "Silicone face seal",
+          "Adjustable head straps",
+          "Long-lasting filters",
+          "Professional grade"
+        ],
         inStock: true,
-        features: ["Moisture-wicking", "Lightweight", "Secure fit", "Quick-dry"],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        createdAt: "2025-01-01T00:00:00Z",
+        updatedAt: "2025-01-01T00:00:00Z"
       },
       {
         id: "4",
-        name: "Car Air Purifier",
-        description: "Compact car air purifier with dual filtration system to clean the air inside your vehicle.",
-        price: 1499,
-        category: "purifiers",
-        image: "/images/car-purifier.jpg",
-        rating: 4.5,
-        reviews: 43,
+        name: "Kids Anti-Pollution Mask",
+        description: "Specially designed comfortable mask for children",
+        fullDescription: "Keep your children safe with our specially designed kids' mask. Features fun colors, comfortable fit, and high-efficiency filtration.",
+        price: 349,
+        originalPrice: 549,
+        image: "https://air-couq.onrender.com/uploads/product-mask.jpg",
+        category: "Masks",
+        rating: 5,
+        features: [
+          "Child-friendly design",
+          "Soft breathable material",
+          "Adjustable ear loops",
+          "Fun colors available",
+          "Safe materials"
+        ],
         inStock: true,
-        features: ["Dual filtration", "Compact design", "USB powered", "LED indicator"],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        createdAt: "2025-01-01T00:00:00Z",
+        updatedAt: "2025-01-01T00:00:00Z"
       },
       {
         id: "5",
-        name: "Kids Mask Pack",
-        description: "Colorful and comfortable masks designed specifically for children with fun patterns and prints.",
-        price: 349,
-        category: "masks",
-        image: "/images/kids-mask.jpg",
-        rating: 4.7,
-        reviews: 92,
+        name: "Car Air Purifier",
+        description: "Portable air purifier for your vehicle",
+        fullDescription: "Compact car air purifier that fits in your cup holder. Features USB charging and effective air cleaning for your daily commute.",
+        price: 1499,
+        originalPrice: 2299,
+        image: "https://air-couq.onrender.com/uploads/product-purifier.jpg",
+        category: "Air Purifiers",
+        rating: 4,
+        features: [
+          "Compact cup holder design",
+          "USB powered",
+          "Negative ion technology",
+          "Low noise operation",
+          "Easy to use"
+        ],
         inStock: true,
-        features: ["Child-friendly design", "Soft material", "Adjustable ear loops", "Fun patterns"],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        createdAt: "2025-01-01T00:00:00Z",
+        updatedAt: "2025-01-01T00:00:00Z"
       },
       {
         id: "6",
-        name: "Desktop Air Monitor",
-        description: "Real-time air quality monitor that tracks PM2.5, humidity, and temperature levels.",
-        price: 1999,
-        category: "monitors",
-        image: "/images/air-monitor.jpg",
-        rating: 4.4,
-        reviews: 28,
+        name: "Replacement Filter Pack",
+        description: "Pack of 10 replacement filters for masks",
+        fullDescription: "High-quality replacement filters compatible with all AirNex masks. Pack includes 10 filters for extended protection.",
+        price: 299,
+        originalPrice: 499,
+        image: "https://air-couq.onrender.com/uploads/product-mask.jpg",
+        category: "Accessories",
+        rating: 5,
+        features: [
+          "Pack of 10 filters",
+          "Universal fit",
+          "High filtration efficiency",
+          "Easy to replace",
+          "Long shelf life"
+        ],
         inStock: true,
-        features: ["Real-time monitoring", "PM2.5 detection", "Humidity sensor", "Digital display"],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        createdAt: "2025-01-01T00:00:00Z",
+        updatedAt: "2025-01-01T00:00:00Z"
       }
     ];
-    fs.writeFileSync(PRODUCTS_FILE, JSON.stringify(initialProducts, null, 2));
     return initialProducts;
   } catch (error) {
     console.error('Error reading products:', error);
