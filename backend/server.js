@@ -106,6 +106,13 @@ app.get('/', (req, res) => {
 const adminRoutes = require('./routes/admin');
 app.use('/api/admin', adminRoutes);
 
+// Upload routes
+const uploadRoutes = require('./routes/upload');
+app.use('/api/upload', uploadRoutes);
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Start server after DB connection
 connectDB().then(() => {
   app.listen(PORT, () => {

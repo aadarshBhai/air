@@ -1,7 +1,7 @@
 export class FileUploadService {
   private static readonly UPLOAD_URL = import.meta.env.VITE_API_URL 
     ? `${import.meta.env.VITE_API_URL}/api/upload`
-    : 'https://airnexpro.store/api/upload'; // Fallback to current domain
+    : 'https://air-couq.onrender.com/api/upload'; // Fallback to production URL
 
   static async uploadPaymentScreenshot(file: File, orderId: string): Promise<string> {
     try {
@@ -30,7 +30,7 @@ export class FileUploadService {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Return a mock URL for demonstration using your domain
-      return `${import.meta.env.VITE_API_URL || 'https://airnexpro.store'}/uploads/payment${orderId}.jpg`;
+      return `${import.meta.env.VITE_API_URL || 'https://air-couq.onrender.com'}/uploads/payment${orderId}.jpg`;
     } catch (error) {
       console.error('Upload error:', error);
       throw new Error('Failed to upload payment screenshot');
