@@ -17,6 +17,8 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('📝 Submitting contact form:', formData);
+    
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/contact`, {
         method: 'POST',
@@ -26,18 +28,24 @@ const Contact = () => {
         body: JSON.stringify(formData)
       });
       
+      console.log('📡 Response status:', response.status);
+      
       if (response.ok) {
+        const data = await response.json();
+        console.log('✅ Success:', data);
         toast.success("Message sent successfully!", {
           description: "We'll get back to you soon."
         });
         setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
       } else {
         const error = await response.json();
+        console.log('❌ Error:', error);
         toast.error("Failed to send message", {
           description: error.error || "Please try again later."
         });
       }
     } catch (error) {
+      console.log('🚫 Network error:', error);
       toast.error("Network error", {
         description: "Please check your connection and try again."
       });
