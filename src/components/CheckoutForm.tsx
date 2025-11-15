@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { toast } from "sonner";
-import { WhatsAppOrderSender } from "./WhatsAppOrderSender";
 
 interface CheckoutFormProps {
   productName: string;
@@ -56,24 +55,31 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
           pincode: formData.pincode,
         },
         paymentMethod: formData.paymentMethod,
-        paymentScreenshot: formData.paymentScreenshot ? {
-          name: formData.paymentScreenshot.name,
-          size: formData.paymentScreenshot.size,
-          type: formData.paymentScreenshot.type
-        } : null,
+        paymentScreenshot: formData.paymentScreenshot,
       };
 
       // Save order to backend
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://air-couq.onrender.com'}/api/orders`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newOrderData),
+        body: JSON.stringify(newOrderData)
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to save order');
+      if (response.ok) {
+        const savedOrder = await response.json();
+        setOrderData(savedOrder.order);
+        setOrderSubmitted(true);
+        
+        toast.success("Order placed successfully!", {
+          description: `Order ID: ${orderId}. We will process your order soon.`
+        });
+      } else {
+        const error = await response.json();
+        toast.error("Failed to place order", {
+          description: error.error || "Please try again."
+        });
       }
 
       // Upload payment screenshot if provided
@@ -350,12 +356,12 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
             size="lg"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Processing Order..." : "Submit Order & Send to WhatsApp"}
+            {isSubmitting ? "Processing Order..." : "Submit Order"}
           </Button>
         </div>
         
         <p className="text-xs text-muted-foreground text-center">
-          📱 You'll receive order confirmation on WhatsApp within minutes
+          📧 You'll receive order confirmation via email
         </p>
       </form>
         </>
