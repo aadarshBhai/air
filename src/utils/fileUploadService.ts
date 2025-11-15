@@ -1,7 +1,5 @@
 export class FileUploadService {
-  private static readonly UPLOAD_URL = import.meta.env.VITE_API_URL 
-    ? `${import.meta.env.VITE_API_URL}/api/upload`
-    : 'https://air-couq.onrender.com/api/upload'; // Fallback to production URL
+  private static readonly UPLOAD_URL = `${import.meta.env.VITE_API_URL}/api/upload`;
 
   static async uploadPaymentScreenshot(file: File, orderId: string): Promise<string> {
     try {
@@ -10,9 +8,7 @@ export class FileUploadService {
       formData.append('orderId', orderId);
       formData.append('type', 'payment_screenshot');
 
-      // For demo purposes, we'll simulate the upload
-      // In production, you would make an actual API call:
-      /*
+      // Make an actual API call:
       const response = await fetch(this.UPLOAD_URL, {
         method: 'POST',
         body: formData,
@@ -24,13 +20,6 @@ export class FileUploadService {
       
       const result = await response.json();
       return result.url;
-      */
-
-      // Simulate upload delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Return a mock URL for demonstration using your domain
-      return `${import.meta.env.VITE_API_URL || 'https://air-couq.onrender.com'}/uploads/payment${orderId}.jpg`;
     } catch (error) {
       console.error('Upload error:', error);
       throw new Error('Failed to upload payment screenshot');
