@@ -102,6 +102,23 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the API' });
 });
 
+// Test uploads directory
+app.get('/test-uploads', (req, res) => {
+  const uploadsPath = path.join(__dirname, 'uploads');
+  const exists = fs.existsSync(uploadsPath);
+  let files = [];
+  
+  if (exists) {
+    files = fs.readdirSync(uploadsPath);
+  }
+  
+  res.json({
+    uploadsPath,
+    exists,
+    files
+  });
+});
+
 // Admin routes (example)
 const adminRoutes = require('./routes/admin');
 app.use('/api/admin', adminRoutes);
@@ -111,7 +128,12 @@ const uploadRoutes = require('./routes/upload');
 app.use('/api/upload', uploadRoutes);
 
 // Serve uploaded files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', (req, res, next) => {
+  console.log('📁 Serving file from uploads:', req.path);
+  const uploadsPath = path.join(__dirname, 'uploads');
+  console.log('📁 Uploads directory:', uploadsPath);
+  next();
+}, express.static(path.join(__dirname, 'uploads')));
 
 // Start server after DB connection
 connectDB().then(() => {

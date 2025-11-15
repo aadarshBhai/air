@@ -8,6 +8,7 @@ const router = express.Router();
 const uploadsDir = path.join(__dirname, '../uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log('📁 Created uploads directory:', uploadsDir);
 }
 
 // Configure multer for file uploads
@@ -34,11 +35,24 @@ const upload = multer({ storage });
 // Upload endpoint
 router.post('/', upload.single('file'), (req, res) => {
   try {
+    console.log('📤 Upload request received:', { body: req.body, file: req.file });
+    
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
     const { orderId, type } = req.body;
+    let filename;
+    
+    if (type === 'payment_screenshot') {
+      filename = `payment${orderId}.jpg`;
+    } else {
+      filename = `${Date.now()}-${req.file.originalname}`;
+    }
+    
+    console.log('📁 File saved to:', req.file.path);
+    console.log('📁 Expected filename:', filename);
+    
     let fileUrl;
 
     if (type === 'payment_screenshot') {
@@ -46,6 +60,8 @@ router.post('/', upload.single('file'), (req, res) => {
     } else {
       fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     }
+
+    console.log('🔗 File URL:', fileUrl);
 
     res.json({
       message: 'File uploaded successfully',
