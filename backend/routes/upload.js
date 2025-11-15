@@ -17,16 +17,9 @@ const storage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
-    const { orderId, type } = req.body;
-    let filename;
-    
-    if (type === 'payment_screenshot') {
-      filename = `payment${orderId}.jpg`;
-    } else {
-      filename = `${Date.now()}-${file.originalname}`;
-    }
-    
-    cb(null, filename);
+    // Use timestamp + original name initially, will be renamed later
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
   }
 });
 
@@ -42,34 +35,30 @@ router.post('/', upload.single('file'), (req, res) => {
     }
 
     const { orderId, type } = req.body;
-    let filename;
-    
-    if (type === 'payment_screenshot') {
-      filename = `payment${orderId}.jpg`;
-    } else {
-      filename = `${Date.now()}-${req.file.originalname}`;
-    }
-    
-    console.log('📁 File saved to:', req.file.path);
-    console.log('📁 Expected filename:', filename);
-    
-    let fileUrl;
+    let finalFilename = req.file.filename;
+    let fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
 
-    if (type === 'payment_screenshot') {
-      fileUrl = `${req.protocol}://${req.get('host')}/uploads/payment${orderId}.jpg`;
-    } else {
-      fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    // Rename file if it's a payment screenshot
+    if (type === 'payment_screenshot' && orderId) {
+      const oldPath = path.join(uploadsDir, req.file.filename);
+      finalFilename = `payment${orderId}.jpg`;
+      const newPath = path.join(uploadsDir, finalFilename);
+      
+      // Rename the file
+      fs.renameSync(oldPath, newPath);
+      fileUrl = `${req.protocol}://${req.get('host')}/uploads/${finalFilename}`;
+      console.log('📤 File renamed to:', finalFilename);
     }
 
-    console.log('🔗 File URL:', fileUrl);
-
-    res.json({
+    console.log('📤 Upload successful:', { filename: finalFilename, url: fileUrl });
+    
+    res.status(200).json({
       message: 'File uploaded successfully',
-      url: fileUrl,
-      filename: req.file.filename
+      filename: finalFilename,
+      url: fileUrl
     });
   } catch (error) {
-    console.error('Upload error:', error);
+    console.error('📤 Upload error:', error);
     res.status(500).json({ error: 'Failed to upload file' });
   }
 });

@@ -19,7 +19,8 @@ export class FileUploadService {
       }
       
       const result = await response.json();
-      return result.url;
+      // Use the actual filename returned by the API
+      return `${this.UPLOAD_URL.replace('/api/upload', '')}/uploads/${result.filename}`;
     } catch (error) {
       console.error('Upload error:', error);
       throw new Error('Failed to upload payment screenshot');

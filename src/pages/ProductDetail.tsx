@@ -11,7 +11,10 @@ import { toast } from "sonner";
 const ProductDetail = () => {
   const { id } = useParams();
   const { products } = useProducts();
+  const { addToCart } = useCart();
   const product = products.find(p => p.id === id);
+
+  const [showBuyModal, setShowBuyModal] = useState(false);
 
   if (!product) {
     return (
@@ -25,9 +28,6 @@ const ProductDetail = () => {
       </div>
     );
   }
-
-  const { addToCart } = useCart();
-  const [showBuyModal, setShowBuyModal] = useState(false);
 
   const handleAddToCart = () => {
     addToCart(product);
@@ -108,12 +108,14 @@ const ProductDetail = () => {
             <div className="space-y-3">
               <h3 className="font-semibold text-lg">Key Features:</h3>
               <ul className="space-y-2">
-                {product.features.map((feature, index) => (
+                {product.features ? product.features.map((feature, index) => (
                   <li key={index} className="flex items-start gap-2">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <span className="text-muted-foreground">{feature}</span>
                   </li>
-                ))}
+                )) : (
+                  <li className="text-muted-foreground">No features available</li>
+                )}
               </ul>
             </div>
 

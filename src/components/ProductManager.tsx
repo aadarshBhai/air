@@ -164,7 +164,7 @@ const ProductManager = () => {
       image: product.image,
       category: product.category,
       rating: product.rating.toString(),
-      features: product.features.join(', '),
+      features: product.features ? product.features.join(', ') : '',
       inStock: product.inStock
     });
     setIsAddDialogOpen(true);
@@ -513,7 +513,7 @@ const ProductManager = () => {
                         <span>Rating: {product.rating} ⭐</span>
                       </div>
                       <div>
-                        Features: {product.features.join(', ')}
+                        Features: {product.features ? product.features.join(', ') : 'No features'}
                       </div>
                     </div>
                   </div>

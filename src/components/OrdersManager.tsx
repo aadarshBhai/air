@@ -44,10 +44,14 @@ const OrdersManager = () => {
 
   const fetchOrders = async () => {
     try {
+      console.log('📋 Fetching orders from:', `${import.meta.env.VITE_API_URL || 'https://air-couq.onrender.com'}/api/orders`);
       const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://air-couq.onrender.com'}/api/orders`);
+      console.log('📋 Orders response status:', response.status);
       if (response.ok) {
         const data = await response.json();
+        console.log('📋 Orders data received:', data);
         setOrders(data.orders || []);
+        console.log('📋 Orders set:', data.orders?.length || 0);
       } else {
         toast.error('Failed to fetch orders');
       }

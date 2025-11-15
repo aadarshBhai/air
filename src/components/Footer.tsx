@@ -116,12 +116,9 @@ const Footer = () => {
             © 2025 AirNex. All rights reserved.
           </p>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span>We accept:</span>
-            <div className="flex gap-2">
-              <span className="px-2 py-1 bg-background border border-border rounded text-xs">Visa</span>
-              <span className="px-2 py-1 bg-background border border-border rounded text-xs">UPI</span>
-              <span className="px-2 py-1 bg-background border border-border rounded text-xs">Paytm</span>
-            </div>
+
+      
+      
           </div>
         </div>
       </div>

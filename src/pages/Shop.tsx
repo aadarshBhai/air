@@ -195,7 +195,6 @@ const Shop = () => {
               products={filteredProducts}
               title={filteredProducts.length === products.length ? "All Products" : "Filtered Results"}
               subtitle={`${filteredProducts.length} products found`}
-              itemsPerPage={8}
             />
           </div>
         </div>

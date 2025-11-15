@@ -43,6 +43,8 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
         
+        console.log('📦 Fetching products from:', `${import.meta.env.VITE_API_URL}/api/products`);
+        
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/products`, {
           method: 'GET',
           headers: {
@@ -51,11 +53,12 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
           signal: controller.signal,
         });
         
-        clearTimeout(timeoutId);
+        console.log('📦 Response status:', response.status);
         
         if (response.ok) {
           const data = await response.json();
           console.log('✅ Products fetched from API:', data.length);
+          console.log('📦 First product:', data[0]);
           setProducts(data);
           // Save to localStorage as cache
           localStorage.setItem('products', JSON.stringify(data));

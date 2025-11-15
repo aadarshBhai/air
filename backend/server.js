@@ -1,6 +1,7 @@
 // backend/server.js
 
 const path = require('path');
+const fs = require('fs');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -38,13 +39,7 @@ console.log('- DB_NAME:', DB_NAME);
 console.log('Current working directory:', process.cwd());
 console.log('__dirname:', __dirname);
 
-// Force MongoDB Atlas connection string if localhost is detected
-if (MONGODB_URI.includes('localhost') || MONGODB_URI.includes('127.0.0.1')) {
-  console.log('⚠️  Localhost detected in MONGODB_URI, forcing MongoDB Atlas connection');
-  const FORCED_URI = 'mongodb+srv://air:VOLVOROANURAG098@cluster0.lts5rjd.mongodb.net/air?retryWrites=true&w=majority';
-  console.log('Using forced MongoDB Atlas URI:', FORCED_URI.replace(/:[^:]*@/, ':***@'));
-  process.env.MONGODB_URI = FORCED_URI;
-}
+// Use MongoDB URI from environment as-is
 
 if (!MONGODB_URI) {
   console.error('❌ MongoDB URI is not defined in environment variables!');
@@ -75,21 +70,21 @@ app.use((req, res, next) => {
   next();
 });
 
-// MongoDB connection function
+// MongoDB connection function (optional)
 const connectDB = async () => {
   try {
-    console.log('🔌 Connecting to MongoDB Atlas...');
+    console.log('🔌 Attempting to connect to MongoDB...');
     const options = {
       dbName: DB_NAME,
-      serverSelectionTimeoutMS: 10000,
+      serverSelectionTimeoutMS: 5000, // Short timeout for development
     };
 
     // Disconnect any existing connections before connecting
     await mongoose.disconnect();
     
-    // Connect to MongoDB Atlas
+    // Connect to MongoDB
     const connection = await mongoose.connect(MONGODB_URI, options);
-    console.log('✅ Successfully connected to MongoDB Atlas!');
+    console.log('✅ Successfully connected to MongoDB!');
     console.log(`📊 Database: ${connection.connection.name}`);
     console.log(`🖥️  Host: ${connection.connection.host}`);
     
@@ -97,15 +92,9 @@ const connectDB = async () => {
     const collections = await connection.connection.db.listCollections().toArray();
     console.log('📋 Available collections:', collections.map(c => c.name));
   } catch (error) {
-    console.error('❌ MongoDB connection failed:', error.message);
-    console.log('🔍 Detailed error:', error);
-    console.log('\nPlease check:');
-    console.log('1. Internet connection');
-    console.log('2. Atlas cluster running');
-    console.log('3. IP whitelisted in MongoDB Atlas');
-    console.log('4. Credentials in .env are correct');
-    console.log('5. Database name is correct');
-    process.exit(1);
+    console.log('⚠️ MongoDB connection failed, continuing without database...');
+    console.log('Using file storage only');
+    // Don't throw error, just continue without MongoDB
   }
 };
 
@@ -179,8 +168,11 @@ app.use('/uploads', (req, res, next) => {
   next();
 }, express.static(path.join(__dirname, 'uploads')));
 
-// Start server after DB connection
-connectDB().then(() => {
+// Start server (MongoDB optional for development)
+connectDB().catch((err) => {
+  console.log('⚠️ MongoDB connection failed, continuing without database...');
+  console.log('Using file storage only');
+}).then(() => {
   const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     console.log(`API URL: http://localhost:${PORT}`);

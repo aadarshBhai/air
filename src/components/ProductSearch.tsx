@@ -35,8 +35,8 @@ const ProductSearch = ({
     const filtered = products.filter(product => 
       product.name.toLowerCase().includes(lowerQuery) ||
       product.description.toLowerCase().includes(lowerQuery) ||
-      product.category.toLowerCase().includes(lowerQuery) ||
-      product.features.some(feature => feature.toLowerCase().includes(lowerQuery))
+      (product.category && product.category.toLowerCase().includes(lowerQuery)) ||
+      (product.features && product.features.some(feature => feature.toLowerCase().includes(lowerQuery)))
     ).slice(0, 8); // Limit to 8 suggestions
 
     setSuggestions(filtered);

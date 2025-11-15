@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       // Make environment variables available at build time
-      'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 'https://air-couq.onrender.com'),
+      'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 'http://localhost:5000'),
     },
   };
 });
