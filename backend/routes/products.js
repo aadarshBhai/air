@@ -148,6 +148,15 @@ const readProducts = () => {
         updatedAt: "2025-01-01T00:00:00Z"
       }
     ];
+    // Try to write file but don't fail if it doesn't work
+    try {
+      if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+      }
+      fs.writeFileSync(PRODUCTS_FILE, JSON.stringify(initialProducts, null, 2));
+    } catch (writeError) {
+      console.log('Could not write products file, using memory fallback:', writeError.message);
+    }
     return initialProducts;
   } catch (error) {
     console.error('Error reading products:', error);
