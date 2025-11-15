@@ -17,7 +17,7 @@ const Shop = () => {
 
   console.log('🛍️ Shop page - Current products:', products.map(p => ({ id: p.id, name: p.name })));
 
-  const categories = ["all", ...Array.from(new Set(products.map(p => p.category)))];
+  const categories = ["all", ...Array.from(new Set(products.map(p => p.category).filter(cat => cat && cat.trim())))];
 
   let filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
