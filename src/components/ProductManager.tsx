@@ -1,16 +1,17 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Plus, Edit, Trash2, Save, X, Upload, Image as ImageIcon } from "lucide-react";
 import { useProducts } from "@/contexts/ProductContext";
 import { Product } from "@/data/products";
+import { toast } from "sonner";
 
 const ProductManager = () => {
   const { products, addProduct, updateProduct, deleteProduct } = useProducts();
@@ -81,7 +82,7 @@ const ProductManager = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     const productData = {
@@ -98,15 +99,57 @@ const ProductManager = () => {
       inStock: formData.inStock
     };
 
-    if (editingProduct) {
-      updateProduct(editingProduct.id, productData);
-      setEditingProduct(null);
-    } else {
-      addProduct(productData);
-    }
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      let response;
 
-    resetForm();
-    setIsAddDialogOpen(false);
+      if (editingProduct) {
+        // Update existing product
+        response = await fetch(`${apiUrl}/api/products/${editingProduct.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(productData)
+        });
+      } else {
+        // Create new product
+        response = await fetch(`${apiUrl}/api/products`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(productData)
+        });
+      }
+
+      if (response.ok) {
+        // Update local context
+        if (editingProduct) {
+          updateProduct(editingProduct.id, productData);
+          toast.success("Product updated successfully!");
+        } else {
+          addProduct(productData);
+          toast.success("Product added successfully!");
+        }
+        
+        resetForm();
+        setIsAddDialogOpen(false);
+        setEditingProduct(null);
+      } else {
+        throw new Error('Failed to save product');
+      }
+    } catch (error) {
+      console.error('Error saving product:', error);
+      // Fallback to local-only update
+      if (editingProduct) {
+        updateProduct(editingProduct.id, productData);
+        toast.success("Product updated locally!");
+      } else {
+        addProduct(productData);
+        toast.success("Product added locally!");
+      }
+      
+      resetForm();
+      setIsAddDialogOpen(false);
+      setEditingProduct(null);
+    }
   };
 
   const handleEdit = (product: Product) => {
@@ -127,22 +170,30 @@ const ProductManager = () => {
     setIsAddDialogOpen(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     console.log('🗑️ Attempting to delete product with ID:', id);
     console.log('📦 Current products before deletion:', products.map(p => ({ id: p.id, name: p.name })));
-    
-    // Simple alert for testing
-    alert(`Trying to delete product: ${id}`);
     
     if (window.confirm('Are you sure you want to delete this product?')) {
       console.log('✅ User confirmed deletion');
       try {
-        deleteProduct(id);
-        console.log('🗑️ deleteProduct called with ID:', id);
-        alert('Product deleted successfully!');
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await fetch(`${apiUrl}/api/products/${id}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          // Update local context
+          deleteProduct(id);
+          toast.success("Product deleted successfully!");
+        } else {
+          throw new Error('Failed to delete product');
+        }
       } catch (error) {
-        console.error('❌ Error deleting product:', error);
-        alert('Error deleting product: ' + error);
+        console.error('Error deleting product:', error);
+        // Fallback to local-only deletion
+        deleteProduct(id);
+        toast.success("Product deleted locally!");
       }
     } else {
       console.log('❌ User cancelled deletion');

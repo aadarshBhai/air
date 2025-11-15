@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Product, products as initialProducts } from '@/data/products';
 
 interface ProductContextType {
@@ -23,21 +23,46 @@ interface ProductProviderProps {
 }
 
 export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
-  // Load products from localStorage or use initial products as fallback
-  const [products, setProducts] = useState<Product[]>(() => {
-    try {
-      const savedProducts = localStorage.getItem('products');
-      if (savedProducts) {
-        return JSON.parse(savedProducts);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch products from backend API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/products`);
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data);
+          // Save to localStorage as cache
+          localStorage.setItem('products', JSON.stringify(data));
+        } else {
+          // Fallback to localStorage if API fails
+          const savedProducts = localStorage.getItem('products');
+          if (savedProducts) {
+            setProducts(JSON.parse(savedProducts));
+          } else {
+            setProducts(initialProducts);
+            localStorage.setItem('products', JSON.stringify(initialProducts));
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        // Fallback to localStorage
+        const savedProducts = localStorage.getItem('products');
+        if (savedProducts) {
+          setProducts(JSON.parse(savedProducts));
+        } else {
+          setProducts(initialProducts);
+          localStorage.setItem('products', JSON.stringify(initialProducts));
+        }
+      } finally {
+        setLoading(false);
       }
-      // Save initial products to localStorage on first load
-      localStorage.setItem('products', JSON.stringify(initialProducts));
-      return initialProducts;
-    } catch (error) {
-      console.error('Error loading products from localStorage:', error);
-      return initialProducts;
-    }
-  });
+    };
+
+    fetchProducts();
+  }, []);
 
   const addProduct = (newProduct: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
     const product: Product = {

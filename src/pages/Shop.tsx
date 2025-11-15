@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductCard from "@/components/ProductCard";
 import ProductGrid from "@/components/ProductGrid";
 import ProductSearch from "@/components/ProductSearch";
@@ -9,11 +9,18 @@ import { useProducts } from "@/contexts/ProductContext";
 
 const Shop = () => {
   const { products } = useProducts();
+  const [loading, setLoading] = useState(true);
   const [priceRange, setPriceRange] = useState([0, 12000]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
   const [searchQuery, setSearchQuery] = useState("");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  useEffect(() => {
+    if (products.length > 0) {
+      setLoading(false);
+    }
+  }, [products]);
 
   console.log('🛍️ Shop page - Current products:', products.map(p => ({ id: p.id, name: p.name })));
 
@@ -33,6 +40,30 @@ const Shop = () => {
     filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
   } else if (sortBy === "rating") {
     filteredProducts = [...filteredProducts].sort((a, b) => b.rating - a.rating);
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        <section className="bg-muted/30 py-12">
+          <div className="container mx-auto px-4">
+            <h1 className="text-4xl font-bold mb-2">Shop</h1>
+            <p className="text-muted-foreground">Loading products...</p>
+          </div>
+        </section>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="bg-gray-200 rounded-lg h-64 mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

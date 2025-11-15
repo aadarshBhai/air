@@ -135,6 +135,10 @@ app.get('/test-uploads', (req, res) => {
 const adminRoutes = require('./routes/admin');
 app.use('/api/admin', adminRoutes);
 
+// Products routes
+const productsRoutes = require('./routes/products');
+app.use('/api/products', productsRoutes);
+
 // Orders routes
 const ordersRoutes = require('./routes/orders');
 app.use('/api/orders', ordersRoutes);
