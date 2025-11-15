@@ -73,7 +73,7 @@ const ProductDetail = () => {
               <div className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm rounded-full mb-4">
                 {product.category}
               </div>
-              <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">{product.name}</h1>
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -89,14 +89,14 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <div className="flex items-baseline gap-4">
-              <span className="text-4xl font-bold text-primary">₹{product.price}</span>
+            <div className="flex items-baseline gap-2 sm:gap-4">
+              <span className="text-3xl sm:text-4xl font-bold text-primary">₹{product.price}</span>
               {product.originalPrice && (
                 <>
-                  <span className="text-xl text-muted-foreground line-through">
+                  <span className="text-lg sm:text-xl text-muted-foreground line-through">
                     ₹{product.originalPrice}
                   </span>
-                  <span className="text-lg font-semibold text-accent bg-accent/10 px-3 py-1 rounded">
+                  <span className="text-sm sm:text-lg font-semibold text-accent bg-accent/10 px-2 sm:px-3 py-1 rounded">
                     {discount}% OFF
                   </span>
                 </>
@@ -119,11 +119,21 @@ const ProductDetail = () => {
               </ul>
             </div>
 
-            <div className="flex gap-4 pt-4">
-              <Button onClick={handleAddToCart} variant="outline" size="lg" className="flex-1">
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <Button 
+                onClick={handleAddToCart} 
+                variant="outline" 
+                size="lg" 
+                className="w-full sm:w-auto flex-1 h-12 sm:h-14 text-base sm:text-lg"
+              >
                 Add to Cart
               </Button>
-              <Button onClick={handleBuyNow} variant="cta" size="lg" className="flex-1">
+              <Button 
+                onClick={handleBuyNow} 
+                variant="cta"
+                size="lg" 
+                className="w-full sm:w-auto flex-1 h-12 sm:h-14 text-base sm:text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+              >
                 Buy Now
               </Button>
             </div>

@@ -89,48 +89,26 @@ const Shop = () => {
 
   return (
     <div className="min-h-screen">
-      <section className="bg-muted/30 py-12">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-2">Shop</h1>
-          <p className="text-muted-foreground">Browse our premium pollution protection products</p>
-        </div>
-      </section>
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-        {/* Search Bar */}
-        <div className="mb-6 lg:mb-8 flex justify-center">
-          <ProductSearch
-            placeholder="Search products by name, category, or features..."
-            onSearch={setSearchQuery}
-            className="w-full max-w-md sm:max-w-lg lg:max-w-xl"
-          />
-        </div>
-
-        {/* Mobile Filter Toggle */}
-        <div className="lg:hidden mb-6">
-          <button
-            onClick={() => setShowMobileFilters(!showMobileFilters)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg w-full justify-center"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-            </svg>
-            Filters
-          </button>
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-          {/* Filters Sidebar */}
-          <div className={`${showMobileFilters ? 'block' : 'hidden'} lg:block w-full lg:w-80 xl:w-96 flex-shrink-0`}>
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h3 className="font-semibold mb-4">Filters</h3>
-              
+      {/* Filter Section - Top */}
+      <section className="bg-card border-b border-border sticky top-16 z-40 shadow-sm">
+        <div className="container mx-auto px-4 py-3 sm:py-4">
+          <div className="flex flex-col xl:flex-row gap-3 sm:gap-4">
+            {/* Search Bar - Full width on mobile, half on desktop */}
+            <div className="w-full xl:flex-1">
+              <ProductSearch
+                placeholder="Search products..."
+                onSearch={setSearchQuery}
+                className="w-full"
+              />
+            </div>
+            
+            {/* Filters Row */}
+            <div className="flex flex-wrap gap-2 sm:gap-3 items-center">
               {/* Category Filter */}
-              <div className="mb-6">
-                <h4 className="text-sm font-medium mb-3">Category</h4>
+              <div className="min-w-0 flex-1 sm:flex-initial sm:w-40">
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger>
-                    <SelectValue />
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map(cat => (
@@ -142,28 +120,28 @@ const Shop = () => {
                 </Select>
               </div>
 
-              {/* Price Range */}
-              <div className="mb-6">
-                <h4 className="text-sm font-medium mb-3">Price Range</h4>
-                <Slider
-                  value={priceRange}
-                  onValueChange={setPriceRange}
-                  max={12000}
-                  step={100}
-                  className="mb-2"
-                />
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>₹{priceRange[0]}</span>
-                  <span>₹{priceRange[1]}</span>
+              {/* Price Range - Compact on mobile */}
+              <div className="min-w-0 flex-1 sm:flex-initial sm:w-44">
+                <div className="px-2 sm:px-0">
+                  <Slider
+                    value={priceRange}
+                    onValueChange={setPriceRange}
+                    max={12000}
+                    step={100}
+                    className="mb-1"
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>₹{priceRange[0]}</span>
+                    <span>₹{priceRange[1]}</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Sort By */}
-              <div>
-                <h4 className="text-sm font-medium mb-3">Sort By</h4>
+              {/* Sort */}
+              <div className="min-w-0 flex-1 sm:flex-initial sm:w-36">
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger>
-                    <SelectValue />
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Sort" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="featured">Featured</SelectItem>
@@ -174,30 +152,45 @@ const Shop = () => {
                 </Select>
               </div>
 
-              <Button 
-                variant="outline" 
-                className="w-full mt-4"
-                onClick={() => {
-                  setPriceRange([0, 12000]);
-                  setSelectedCategory("all");
-                  setSortBy("featured");
-                  setSearchQuery("");
-                }}
-              >
-                Reset Filters
-              </Button>
+              {/* Clear Filters Button - Only show when filters are active */}
+              {(selectedCategory !== "all" || priceRange[0] > 0 || priceRange[1] < 12000 || sortBy !== "featured" || searchQuery) && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedCategory("all");
+                    setPriceRange([0, 12000]);
+                    setSortBy("featured");
+                    setSearchQuery("");
+                  }}
+                  className="whitespace-nowrap"
+                >
+                  Clear
+                </Button>
+              )}
             </div>
           </div>
-
-          {/* Products Grid */}
-          <div className="flex-1 min-w-0">
-            <ProductGrid
-              products={filteredProducts}
-              title={filteredProducts.length === products.length ? "All Products" : "Filtered Results"}
-              subtitle={`${filteredProducts.length} products found`}
-            />
-          </div>
         </div>
+      </section>
+
+      {/* Header Section */}
+      <section className="bg-muted/30 py-8">
+        <div className="container mx-auto px-4">
+          <h1 className="text-3xl lg:text-4xl font-bold mb-2">Shop</h1>
+          <p className="text-muted-foreground">Browse our premium pollution protection products</p>
+        </div>
+      </section>
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        {/* Results Count */}
+        <div className="mb-6 flex justify-between items-center">
+          <p className="text-muted-foreground">
+            Showing {filteredProducts.length} of {products.length} products
+          </p>
+        </div>
+
+        {/* Products Grid */}
+        <ProductGrid products={filteredProducts} />
       </div>
     </div>
   );
