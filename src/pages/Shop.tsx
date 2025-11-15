@@ -8,19 +8,12 @@ import { Slider } from "@/components/ui/slider";
 import { useProducts } from "@/contexts/ProductContext";
 
 const Shop = () => {
-  const { products } = useProducts();
-  const [loading, setLoading] = useState(true);
+  const { products, loading, error } = useProducts();
   const [priceRange, setPriceRange] = useState([0, 12000]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
   const [searchQuery, setSearchQuery] = useState("");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-
-  useEffect(() => {
-    if (products.length > 0) {
-      setLoading(false);
-    }
-  }, [products]);
 
   console.log('🛍️ Shop page - Current products:', products.map(p => ({ id: p.id, name: p.name })));
 
@@ -48,18 +41,46 @@ const Shop = () => {
         <section className="bg-muted/30 py-12">
           <div className="container mx-auto px-4">
             <h1 className="text-4xl font-bold mb-2">Shop</h1>
-            <p className="text-muted-foreground">Loading products...</p>
+            <p className="text-muted-foreground">Loading amazing products...</p>
           </div>
         </section>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {/* Flipkart-style loading skeleton */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-gray-200 rounded-lg h-64 mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              <div key={i} className="bg-white rounded-lg shadow-sm overflow-hidden animate-pulse">
+                <div className="bg-gray-200 h-48"></div>
+                <div className="p-4">
+                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                </div>
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && products.length === 0) {
+    return (
+      <div className="min-h-screen">
+        <section className="bg-muted/30 py-12">
+          <div className="container mx-auto px-4">
+            <h1 className="text-4xl font-bold mb-2">Shop</h1>
+            <p className="text-red-500">{error}</p>
+          </div>
+        </section>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+          <div className="text-center py-12">
+            <p className="text-muted-foreground mb-4">Unable to load products from server.</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
+            >
+              Retry
+            </button>
           </div>
         </div>
       </div>

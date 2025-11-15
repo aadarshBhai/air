@@ -55,14 +55,7 @@ if (!MONGODB_URI) {
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: [
-    'http://localhost:8080', 
-    'http://localhost:3000',
-    'https://your-netlify-site.netlify.app' // Replace with your actual Netlify URL
-  ],
-  credentials: true
-}));
+app.use(cors()); // Allow all origins for development
 app.use(express.json());
 
 // MongoDB connection function

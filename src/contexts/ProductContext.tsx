@@ -3,6 +3,8 @@ import { Product, products as initialProducts } from '@/data/products';
 
 interface ProductContextType {
   products: Product[];
+  loading: boolean;
+  error: string | null;
   addProduct: (product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateProduct: (id: string, product: Partial<Product>) => void;
   deleteProduct: (id: string) => void;
@@ -25,36 +27,52 @@ interface ProductProviderProps {
 export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch products from backend API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/products`);
+        setLoading(true);
+        setError(null);
+        
+        // Try to fetch from API first
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/products`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
         if (response.ok) {
           const data = await response.json();
+          console.log('✅ Products fetched from API:', data.length);
           setProducts(data);
           // Save to localStorage as cache
           localStorage.setItem('products', JSON.stringify(data));
         } else {
-          // Fallback to localStorage if API fails
+          throw new Error(`API responded with ${response.status}`);
+        }
+      } catch (error) {
+        console.error('Error fetching products from API:', error);
+        setError('Failed to load products from server');
+        
+        // Fallback to localStorage
+        try {
           const savedProducts = localStorage.getItem('products');
           if (savedProducts) {
-            setProducts(JSON.parse(savedProducts));
+            const cachedProducts = JSON.parse(savedProducts);
+            console.log('📦 Using cached products:', cachedProducts.length);
+            setProducts(cachedProducts);
+            setError(null); // Clear error since we have fallback
           } else {
+            console.log('📦 Using initial products');
             setProducts(initialProducts);
             localStorage.setItem('products', JSON.stringify(initialProducts));
           }
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        // Fallback to localStorage
-        const savedProducts = localStorage.getItem('products');
-        if (savedProducts) {
-          setProducts(JSON.parse(savedProducts));
-        } else {
+        } catch (localStorageError) {
+          console.error('Error reading from localStorage:', localStorageError);
           setProducts(initialProducts);
-          localStorage.setItem('products', JSON.stringify(initialProducts));
         }
       } finally {
         setLoading(false);
@@ -101,7 +119,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
   };
 
   return (
-    <ProductContext.Provider value={{ products, addProduct, updateProduct, deleteProduct }}>
+    <ProductContext.Provider value={{ products, loading, error, addProduct, updateProduct, deleteProduct }}>
       {children}
     </ProductContext.Provider>
   );
