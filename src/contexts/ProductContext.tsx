@@ -5,6 +5,8 @@ interface ProductContextType {
   products: Product[];
   loading: boolean;
   error: string | null;
+  retryCount: number;
+  retry: () => void;
   addProduct: (product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateProduct: (id: string, product: Partial<Product>) => void;
   deleteProduct: (id: string) => void;
@@ -28,21 +30,28 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   // Fetch products from backend API
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProducts = async (attempt = 1) => {
       try {
         setLoading(true);
         setError(null);
         
         // Try to fetch from API first
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+        
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/products`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
+          signal: controller.signal,
         });
+        
+        clearTimeout(timeoutId);
         
         if (response.ok) {
           const data = await response.json();
@@ -50,12 +59,20 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
           setProducts(data);
           // Save to localStorage as cache
           localStorage.setItem('products', JSON.stringify(data));
+          setRetryCount(0); // Reset retry count on success
         } else {
           throw new Error(`API responded with ${response.status}`);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching products from API:', error);
-        setError('Failed to load products from server');
+        
+        if (error.name === 'AbortError') {
+          setError('Request timed out. Please check your connection.');
+        } else if (error.message.includes('Failed to fetch')) {
+          setError('Network error. Backend may be down.');
+        } else {
+          setError(`Failed to load products: ${error.message}`);
+        }
         
         // Fallback to localStorage
         try {
@@ -80,7 +97,11 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
     };
 
     fetchProducts();
-  }, []);
+  }, [retryCount]);
+
+  const retry = () => {
+    setRetryCount(prev => prev + 1);
+  };
 
   const addProduct = (newProduct: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
     const product: Product = {
@@ -119,7 +140,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
   };
 
   return (
-    <ProductContext.Provider value={{ products, loading, error, addProduct, updateProduct, deleteProduct }}>
+    <ProductContext.Provider value={{ products, loading, error, retryCount, retry, addProduct, updateProduct, deleteProduct }}>
       {children}
     </ProductContext.Provider>
   );

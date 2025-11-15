@@ -57,6 +57,14 @@ const app = express();
 // Middleware
 app.use(cors()); // Allow all origins for development
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Set keep-alive timeout
+app.use((req, res, next) => {
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('Keep-Alive', 'timeout=5');
+  next();
+});
 
 // MongoDB connection function
 const connectDB = async () => {
@@ -92,7 +100,16 @@ const connectDB = async () => {
   }
 };
 
-// Routes
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
+// API Routes
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the API' });
 });
@@ -154,8 +171,12 @@ app.use('/uploads', (req, res, next) => {
 
 // Start server after DB connection
 connectDB().then(() => {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     console.log(`API URL: http://localhost:${PORT}`);
   });
+  
+  // Set server timeout
+  server.keepAliveTimeout = 65000; // 65 seconds
+  server.headersTimeout = 66000;   // 66 seconds
 });

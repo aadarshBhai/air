@@ -8,7 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { useProducts } from "@/contexts/ProductContext";
 
 const Shop = () => {
-  const { products, loading, error } = useProducts();
+  const { products, loading, error, retry } = useProducts();
   const [priceRange, setPriceRange] = useState([0, 12000]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
@@ -76,7 +76,7 @@ const Shop = () => {
           <div className="text-center py-12">
             <p className="text-muted-foreground mb-4">Unable to load products from server.</p>
             <button 
-              onClick={() => window.location.reload()} 
+              onClick={retry} 
               className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
             >
               Retry
