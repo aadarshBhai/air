@@ -29,7 +29,7 @@ const Home = () => {
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
               Breathe Smart.
               <br />
-              <span className="text-primary">Live Better.</span>
+              <span className="text-black">Live Better.</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground">
               AirNex brings you cutting-edge anti-pollution masks designed for India's urban environments. 
