@@ -18,7 +18,7 @@ const sendOrderEmail = async (orderData) => {
   try {
     console.log('📧 Creating email transporter for order...');
     const transporter = createTransporter();
-    const receiverEmail = process.env.RECEIVER_EMAIL || 'airnexpro@gmail.com';
+    const receiverEmail = process.env.RECEIVER_EMAIL || 'theairnexpro@gmail.com';
     
     const mailOptions = {
       from: process.env.SMTP_FROM || process.env.SMTP_USER,
@@ -73,7 +73,7 @@ const sendContactEmail = async (contactData) => {
   try {
     console.log('📧 Creating email transporter for contact form...');
     const transporter = createTransporter();
-    const receiverEmail = process.env.RECEIVER_EMAIL || 'airnexpro@gmail.com';
+    const receiverEmail = process.env.RECEIVER_EMAIL || 'theairnexpro@gmail.com';
     
     console.log('📧 SMTP Config:', {
       host: process.env.SMTP_HOST || 'smtp.gmail.com',

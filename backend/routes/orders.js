@@ -121,4 +121,42 @@ router.patch('/:orderId/status', (req, res) => {
   }
 });
 
+// DELETE order
+router.delete('/:orderId', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    console.log('🗑️ Deleting order:', orderId);
+    
+    // Read existing orders
+    const orders = readOrders();
+    
+    // Find and remove the order
+    const initialLength = orders.length;
+    const filteredOrders = orders.filter(order => order.orderId !== orderId);
+    
+    if (filteredOrders.length === initialLength) {
+      return res.status(404).json({ 
+        success: false,
+        error: 'Order not found' 
+      });
+    }
+    
+    // Save updated orders
+    writeOrders(filteredOrders);
+    
+    console.log('✅ Order deleted successfully:', orderId);
+    
+    res.json({ 
+      success: true,
+      message: 'Order deleted successfully'
+    });
+  } catch (error) {
+    console.error('❌ Error deleting order:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to delete order' 
+    });
+  }
+});
+
 module.exports = router;

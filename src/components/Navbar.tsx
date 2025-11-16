@@ -2,12 +2,11 @@ import { Link } from "react-router-dom";
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ShoppingCart } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
+import { Menu } from "lucide-react";
+import CartDropdown from "@/components/CartDropdown";
 import logo from "/logo.png";
 
 const Navbar = () => {
-  const { totalItems } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   
   return (
@@ -83,15 +82,8 @@ const Navbar = () => {
             </Sheet>
           </div>
 
-          {/* Cart Button - Always Visible */}
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">
-                {totalItems}
-              </span>
-            </Button>
-          </div>
+          {/* Cart Dropdown - Always Visible */}
+          <CartDropdown />
         </div>
       </div>
     </nav>

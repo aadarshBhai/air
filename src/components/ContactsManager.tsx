@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Mail, Phone, Clock, CheckCircle } from "lucide-react";
+import { MessageSquare, Mail, Phone, Clock, CheckCircle, Trash2 } from "lucide-react";
 
 interface Contact {
   id: string;
@@ -45,6 +45,27 @@ const ContactsManager = () => {
           : contact
       )
     );
+  };
+
+  const deleteContact = async (contactId: string) => {
+    if (!window.confirm('Are you sure you want to delete this contact message?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/contact/${contactId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setContacts(prev => prev.filter(contact => contact.id !== contactId));
+        console.log('Contact deleted successfully');
+      } else {
+        console.error('Failed to delete contact');
+      }
+    } catch (error) {
+      console.error('Error deleting contact:', error);
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -160,6 +181,13 @@ const ContactsManager = () => {
                       onClick={() => window.open(`mailto:${contact.email}?subject=Re: ${contact.subject}`)}
                     >
                       Reply via Email
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => deleteContact(contact.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>

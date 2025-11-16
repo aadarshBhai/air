@@ -27,7 +27,7 @@ const MONGODB_URI = process.env.MONGODB_URI ||
 const DB_NAME = process.env.DB_NAME || 'air';
 const PORT = process.env.PORT || 5000;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
-const RECEIVER_EMAIL = process.env.RECEIVER_EMAIL || 'airnexpro@gmail.com';
+const RECEIVER_EMAIL = process.env.RECEIVER_EMAIL || 'theairnexpro@gmail.com';
 
 // Debug: Log environment variables (with sensitive info masked)
 console.log('Environment variables after loading:');

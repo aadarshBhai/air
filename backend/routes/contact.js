@@ -116,4 +116,48 @@ router.post('/', async (req, res) => {
   }
 });
 
+// DELETE contact message
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log('🗑️ Deleting contact message:', id);
+    
+    // Read existing contacts
+    const contactsPath = path.join(__dirname, '../data/contacts.json');
+    let contacts = [];
+    
+    if (fs.existsSync(contactsPath)) {
+      const data = fs.readFileSync(contactsPath, 'utf8');
+      contacts = JSON.parse(data);
+    }
+    
+    // Remove the contact with matching id
+    const initialLength = contacts.length;
+    contacts = contacts.filter(contact => contact.id !== id);
+    
+    if (contacts.length === initialLength) {
+      return res.status(404).json({ 
+        success: false,
+        error: 'Contact message not found' 
+      });
+    }
+    
+    // Save updated contacts
+    fs.writeFileSync(contactsPath, JSON.stringify(contacts, null, 2));
+    
+    console.log('✅ Contact message deleted successfully:', id);
+    
+    res.json({ 
+      success: true,
+      message: 'Contact message deleted successfully'
+    });
+  } catch (error) {
+    console.error('❌ Error deleting contact message:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to delete contact message' 
+    });
+  }
+});
+
 module.exports = router;

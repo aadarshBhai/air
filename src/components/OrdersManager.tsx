@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Search, Eye, Download, CheckCircle, Truck, Package } from 'lucide-react';
+import { Search, Eye, Download, CheckCircle, Truck, Package, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Order {
@@ -82,6 +82,28 @@ const OrdersManager = () => {
     } catch (error) {
       console.error('Error updating order status:', error);
       toast.error('Failed to update order status');
+    }
+  };
+
+  const deleteOrder = async (orderId: string) => {
+    if (!window.confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://air-couq.onrender.com'}/api/orders/${orderId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        toast.success('Order deleted successfully');
+        fetchOrders(); // Refresh orders
+      } else {
+        toast.error('Failed to delete order');
+      }
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      toast.error('Failed to delete order');
     }
   };
 
@@ -239,6 +261,14 @@ const OrdersManager = () => {
                         <Download className="w-4 h-4" />
                       </Button>
                     )}
+                    
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => deleteOrder(order.orderId)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
                 
