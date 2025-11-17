@@ -60,6 +60,18 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
     }
   };
 
+  const handleUpiAppClick = async (appName: string) => {
+    // Copy UPI ID first
+    try {
+      await navigator.clipboard.writeText(upiId);
+      toast.success(`UPI ID copied! Open ${appName} and paste the ID to pay ₹${product.price}`, {
+        duration: 5000
+      });
+    } catch (error) {
+      toast.error("Failed to copy UPI ID");
+    }
+  };
+
   const copyUpiId = async () => {
     try {
       await navigator.clipboard.writeText(upiId);
@@ -253,14 +265,14 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
                   <Smartphone className="w-8 h-8 text-blue-600 mr-2" />
                   <h3 className="text-xl font-bold text-gray-800">Pay via UPI</h3>
                 </div>
-                <div className="bg-white rounded-lg p-4 mb-4 border-2 border-dashed border-blue-300">
+                <div className="bg-white rounded-lg p-3 mb-4 border-2 border-dashed border-blue-300">
                   <p className="text-sm text-gray-600 mb-1">UPI ID</p>
-                  <p className="text-2xl font-bold text-blue-600 mb-3">{upiId}</p>
+                  <p className="text-lg font-bold text-blue-600 break-all">{upiId}</p>
                   <Button 
                     onClick={copyUpiId} 
                     variant="outline" 
                     size="sm"
-                    className="w-full"
+                    className="w-full mt-2"
                   >
                     <Copy className="w-4 h-4 mr-2" />
                     Copy UPI ID
@@ -278,11 +290,7 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
                       key={app.name}
                       variant="outline"
                       className="h-16 flex flex-col items-center justify-center hover:scale-105 transition-transform"
-                      onClick={() => {
-                        // Open UPI app with payment URL
-                        const upiUrl = `upi://pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
-                        window.open(upiUrl, '_blank');
-                      }}
+                      onClick={() => handleUpiAppClick(app.name)}
                     >
                       <span className="text-2xl mb-1">{app.icon}</span>
                       <span className="text-xs font-medium">{app.name}</span>
@@ -303,10 +311,18 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
                 </div>
               </div>
 
-              {/* Payment Confirmation */}
-              <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
-                <p className="text-sm text-green-800 text-center">
-                  After completing payment, upload the screenshot in the next step to confirm your order.
+              {/* Payment Instructions */}
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                <h4 className="font-semibold text-blue-800 mb-2 text-center">How to Pay:</h4>
+                <ol className="text-sm text-blue-700 space-y-1">
+                  <li>1. Click any UPI app button above</li>
+                  <li>2. UPI ID will be copied automatically</li>
+                  <li>3. Open your UPI app and paste the ID</li>
+                  <li>4. Enter amount: ₹{product.price}</li>
+                  <li>5. Complete payment and upload screenshot</li>
+                </ol>
+                <p className="text-xs text-blue-600 mt-2 text-center">
+                  💡 On mobile: UPI apps will open automatically
                 </p>
               </div>
 
