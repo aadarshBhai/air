@@ -55,12 +55,58 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
   };
 
   const handleUpiAppClick = async (appName: string) => {
-    // Copy UPI ID first
+    // Copy UPI ID first (works for both mobile and desktop)
     try {
       await navigator.clipboard.writeText(upiId);
-      toast.success(`UPI ID copied! Open ${appName} and paste the ID to pay ₹${product.price}`, {
-        duration: 5000
-      });
+      
+      // Check if mobile device
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        // App-specific UPI URLs for better compatibility
+        let upiUrl = `upi://pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+        
+        switch(appName.toLowerCase()) {
+          case 'google pay':
+            upiUrl = `tez://upi/pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            break;
+          case 'phonepe':
+            upiUrl = `phonepe://pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            break;
+          case 'paytm':
+            upiUrl = `paytmmp://pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            break;
+          case 'navi':
+            upiUrl = `navi://upi/pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            break;
+          case 'amazon pay':
+            upiUrl = `amazonpay://upi/pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            break;
+          case 'bhim upi':
+            upiUrl = `bhim://upi/pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            break;
+        }
+        
+        // Try to open the app-specific URL
+        window.location.href = upiUrl;
+        
+        // Show toast with fallback instructions
+        toast.success(`Opening ${appName}... If app doesn't open, UPI ID copied: ${upiId}`, {
+          duration: 6000
+        });
+        
+        // Fallback: try generic UPI URL after 2 seconds
+        setTimeout(() => {
+          const fallbackUrl = `upi://pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+          window.location.href = fallbackUrl;
+        }, 2000);
+        
+      } else {
+        // Desktop - show copy instructions
+        toast.success(`UPI ID copied! Open ${appName} and pay ₹${product.price}`, {
+          duration: 5000
+        });
+      }
     } catch (error) {
       toast.error("Failed to copy UPI ID");
     }
@@ -314,13 +360,14 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
                 <h4 className="font-semibold text-blue-800 mb-2 text-center">How to Pay:</h4>
                 <ol className="text-sm text-blue-700 space-y-1">
                   <li>1. Click any UPI app button above</li>
-                  <li>2. UPI ID will be copied automatically</li>
-                  <li>3. Open your UPI app and paste the ID</li>
-                  <li>4. Enter amount: ₹{product.price}</li>
-                  <li>5. Complete payment and upload screenshot</li>
+                  <li>2. <strong>Mobile:</strong> App opens automatically | <strong>Desktop:</strong> UPI ID copied</li>
+                  <li>3. Pay amount: ₹{product.price}</li>
+                  <li>4. Complete payment and upload screenshot</li>
                 </ol>
                 <p className="text-xs text-blue-600 mt-2 text-center">
-                  💡 On mobile: UPI apps will open automatically
+                  📱 Mobile users: Apps will open automatically
+                  <br />
+                  💻 Desktop users: Copy UPI ID and paste in your app
                 </p>
               </div>
 
