@@ -1,23 +1,6 @@
 {
   "orders": [
     {
-      "orderId": "ORD1763224042599",
-      "productName": "tum",
-      "price": 500,
-      "customerInfo": {
-        "fullName": "Aadarsh Kumar",
-        "email": "aadarshgolucky@gmail.com",
-        "phoneNumber": "07050819323",
-        "shippingAddress": "Patna, Bihar\nJehanabad , Bihar",
-        "city": "Patna",
-        "pincode": "804454"
-      },
-      "paymentMethod": "upi",
-      "paymentScreenshot": "http://localhost:5000/uploads/paymentORD1763224042599.jpg",
-      "createdAt": "2025-11-15T16:27:22.808Z",
-      "status": "pending"
-    },
-    {
       "orderId": "ORD1763224192486",
       "productName": "tum",
       "price": 500,

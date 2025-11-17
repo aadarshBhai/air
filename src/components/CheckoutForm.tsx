@@ -276,7 +276,7 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
           
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Payment Method *</label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="flex items-center space-x-2">
               <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="radio"
@@ -286,28 +286,48 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
                   onChange={handleChange}
                   className="text-primary"
                 />
-                <span className="text-sm">UPI</span>
-              </label>
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="bank_transfer"
-                  checked={formData.paymentMethod === "bank_transfer"}
-                  onChange={handleChange}
-                  className="text-primary"
-                />
-                <span className="text-sm">Bank Transfer</span>
+                <span className="text-sm font-medium">UPI Payment</span>
               </label>
             </div>
           </div>
 
-          <div className="bg-muted/30 p-4 rounded-lg mb-4">
-            <h4 className="font-medium mb-2">Payment Details</h4>
-            <div className="text-sm space-y-1">
-              <p><strong>UPI ID:</strong> yourbusiness@paytm</p>
-              <p><strong>Bank Account:</strong> XXXX-XXXX-XXXX-1234</p>
-              <p><strong>IFSC:</strong> HDFC0001234</p>
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
+            <h4 className="font-medium mb-3 text-center">Payment Details</h4>
+            <div className="text-center space-y-3">
+              <div className="bg-white rounded-lg p-3 border-2 border-dashed border-blue-300">
+                <p className="text-sm text-gray-600 mb-1">UPI ID</p>
+                <p className="text-xl font-bold text-blue-600">theairnexpro@okicici</p>
+              </div>
+              <div className="text-sm text-gray-700">
+                <p>Amount to pay: <span className="font-bold text-lg">₹{price}</span></p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
+                <div className="bg-blue-100 rounded p-2 text-center">
+                  <span className="text-lg">💰</span>
+                  <p className="text-xs font-medium">Google Pay</p>
+                </div>
+                <div className="bg-purple-100 rounded p-2 text-center">
+                  <span className="text-lg">🔵</span>
+                  <p className="text-xs font-medium">PhonePe</p>
+                </div>
+                <div className="bg-cyan-100 rounded p-2 text-center">
+                  <span className="text-lg">💸</span>
+                  <p className="text-xs font-medium">Paytm</p>
+                </div>
+                <div className="bg-orange-100 rounded p-2 text-center">
+                  <span className="text-lg">🟠</span>
+                  <p className="text-xs font-medium">Amazon Pay</p>
+                </div>
+                <div className="bg-green-100 rounded p-2 text-center">
+                  <span className="text-lg">🇮🇳</span>
+                  <p className="text-xs font-medium">BHIM UPI</p>
+                </div>
+                <div className="bg-gray-100 rounded p-2 text-center">
+                  <span className="text-lg">📱</span>
+                  <p className="text-xs font-medium">Others</p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-600 mt-2">Use any UPI app to pay with the UPI ID above</p>
             </div>
           </div>
 

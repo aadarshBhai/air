@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Product } from "@/data/products";
 import { toast } from "sonner";
-import { Upload, CheckCircle, ArrowRight, ArrowLeft } from "lucide-react";
+import { Upload, CheckCircle, ArrowRight, ArrowLeft, Smartphone, Copy } from "lucide-react";
 import upiQR from "@/assets/upi-qr.jpg";
 import { FileUploadService } from "@/utils/fileUploadService";
 
@@ -28,6 +28,16 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
   });
   const [screenshot, setScreenshot] = useState<File | null>(null);
 
+  // UPI payment details
+  const upiId = "theairnexpro@okicici"; // Your UPI ID
+  const upiApps = [
+    { name: "Google Pay", icon: "💰", color: "bg-blue-500" },
+    { name: "PhonePe", icon: "🔵", color: "bg-purple-500" },
+    { name: "Paytm", icon: "💸", color: "bg-cyan-500" },
+    { name: "Amazon Pay", icon: "🟠", color: "bg-orange-500" },
+    { name: "BHIM UPI", icon: "🇮🇳", color: "bg-green-500" },
+  ];
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -47,6 +57,15 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setScreenshot(e.target.files[0]);
+    }
+  };
+
+  const copyUpiId = async () => {
+    try {
+      await navigator.clipboard.writeText(upiId);
+      toast.success("UPI ID copied to clipboard!");
+    } catch (error) {
+      toast.error("Failed to copy UPI ID");
     }
   };
 
@@ -225,25 +244,74 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
         {step === "payment" && (
           <>
             <DialogHeader>
-              <DialogTitle className="text-2xl">Payment</DialogTitle>
+              <DialogTitle className="text-2xl">Complete Your Payment</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4 py-4 text-center">
-              <div className="bg-muted/30 p-6 rounded-lg">
-                <div className="w-64 h-64 mx-auto bg-white rounded-lg flex items-center justify-center border-2 border-border p-3">
+            <div className="space-y-6 py-4">
+              {/* UPI ID Display */}
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-xl p-6 text-center">
+                <div className="flex items-center justify-center mb-3">
+                  <Smartphone className="w-8 h-8 text-blue-600 mr-2" />
+                  <h3 className="text-xl font-bold text-gray-800">Pay via UPI</h3>
+                </div>
+                <div className="bg-white rounded-lg p-4 mb-4 border-2 border-dashed border-blue-300">
+                  <p className="text-sm text-gray-600 mb-1">UPI ID</p>
+                  <p className="text-2xl font-bold text-blue-600 mb-3">{upiId}</p>
+                  <Button 
+                    onClick={copyUpiId} 
+                    variant="outline" 
+                    size="sm"
+                    className="w-full"
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy UPI ID
+                  </Button>
+                </div>
+                <p className="text-sm text-gray-600">Amount to pay: <span className="font-bold text-lg">₹{product.price}</span></p>
+              </div>
+
+              {/* UPI Apps Grid */}
+              <div>
+                <h4 className="text-lg font-semibold mb-4 text-center">Choose Your UPI App</h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {upiApps.map((app) => (
+                    <Button
+                      key={app.name}
+                      variant="outline"
+                      className="h-16 flex flex-col items-center justify-center hover:scale-105 transition-transform"
+                      onClick={() => {
+                        // Open UPI app with payment URL
+                        const upiUrl = `upi://pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+                        window.open(upiUrl, '_blank');
+                      }}
+                    >
+                      <span className="text-2xl mb-1">{app.icon}</span>
+                      <span className="text-xs font-medium">{app.name}</span>
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {/* QR Code as backup */}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <p className="text-sm text-gray-600 text-center mb-3">Or scan QR code if UPI apps don't open</p>
+                <div className="w-48 h-48 mx-auto bg-white rounded-lg flex items-center justify-center border-2 border-gray-300 p-2">
                   <img 
                     src={upiQR} 
                     alt="UPI QR Code for Payment" 
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <p className="mt-4 text-lg font-semibold">Scan to Pay ₹{product.price}</p>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Use any UPI app to scan and complete payment
+              </div>
+
+              {/* Payment Confirmation */}
+              <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+                <p className="text-sm text-green-800 text-center">
+                  After completing payment, upload the screenshot in the next step to confirm your order.
                 </p>
               </div>
 
               <Button onClick={handlePaymentDone} className="w-full" size="lg" variant="cta">
-                I've Completed Payment
+                I've Completed Payment →
               </Button>
             </div>
           </>
