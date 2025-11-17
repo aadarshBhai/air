@@ -296,7 +296,7 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
             <div className="text-center space-y-3">
               <div className="bg-white rounded-lg p-3 border-2 border-dashed border-blue-300">
                 <p className="text-sm text-gray-600 mb-1">UPI ID</p>
-                <p className="text-lg font-bold text-blue-600 break-all">theairnexpro@okicici</p>
+                <p className="text-lg font-bold text-blue-600 break-all">7050819323@naviaxis</p>
               </div>
               <div className="text-sm text-gray-700">
                 <p>Amount to pay: <span className="font-bold text-lg">₹{price}</span></p>

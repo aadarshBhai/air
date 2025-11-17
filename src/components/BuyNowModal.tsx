@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Product } from "@/data/products";
 import { toast } from "sonner";
-import { Upload, CheckCircle, ArrowRight, ArrowLeft, Smartphone, Copy } from "lucide-react";
-import upiQR from "@/assets/upi-qr.jpg";
+import { Upload, Copy, Smartphone, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
+import upiQR from "@/assets/upi-qr_backup.jpg";
+import { upiApps } from "@/assets/upi-logos";
 import { FileUploadService } from "@/utils/fileUploadService";
 
 interface BuyNowModalProps {
@@ -29,14 +30,7 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
   const [screenshot, setScreenshot] = useState<File | null>(null);
 
   // UPI payment details
-  const upiId = "theairnexpro@okicici"; // Your UPI ID
-  const upiApps = [
-    { name: "Google Pay", icon: "💰", color: "bg-blue-500" },
-    { name: "PhonePe", icon: "🔵", color: "bg-purple-500" },
-    { name: "Paytm", icon: "💸", color: "bg-cyan-500" },
-    { name: "Amazon Pay", icon: "🟠", color: "bg-orange-500" },
-    { name: "BHIM UPI", icon: "🇮🇳", color: "bg-green-500" },
-  ];
+  const upiId = "7050819323@naviaxis"; // Your UPI ID
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -292,7 +286,11 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
                       className="h-16 flex flex-col items-center justify-center hover:scale-105 transition-transform"
                       onClick={() => handleUpiAppClick(app.name)}
                     >
-                      <span className="text-2xl mb-1">{app.icon}</span>
+                      <img 
+                        src={app.logo} 
+                        alt={app.name}
+                        className="w-6 h-6 mb-1 object-contain"
+                      />
                       <span className="text-xs font-medium">{app.name}</span>
                     </Button>
                   ))}
