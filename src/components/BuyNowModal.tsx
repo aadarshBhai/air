@@ -62,56 +62,44 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
 
   const handleUpiAppClick = async (appName: string) => {
     try {
-      await navigator.clipboard.writeText(upiId);
+      // Extract product details
+      const price = product.price;
+      const productName = product.name;
       
-      // Enhanced mobile detection
+      // Generate UPI link using exact required format
+      const upiLink = `upi://pay?pa=9065588337ayush@ybl&pn=Ayush Store&am=${price}&cu=INR&tn=${encodeURIComponent(productName)}`;
+      
+      // Console logs for debugging
+      console.log('Final UPI Link:', upiLink);
+      console.log('Product Name:', productName);
+      console.log('Amount:', price);
+      console.log('Encoded Product Name:', encodeURIComponent(productName));
+      
+      // Device detection
       const userAgent = navigator.userAgent.toLowerCase();
       const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-      const isAndroid = /android/i.test(userAgent);
-      const isIOS = /iphone|ipad|ipod/i.test(userAgent);
       
-      console.log('Device detection:', { isMobile, isAndroid, isIOS, userAgent });
+      console.log('Device detection:', { isMobile, userAgent });
       
       if (isMobile) {
-        // Generate UPI link with iOS-specific base URL
-        const price = product.price;
-        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        // Mobile: Open UPI link directly
+        window.location.href = upiLink;
         
-        const baseURL = isIOS
-          ? "gpay://upi/pay"
-          : "upi://pay";
-        
-        const upiLink = `${baseURL}?pa=9065588337ayush@ybl&pn=Ayush Store&am=${price}&cu=INR&tn=${encodeURIComponent(product.name)}`;
-        
-        console.log('Generated UPI Link:', upiLink);
-        console.log('Amount parameter:', price);
-        console.log('Product name:', product.name);
-        console.log('Base URL:', baseURL);
-        
-        if (isIOS) {
-          // Show copy UPI ID modal
-          alert("UPI apps are not supported on iPhone. Please copy the UPI ID: 9065588337ayush@ybl");
-        } else {
-          // Open UPI link normally
-          window.location.href = upiLink;
-          
-          // Show success message
-          toast.success(`Opening ${appName}... Pay ₹${price} to ${upiId}`, {
-            duration: 5000
-          });
-        }
-        
+        // Show success message
+        toast.success(`Opening UPI app... Pay ₹${price}`, {
+          duration: 5000
+        });
       } else {
-        // Desktop - show copy instructions with mobile guidance
-        console.log('Desktop detected, copying UPI ID');
-        toast.success(`UPI ID copied! Please use your mobile to open ${appName} and pay ₹${product.price}`, {
+        // Desktop: Show QR or copy UPI ID message
+        toast.info("Scan QR code or copy UPI ID to make payment", {
           description: "UPI apps work on mobile devices only",
           duration: 6000
         });
       }
+      
     } catch (error) {
       console.error('Error in UPI app click:', error);
-      toast.error("Failed to copy UPI ID");
+      toast.error("Failed to process UPI payment");
     }
   };
 
