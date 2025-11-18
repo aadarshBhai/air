@@ -9,5 +9,5 @@ console.log('WhatsAppService:', WhatsAppService);
 console.log('WHATSAPP_NUMBER:', WhatsAppService.WHATSAPP_NUMBER);
 
 // Test URL creation
-const testUrl = `https://wa.me/8544635259?text=Hello`;
+const testUrl = `https://wa.me/918544635259?text=Hello`;
 console.log('Test URL:', testUrl);
