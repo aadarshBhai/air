@@ -112,13 +112,6 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
             duration: 6000
           });
           
-          // Fallback: try universal UPI link after 3 seconds
-          setTimeout(() => {
-            const universalUrl = `https://upi.pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
-            console.log('Trying universal UPI URL:', universalUrl);
-            window.location.href = universalUrl;
-          }, 3000);
-          
           // Additional fallback: Show manual instructions if apps don't open
           setTimeout(() => {
             toast.error(`If ${appName} didn't open, please open it manually and pay ₹${amount} to ${upiId}`, {
