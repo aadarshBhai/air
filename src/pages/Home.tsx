@@ -26,12 +26,12 @@ const Home = () => {
         
         <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center relative">
           <div className="space-y-6 animate-fade-in">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-tight tracking-tight">
               Breathe Smart.
               <br />
-              <span className="text-black">Live Better.</span>
+              <span className="text-primary">Live Better.</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground">
+            <p className="text-xl md:text-2xl text-muted-foreground font-bold leading-relaxed">
               AirNex brings you cutting-edge anti-pollution masks designed for India's urban environments. 
               Breathe clean air wherever you go with our premium filtration technology.
             </p>
@@ -49,7 +49,7 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12">
             <div className="space-y-4">
-              <h2 className="text-2xl md:text-3xl font-bold text-secondary">The Problem</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-secondary mb-4">The Problem</h2>
               <p className="text-muted-foreground">
                 Air pollution in India has reached critical levels, affecting millions of lives daily.
                 PM2.5 particles, harmful gases, and pollutants pose serious health risks.
@@ -70,7 +70,7 @@ const Home = () => {
               </div>
             </div>
             <div className="space-y-4">
-              <h2 className="text-2xl md:text-3xl font-bold text-primary">Our Solution</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-primary mb-4">Our Solution</h2>
               <p className="text-muted-foreground">
                 AirNex masks provide advanced protection with multi-layer filtration technology.
                 Designed for comfort, style, and maximum effectiveness against pollutants.
@@ -98,7 +98,7 @@ const Home = () => {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">Find Your Perfect Protection</h2>
+            <h2 className="text-3xl md:text-4xl font-black mb-4">Find Your Perfect Protection</h2>
             <p className="text-muted-foreground text-base md:text-lg mb-8">
               Search through our complete collection of anti-pollution products
             </p>
@@ -134,35 +134,35 @@ const Home = () => {
       <section className="relative bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 py-16 md:py-20">
         <div className="container mx-auto px-4 relative">
           <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose AirNex?</h2>
+            <h2 className="text-3xl md:text-4xl font-black mb-4">Why Choose AirNex?</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             <div className="text-center space-y-4">
               <div className="w-12 h-12 md:w-16 md:h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
                 <Shield className="h-6 w-6 md:h-8 md:w-8 text-primary" />
               </div>
-              <h3 className="font-semibold text-base md:text-lg">Premium Quality</h3>
+              <h3 className="font-bold text-base md:text-lg">Premium Quality</h3>
               <p className="text-sm text-muted-foreground">Medical-grade filtration technology</p>
             </div>
             <div className="text-center space-y-4">
               <div className="w-12 h-12 md:w-16 md:h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
                 <Wind className="h-6 w-6 md:h-8 md:w-8 text-primary" />
               </div>
-              <h3 className="font-semibold text-base md:text-lg">Breathable Design</h3>
+              <h3 className="font-bold text-base md:text-lg">Breathable Design</h3>
               <p className="text-sm text-muted-foreground">Comfortable for extended wear</p>
             </div>
             <div className="text-center space-y-4">
               <div className="w-12 h-12 md:w-16 md:h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
                 <Award className="h-6 w-6 md:h-8 md:w-8 text-primary" />
               </div>
-              <h3 className="font-semibold text-base md:text-lg">Certified Safe</h3>
+              <h3 className="font-bold text-base md:text-lg">Certified Safe</h3>
               <p className="text-sm text-muted-foreground">Meets international standards</p>
             </div>
             <div className="text-center space-y-4">
               <div className="w-12 h-12 md:w-16 md:h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
                 <Heart className="h-6 w-6 md:h-8 md:w-8 text-primary" />
               </div>
-              <h3 className="font-semibold text-base md:text-lg">Health First</h3>
+              <h3 className="font-bold text-base md:text-lg">Health First</h3>
               <p className="text-sm text-muted-foreground">Your wellbeing is our priority</p>
             </div>
           </div>
@@ -173,7 +173,7 @@ const Home = () => {
       <section className="relative bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 py-16 md:py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Customers Say</h2>
+            <h2 className="text-3xl md:text-4xl font-black mb-4">What Our Customers Say</h2>
             <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
               Real experiences from real customers who trust AirNex for their daily protection needs
             </p>

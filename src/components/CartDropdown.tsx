@@ -46,7 +46,7 @@ const CartDropdown = () => {
           {/* Dropdown */}
           <div className="absolute right-0 top-full mt-2 w-80 bg-card border border-border rounded-lg shadow-lg z-50">
             <div className="p-4">
-              <h3 className="font-semibold text-lg mb-4">Shopping Cart</h3>
+              <h3 className="font-bold text-lg mb-4">Shopping Cart</h3>
               
               {items.length === 0 ? (
                 <div className="text-center py-8">
@@ -65,7 +65,7 @@ const CartDropdown = () => {
                             className="w-16 h-16 object-cover rounded-md"
                           />
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-sm truncate">{item.name}</h4>
+                            <h4 className="font-bold text-sm truncate">{item.name}</h4>
                             <p className="text-sm text-muted-foreground">₹{item.price}</p>
                             
                             <div className="flex items-center gap-2 mt-2">
@@ -77,7 +77,7 @@ const CartDropdown = () => {
                               >
                                 <Minus className="h-3 w-3" />
                               </Button>
-                              <span className="text-sm font-medium w-8 text-center">{item.quantity}</span>
+                              <span className="text-sm font-bold w-8 text-center">{item.quantity}</span>
                               <Button
                                 variant="outline"
                                 size="icon"
@@ -105,10 +105,10 @@ const CartDropdown = () => {
 
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="font-semibold">Total:</span>
+                      <span className="font-bold">Total:</span>
                       <div className="flex items-center gap-1">
                         <IndianRupee className="h-4 w-4" />
-                        <span className="font-semibold text-lg">{totalPrice}</span>
+                        <span className="font-bold text-lg">{totalPrice}</span>
                       </div>
                     </div>
 

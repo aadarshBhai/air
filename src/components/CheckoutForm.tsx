@@ -146,17 +146,17 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
                 </svg>
               </div>
               
-              <h3 className="text-xl font-semibold text-green-600">Order Placed Successfully!</h3>
+              <h3 className="text-xl font-black text-green-600">Order Placed Successfully!</h3>
               
               <div className="bg-muted/30 p-4 rounded-lg">
-                <p className="text-sm text-muted-foreground mb-2">Order ID: <span className="font-mono font-semibold">{orderData.orderId}</span></p>
+                <p className="text-sm text-muted-foreground mb-2">Order ID: <span className="font-mono font-bold">{orderData.orderId}</span></p>
                 <p className="text-sm text-muted-foreground">We've received your order and will process it soon.</p>
               </div>
               
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">Order details:</p>
                 <div className="text-left bg-white p-3 rounded border">
-                  <p className="font-medium">{orderData.productName}</p>
+                  <p className="font-bold">{orderData.productName}</p>
                   <p className="text-sm text-muted-foreground">₹{orderData.price}</p>
                   <p className="text-sm text-muted-foreground mt-1">
                     {orderData.customerInfo.fullName} - {orderData.customerInfo.phoneNumber}
@@ -190,18 +190,18 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
         </div>
       ) : (
         <>
-          <h2 className="text-2xl font-bold mb-6">Shipping Details</h2>
+          <h2 className="text-2xl font-black mb-6">Shipping Details</h2>
           
           <div className="bg-muted/30 p-4 rounded-lg mb-6">
             <div className="flex justify-between items-center">
-              <h3 className="font-medium">{productName}</h3>
-              <span className="font-bold">₹{price}</span>
+              <h3 className="font-bold">{productName}</h3>
+              <span className="font-black">₹{price}</span>
             </div>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Full Name *</label>
+          <label className="font-bold mb-1">Full Name *</label>
           <Input
             type="text"
             name="fullName"
@@ -213,7 +213,7 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Email *</label>
+            <label className="font-bold mb-1">Email *</label>
             <Input
               type="email"
               name="email"
@@ -224,7 +224,7 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium mb-1">Phone Number *</label>
+            <label className="font-bold mb-1">Phone Number *</label>
             <Input
               type="tel"
               name="phoneNumber"
@@ -236,7 +236,7 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
         </div>
         
         <div>
-          <label className="block text-sm font-medium mb-1">Shipping Address *</label>
+          <label className="font-bold mb-1">Shipping Address *</label>
           <Input
             type="text"
             name="shippingAddress"
@@ -248,7 +248,7 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1">City *</label>
+            <label className="font-bold mb-1">City *</label>
             <Input
               type="text"
               name="city"
@@ -259,7 +259,7 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium mb-1">PIN Code *</label>
+            <label className="font-bold mb-1">PIN Code *</label>
             <Input
               type="text"
               name="pincode"
@@ -272,10 +272,10 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
 
         {/* Payment Information */}
         <div className="border-t pt-4">
-          <h3 className="font-medium mb-4">Payment Information</h3>
+          <h3 className="font-bold mb-4">Payment Information</h3>
           
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Payment Method *</label>
+            <label className="block text-sm font-bold mb-2">Payment Method *</label>
             <div className="flex items-center space-x-2">
               <label className="flex items-center space-x-2 cursor-pointer">
                 <input
@@ -286,13 +286,13 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
                   onChange={handleChange}
                   className="text-primary"
                 />
-                <span className="text-sm font-medium">UPI Payment</span>
+                <span className="text-sm font-bold">UPI Payment</span>
               </label>
             </div>
           </div>
 
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
-            <h4 className="font-medium mb-3 text-center">Payment Details</h4>
+            <h4 className="font-bold mb-3 text-center">Payment Details</h4>
             <div className="text-center space-y-3">
               <div className="bg-white rounded-lg p-3 border-2 border-dashed border-blue-300">
                 <p className="text-sm text-gray-600 mb-1">UPI ID</p>
@@ -304,27 +304,27 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
                 <div className="bg-blue-100 rounded p-2 text-center">
                   <span className="text-lg">💰</span>
-                  <p className="text-xs font-medium">Google Pay</p>
+                  <p className="text-xs font-bold">Google Pay</p>
                 </div>
                 <div className="bg-purple-100 rounded p-2 text-center">
                   <span className="text-lg">🔵</span>
-                  <p className="text-xs font-medium">PhonePe</p>
+                  <p className="text-xs font-bold">PhonePe</p>
                 </div>
                 <div className="bg-cyan-100 rounded p-2 text-center">
                   <span className="text-lg">💸</span>
-                  <p className="text-xs font-medium">Paytm</p>
+                  <p className="text-xs font-bold">Paytm</p>
                 </div>
                 <div className="bg-orange-100 rounded p-2 text-center">
                   <span className="text-lg">🟠</span>
-                  <p className="text-xs font-medium">Amazon Pay</p>
+                  <p className="text-xs font-bold">Amazon Pay</p>
                 </div>
                 <div className="bg-green-100 rounded p-2 text-center">
                   <span className="text-lg">🇮🇳</span>
-                  <p className="text-xs font-medium">BHIM UPI</p>
+                  <p className="text-xs font-bold">BHIM UPI</p>
                 </div>
                 <div className="bg-gray-100 rounded p-2 text-center">
                   <span className="text-lg">📱</span>
-                  <p className="text-xs font-medium">Others</p>
+                  <p className="text-xs font-bold">Others</p>
                 </div>
               </div>
               <p className="text-xs text-gray-600 mt-2">Use any UPI app to pay with the UPI ID above</p>
@@ -332,7 +332,7 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Payment Screenshot *</label>
+            <label className="block text-sm font-bold mb-2">Payment Screenshot *</label>
             <div className="border-2 border-dashed border-border rounded-lg p-4">
               <input
                 type="file"
@@ -344,7 +344,7 @@ export const CheckoutForm = ({ productName, price }: CheckoutFormProps) => {
               <label htmlFor="payment-screenshot" className="cursor-pointer block text-center">
                 {formData.paymentScreenshot ? (
                   <div className="space-y-2">
-                    <div className="text-sm text-green-600 font-medium">
+                    <div className="text-sm text-green-600 font-bold">
                       ✓ {formData.paymentScreenshot.name}
                     </div>
                     <div className="text-xs text-muted-foreground">

@@ -8,87 +8,80 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 7%;
+    --background: 0 0% 98%;
+    --foreground: 0 0% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 7%;
+    --card-foreground: 0 0% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
+    --popover-foreground: 0 0% 12%;
 
-    --primary: 171 100% 37%;
+    --primary: 220 90% 56%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 18% 16%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 90% 56%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 8% 46%;
 
-    --accent: 43 100% 71%;
-    --accent-foreground: 0 0% 7%;
+    --accent: 220 90% 56%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 171 100% 37%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 220 90% 56%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
     
-    /* Custom design tokens */
-    --hero-gradient: linear-gradient(135deg, hsl(171, 100%, 37%) 0%, hsl(171, 80%, 45%) 100%);
-    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    --card-shadow-hover: 0 8px 30px rgba(0, 191, 166, 0.15);
+    /* Custom design tokens - Professional bold theme */
+    --hero-gradient: linear-gradient(135deg, hsl(220, 90%, 56%) 0%, hsl(220, 85%, 64%) 100%);
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 210 18% 16%;
-    --foreground: 0 0% 100%;
+    --background: 220 13% 9%;
+    --foreground: 0 0% 98%;
 
-    --card: 210 18% 16%;
-    --card-foreground: 0 0% 100%;
+    --card: 220 13% 11%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 210 18% 16%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 220 13% 11%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 171 100% 37%;
+    --primary: 220 90% 56%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 18% 22%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 220 15% 16%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 210 18% 22%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 220 15% 16%;
+    --muted-foreground: 220 9% 65%;
 
-    --accent: 43 100% 71%;
-    --accent-foreground: 0 0% 7%;
+    --accent: 220 90% 56%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 210 18% 22%;
-    --input: 210 18% 22%;
-    --ring: 171 100% 37%;
+    --border: 220 15% 16%;
+    --input: 220 15% 16%;
+    --ring: 220 90% 56%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -107,10 +100,44 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    font-weight: 500;
+    line-height: 1.6;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+  }
+
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.75rem; }
+  h4 { font-size: 1.5rem; }
+  h5 { font-size: 1.25rem; }
+  h6 { font-size: 1.125rem; }
+
+  strong, b {
+    font-weight: 700;
+  }
+
+  button {
+    font-weight: 600;
+    letter-spacing: 0.025em;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-card text-card-foreground rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300;
+    border: 1px solid hsl(var(--border));
+  }
+
+  .input {
+    @apply bg-background text-foreground border border-input rounded-md px-3 py-2 text-sm font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200;
   }
 }
 

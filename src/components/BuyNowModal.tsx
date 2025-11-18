@@ -6,11 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Product } from "@/data/products";
 import { toast } from "sonner";
-import { Upload, Copy, Smartphone, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
+import { Copy, Smartphone, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
 // QR code from public folder
 const upiQR = "/qr.jpg";
 import { upiApps } from "@/assets/upi-logos";
-import { FileUploadService } from "@/utils/fileUploadService";
 
 interface BuyNowModalProps {
   product: Product | null;
@@ -19,7 +18,7 @@ interface BuyNowModalProps {
 }
 
 const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
-  const [step, setStep] = useState<"form" | "payment" | "upload" | "success">("form");
+  const [step, setStep] = useState<"form" | "payment" | "success">("form");
   const [showCopyUPI, setShowCopyUPI] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -29,10 +28,13 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
     city: "",
     pincode: "",
   });
-  const [screenshot, setScreenshot] = useState<File | null>(null);
 
   // UPI payment details
   const upiId = "9065588337@upi"; // Your UPI ID
+  
+  // Calculate half payment amounts
+  const halfPaymentAmount = product ? Math.ceil(product.price / 2) : 0;
+  const remainingAmount = product ? product.price - halfPaymentAmount : 0;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,13 +48,60 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
     setStep("payment");
   };
 
-  const handlePaymentDone = () => {
-    setStep("upload");
-  };
+  const handlePaymentDone = async () => {
+    try {
+      // Generate order ID
+      const orderId = `ORD${Date.now()}`;
+      
+      // Save order to backend without screenshot
+      const orderData = {
+        orderId,
+        productName: product.name,
+        price: product.price,
+        advancePaid: halfPaymentAmount,
+        remainingAmount: remainingAmount,
+        paymentType: "50% advance",
+        customerInfo: {
+          fullName: formData.fullName,
+          email: formData.email,
+          phoneNumber: formData.phone,
+          shippingAddress: formData.address,
+          city: formData.city,
+          pincode: formData.pincode,
+        },
+        paymentMethod: "upi",
+        paymentScreenshot: null, // No screenshot required
+      };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setScreenshot(e.target.files[0]);
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData)
+        });
+
+        if (response.ok) {
+          const savedOrder = await response.json();
+          setStep("success");
+          toast.success(`Order placed successfully! Order ID: ${orderId}`, {
+            duration: 5000
+          });
+        } else {
+          const error = await response.json();
+          toast.error("Failed to save order", {
+            description: error.error || "Please try again."
+          });
+        }
+      } catch (error) {
+        toast.error("Failed to save order", {
+          description: "Please check your connection and try again."
+        });
+      }
+    } catch (error) {
+      toast.error("Failed to process order");
+      console.error("Order processing error:", error);
     }
   };
 
@@ -64,7 +113,7 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
   const handleUpiAppClick = async (appName: string) => {
     try {
       // Extract product details
-      const price = product.price;
+      const price = halfPaymentAmount; // Use half payment amount
       const productName = product.name;
       
       // Generate UPI link using exact required format
@@ -73,7 +122,8 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
       // Console logs for debugging
       console.log('Final UPI Link:', upiLink);
       console.log('Product Name:', productName);
-      console.log('Amount:', price);
+      console.log('Half Payment Amount:', price);
+      console.log('Remaining Amount:', remainingAmount);
       console.log('Encoded Product Name:', encodeURIComponent(productName));
       
       // Device detection
@@ -113,70 +163,6 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
     }
   };
 
-  const handleSubmitScreenshot = async () => {
-    if (!screenshot) {
-      toast.error("Please upload your payment screenshot");
-      return;
-    }
-
-    try {
-      // Generate order ID
-      const orderId = `ORD${Date.now()}`;
-      
-      // Upload the screenshot to get a URL
-      toast.loading("Uploading payment screenshot...");
-      const screenshotUrl = await FileUploadService.uploadFileWithFallback(screenshot, orderId);
-      toast.dismiss();
-      toast.success("Payment screenshot uploaded successfully!");
-
-      // Save order to backend
-      const orderData = {
-        orderId,
-        productName: product.name,
-        price: product.price,
-        customerInfo: {
-          fullName: formData.fullName,
-          email: formData.email,
-          phoneNumber: formData.phone,
-          shippingAddress: formData.address,
-          city: formData.city,
-          pincode: formData.pincode,
-        },
-        paymentMethod: "upi",
-        paymentScreenshot: screenshotUrl,
-      };
-
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(orderData)
-        });
-
-        if (response.ok) {
-          const savedOrder = await response.json();
-          setStep("success");
-          toast.success(`Order placed successfully! Order ID: ${orderId}`);
-        } else {
-          const error = await response.json();
-          toast.error("Failed to save order", {
-            description: error.error || "Please try again."
-          });
-        }
-      } catch (error) {
-        toast.error("Failed to save order", {
-          description: "Please check your connection and try again."
-        });
-      }
-    } catch (error) {
-      toast.dismiss();
-      toast.error("Failed to upload screenshot. Please try again.");
-      console.error("Screenshot upload error:", error);
-    }
-  };
-
   const handleClose = () => {
     setStep("form");
     setFormData({
@@ -187,7 +173,6 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
       city: "",
       pincode: "",
     });
-    setScreenshot(null);
     onClose();
   };
 
@@ -199,15 +184,15 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
         {step === "form" && (
           <>
             <DialogHeader>
-              <DialogTitle className="text-2xl">Shipping Details</DialogTitle>
+              <DialogTitle className="text-2xl font-black">Shipping Details</DialogTitle>
               <DialogDescription>
                 Please provide your shipping information to complete the order for {product.name}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="bg-muted/30 p-4 rounded-lg">
-                <h3 className="font-semibold text-lg">{product.name}</h3>
-                <p className="text-2xl font-bold text-primary mt-2">₹{product.price}</p>
+                <h3 className="font-bold text-lg">{product.name}</h3>
+                <p className="text-2xl font-black text-primary mt-2">₹{product.price}</p>
               </div>
 
               <div className="space-y-3">
@@ -291,12 +276,33 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
         {step === "payment" && (
           <>
             <DialogHeader>
-              <DialogTitle className="text-2xl">Complete Payment</DialogTitle>
+              <DialogTitle className="text-2xl font-black">Complete Payment</DialogTitle>
               <DialogDescription>
-                Choose your preferred UPI app to pay ₹{product.price} for {product.name}
+                Pay ₹{halfPaymentAmount} now for {product.name} (50% advance)
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-6 py-4">
+            <div className="space-y-4 py-4">
+              {/* Payment Breakdown */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+                <h4 className="font-black text-blue-800 mb-3 text-center">Payment Breakdown</h4>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Total Price:</span>
+                    <span className="font-black">₹{product.price}</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-green-50 p-2 rounded">
+                    <span className="text-sm font-bold text-green-800">Pay Now (50%):</span>
+                    <span className="font-bold text-green-700 text-lg">₹{halfPaymentAmount}</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-orange-50 p-2 rounded">
+                    <span className="text-sm font-bold text-orange-800">Pay on Delivery:</span>
+                    <span className="font-bold text-orange-700 text-lg">₹{remainingAmount}</span>
+                  </div>
+                </div>
+                <p className="text-xs text-blue-600 mt-3 text-center">
+                  💰 Remaining amount will be collected at the time of delivery
+                </p>
+              </div>
               {/* UPI ID Display */}
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-xl p-6 text-center">
                 <div className="flex items-center justify-center mb-3">
@@ -321,7 +327,7 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
 
               {/* UPI Apps Grid */}
               <div>
-                <h4 className="text-lg font-semibold mb-4 text-center">Choose Your UPI App</h4>
+                <h4 className="text-lg font-black mb-4 text-center">Choose Your UPI App</h4>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {upiApps.map((app) => (
                     <Button
@@ -335,21 +341,21 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
                         alt={app.name}
                         className="w-6 h-6 mb-1 object-contain"
                       />
-                      <span className="text-xs font-medium">{app.name}</span>
+                      <span className="text-xs font-bold">{app.name}</span>
                     </Button>
                   ))}
                 </div>
 
                 {/* Manual Payment Instructions */}
                 <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                  <p className="text-sm text-amber-800 font-medium mb-2">
+                  <p className="text-sm text-amber-800 font-bold mb-2">
                     ⚠️ If UPI apps don't open automatically:
                   </p>
                   <ol className="text-xs text-amber-700 space-y-1 list-decimal list-inside">
                     <li>Copy UPI ID: <span className="font-mono bg-amber-100 px-2 py-1 rounded">{upiId}</span></li>
                     <li>Open your UPI app manually</li>
-                    <li>Send ₹{product.price} to <span className="font-mono">{upiId}</span></li>
-                    <li>Upload payment screenshot below</li>
+                    <li>Send ₹{halfPaymentAmount} to <span className="font-mono">{upiId}</span></li>
+                    <li>Click "Complete Order" after payment</li>
                   </ol>
                 </div>
 
@@ -384,12 +390,12 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
 
               {/* Payment Instructions */}
               <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
-                <h4 className="font-semibold text-blue-800 mb-2 text-center">How to Pay:</h4>
+                <h4 className="font-black text-blue-800 mb-2 text-center">How to Pay:</h4>
                 <ol className="text-sm text-blue-700 space-y-1">
                   <li>1. Click any UPI app button above</li>
                   <li>2. <strong>Mobile:</strong> App opens automatically | <strong>Desktop:</strong> UPI ID copied</li>
-                  <li>3. Pay amount: ₹{product.price}</li>
-                  <li>4. Complete payment and upload screenshot</li>
+                  <li>3. Pay amount: ₹{halfPaymentAmount} (50% advance)</li>
+                  <li>4. Complete payment and click "Complete Order"</li>
                 </ol>
                 <p className="text-xs text-blue-600 mt-2 text-center">
                   📱 Mobile users: Apps will open automatically
@@ -399,52 +405,7 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
               </div>
 
               <Button onClick={handlePaymentDone} className="w-full" size="lg" variant="cta">
-                I've Completed Payment →
-              </Button>
-            </div>
-          </>
-        )}
-
-        {step === "upload" && (
-          <>
-            <DialogHeader>
-              <DialogTitle className="text-2xl">Upload Payment Screenshot</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="bg-accent/10 border border-accent/30 p-4 rounded-lg text-center">
-                <CheckCircle className="w-12 h-12 text-accent mx-auto mb-2" />
-                <p className="font-semibold text-lg">Thank You for Your Order!</p>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Please upload your payment screenshot to confirm your order 👇
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Note: Your order will be processed after verifying your uploaded image.
-                </p>
-              </div>
-
-              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors">
-                <Upload className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="max-w-xs mx-auto"
-                />
-                {screenshot && (
-                  <p className="text-sm text-primary mt-2">
-                    ✓ {screenshot.name}
-                  </p>
-                )}
-              </div>
-
-              <Button
-                onClick={handleSubmitScreenshot}
-                className="w-full"
-                size="lg"
-                variant="cta"
-                disabled={!screenshot}
-              >
-                Submit Order
+                Complete Order →
               </Button>
             </div>
           </>
@@ -463,12 +424,12 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
                 <CheckCircle className="w-12 h-12 text-accent" />
               </div>
               <div>
-                <p className="text-lg font-semibold">Your order has been received!</p>
+                <p className="text-lg font-black">Your order has been received!</p>
                 <p className="text-sm text-muted-foreground mt-2">
                   We'll verify your payment and process your order soon.
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  You'll receive a confirmation email at <span className="font-medium">{formData.email}</span>
+                  You'll receive a confirmation email at <span className="font-bold">{formData.email}</span>
                 </p>
               </div>
               <Button onClick={handleClose} className="w-full" size="lg" variant="cta">

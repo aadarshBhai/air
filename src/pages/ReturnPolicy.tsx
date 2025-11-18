@@ -14,7 +14,7 @@ const ReturnPolicy = () => {
               Back to Home
             </Link>
           </Button>
-          <h1 className="text-4xl font-bold mb-4">Return Policy</h1>
+          <h1 className="text-4xl font-black mb-4">Return Policy</h1>
           <p className="text-lg text-muted-foreground max-w-3xl">
             Our hassle-free return policy ensures you can shop with confidence. 
             If you're not satisfied with your purchase, we're here to help.
@@ -29,7 +29,7 @@ const ReturnPolicy = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <Clock className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">Return Period</h2>
+              <h2 className="text-2xl font-black">Return Period</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>
@@ -38,7 +38,7 @@ const ReturnPolicy = () => {
                 that you received it.
               </p>
               <div className="bg-muted/50 rounded-lg p-4">
-                <h3 className="font-semibold text-foreground mb-2">Eligible Products:</h3>
+                <h3 className="font-black text-foreground mb-2">Eligible Products:</h3>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
@@ -61,12 +61,12 @@ const ReturnPolicy = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <Package className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">Return Process</h2>
+              <h2 className="text-2xl font-black">Return Process</h2>
             </div>
             <div className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <h3 className="font-semibold">How to Initiate a Return:</h3>
+                  <h3 className="font-black">How to Initiate a Return:</h3>
                   <ol className="space-y-3 text-muted-foreground">
                     <li>1. Contact our customer support at support@airnex.com</li>
                     <li>2. Provide your order number and reason for return</li>
@@ -75,7 +75,7 @@ const ReturnPolicy = () => {
                   </ol>
                 </div>
                 <div className="space-y-4">
-                  <h3 className="font-semibold">Required Information:</h3>
+                  <h3 className="font-black">Required Information:</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li>• Order number</li>
                     <li>• Product name/ID</li>
@@ -89,14 +89,14 @@ const ReturnPolicy = () => {
 
           {/* Refund Policy */}
           <div className="bg-card border border-border rounded-xl p-8">
-            <h2 className="text-2xl font-bold mb-6">Refund Policy</h2>
+            <h2 className="text-2xl font-black mb-6">Refund Policy</h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
                 Refunds are processed within <strong>5-7 business days</strong> after we receive 
                 the returned product. The refund will be credited to your original payment method.
               </p>
               <div className="bg-muted/50 rounded-lg p-4">
-                <h3 className="font-semibold text-foreground mb-2">Refund Conditions:</h3>
+                <h3 className="font-black text-foreground mb-2">Refund Conditions:</h3>
                 <ul className="space-y-2">
                   <li>• Product must pass quality inspection</li>
                   <li>• Original packaging must be intact</li>
@@ -109,7 +109,7 @@ const ReturnPolicy = () => {
 
           {/* Exceptions */}
           <div className="bg-card border border-border rounded-xl p-8">
-            <h2 className="text-2xl font-bold mb-6">Non-Returnable Items</h2>
+            <h2 className="text-2xl font-black mb-6">Non-Returnable Items</h2>
             <div className="space-y-3 text-muted-foreground">
               <p>The following items cannot be returned:</p>
               <ul className="space-y-2">
@@ -131,7 +131,7 @@ const ReturnPolicy = () => {
 
           {/* Contact */}
           <div className="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Need Help?</h2>
+            <h2 className="text-2xl font-black mb-4">Need Help?</h2>
             <p className="text-muted-foreground mb-6">
               Our customer support team is here to assist you with any return-related queries.
             </p>

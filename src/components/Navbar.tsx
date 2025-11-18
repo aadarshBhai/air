@@ -10,7 +10,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   
   return (
-    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
+    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-lg supports-[backdrop-filter]:bg-background/90 border-b border-border shadow-sm">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
@@ -20,21 +20,21 @@ const Navbar = () => {
               className="h-10 w-auto" 
               style={{ height: '40px', width: 'auto' }}
             />
-            <span className="font-logo text-2xl font-semibold text-primary">AirNex</span>
+            <span className="font-logo text-3xl font-black text-primary tracking-tight">AirNex</span>
           </Link>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <Link to="/" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/" className="font-bold text-foreground hover:text-primary transition-colors duration-200">
               Home
             </Link>
-            <Link to="/shop" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/shop" className="font-bold text-foreground hover:text-primary transition-colors duration-200">
               Shop
             </Link>
-            <Link to="/about" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/about" className="font-bold text-foreground hover:text-primary transition-colors duration-200">
               About
             </Link>
-            <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/contact" className="font-bold text-foreground hover:text-primary transition-colors duration-200">
               Contact
             </Link>
           </div>
@@ -51,28 +51,28 @@ const Navbar = () => {
                 <div className="flex flex-col gap-6 mt-8">
                   <Link 
                     to="/" 
-                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                    className="text-lg font-bold text-foreground hover:text-primary transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     Home
                   </Link>
                   <Link 
                     to="/shop" 
-                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                    className="text-lg font-bold text-foreground hover:text-primary transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     Shop
                   </Link>
                   <Link 
                     to="/about" 
-                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                    className="text-lg font-bold text-foreground hover:text-primary transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     About
                   </Link>
                   <Link 
                     to="/contact" 
-                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                    className="text-lg font-bold text-foreground hover:text-primary transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     Contact

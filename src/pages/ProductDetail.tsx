@@ -73,7 +73,7 @@ const ProductDetail = () => {
               <div className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm rounded-full mb-4">
                 {product.category}
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">{product.name}</h1>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-4">{product.name}</h1>
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -90,13 +90,13 @@ const ProductDetail = () => {
             </div>
 
             <div className="flex items-baseline gap-2 sm:gap-4">
-              <span className="text-3xl sm:text-4xl font-bold text-primary">₹{product.price}</span>
+              <span className="text-3xl sm:text-4xl font-black text-primary">₹{product.price}</span>
               {product.originalPrice && (
                 <>
                   <span className="text-lg sm:text-xl text-muted-foreground line-through">
                     ₹{product.originalPrice}
                   </span>
-                  <span className="text-sm sm:text-lg font-semibold text-accent bg-accent/10 px-2 sm:px-3 py-1 rounded">
+                  <span className="text-sm sm:text-lg font-black text-red-600 bg-red-50 px-2 sm:px-3 py-1 rounded border border-red-200">
                     {discount}% OFF
                   </span>
                 </>
@@ -106,7 +106,7 @@ const ProductDetail = () => {
             <p className="text-muted-foreground text-lg">{product.fullDescription}</p>
 
             <div className="space-y-3">
-              <h3 className="font-semibold text-lg">Key Features:</h3>
+              <h3 className="font-bold text-lg">Key Features:</h3>
               <ul className="space-y-2">
                 {product.features ? product.features.map((feature, index) => (
                   <li key={index} className="flex items-start gap-2">
@@ -148,7 +148,7 @@ const ProductDetail = () => {
 
         {/* Reviews Section */}
         <div className="border-t border-border pt-12">
-          <h2 className="text-3xl font-bold mb-8">Customer Reviews</h2>
+          <h2 className="text-3xl font-black mb-8">Customer Reviews</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <ReviewCard
               name="Amit Kumar"

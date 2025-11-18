@@ -39,7 +39,7 @@ const Admin = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
+            <h1 className="text-4xl font-black mb-2">Admin Dashboard</h1>
             <p className="text-muted-foreground">Welcome back!</p>
           </div>
           <Button variant="outline" onClick={logout} className="gap-2">
@@ -67,7 +67,7 @@ const Admin = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">{stat.title}</p>
-                        <p className="text-3xl font-bold mt-1">{stat.value}</p>
+                        <p className="text-3xl font-black mt-1">{stat.value}</p>
                       </div>
                       <stat.icon className={`h-10 w-10 ${stat.color}`} />
                     </div>

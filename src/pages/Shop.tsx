@@ -40,7 +40,7 @@ const Shop = () => {
       <div className="min-h-screen">
         <section className="bg-muted/30 py-12">
           <div className="container mx-auto px-4">
-            <h1 className="text-4xl font-bold mb-2">Shop</h1>
+            <h1 className="text-4xl font-black mb-2">Shop</h1>
             <p className="text-muted-foreground">Loading amazing products...</p>
           </div>
         </section>
@@ -68,7 +68,7 @@ const Shop = () => {
       <div className="min-h-screen">
         <section className="bg-muted/30 py-12">
           <div className="container mx-auto px-4">
-            <h1 className="text-4xl font-bold mb-2">Shop</h1>
+            <h1 className="text-4xl font-black mb-2">Shop</h1>
             <p className="text-red-500">{error}</p>
           </div>
         </section>
@@ -176,7 +176,7 @@ const Shop = () => {
       {/* Header Section */}
       <section className="bg-muted/30 py-8">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl lg:text-4xl font-bold mb-2">Shop</h1>
+          <h1 className="text-3xl lg:text-4xl font-black mb-2">Shop</h1>
           <p className="text-muted-foreground">Browse our premium pollution protection products</p>
         </div>
       </section>

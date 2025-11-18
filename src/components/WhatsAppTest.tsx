@@ -6,7 +6,7 @@ import { WhatsAppService } from "../utils/whatsappService";
 
 export const WhatsAppTest = () => {
   const [isTesting, setIsTesting] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState("918434903291");
+  const [phoneNumber, setPhoneNumber] = useState("9185444635259");
 
   const testWhatsApp = async () => {
     setIsTesting(true);

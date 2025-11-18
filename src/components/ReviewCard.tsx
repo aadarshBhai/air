@@ -17,11 +17,11 @@ const ReviewCard = ({ name, rating, comment, avatar }: ReviewCardProps) => {
             {avatar ? (
               <img src={avatar} alt={name} className="w-full h-full rounded-full object-cover" />
             ) : (
-              <span className="text-primary font-semibold">{name.charAt(0)}</span>
+              <span className="text-primary font-bold">{name.charAt(0)}</span>
             )}
           </div>
           <div>
-            <h4 className="font-semibold">{name}</h4>
+            <h4 className="font-bold">{name}</h4>
             <div className="flex gap-1">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star

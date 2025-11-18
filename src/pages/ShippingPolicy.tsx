@@ -14,7 +14,7 @@ const ShippingPolicy = () => {
               Back to Home
             </Link>
           </Button>
-          <h1 className="text-4xl font-bold mb-4">Shipping Policy</h1>
+          <h1 className="text-4xl font-black mb-4">Shipping Policy</h1>
           <p className="text-lg text-muted-foreground max-w-3xl">
             Fast and reliable delivery across India. Track your order every step of the way 
             from our warehouse to your doorstep.
@@ -29,7 +29,7 @@ const ShippingPolicy = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <MapPin className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">Delivery Areas</h2>
+              <h2 className="text-2xl font-black">Delivery Areas</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>
@@ -38,7 +38,7 @@ const ShippingPolicy = () => {
               </p>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <h3 className="font-semibold text-foreground mb-2">Metro Cities</h3>
+                  <h3 className="font-black text-foreground mb-2">Metro Cities</h3>
                   <ul className="space-y-1 text-sm">
                     <li>• Delhi NCR</li>
                     <li>• Mumbai</li>
@@ -49,7 +49,7 @@ const ShippingPolicy = () => {
                   </ul>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <h3 className="font-semibold text-foreground mb-2">Other Major Cities</h3>
+                  <h3 className="font-black text-foreground mb-2">Other Major Cities</h3>
                   <ul className="space-y-1 text-sm">
                     <li>• Pune</li>
                     <li>• Ahmedabad</li>
@@ -67,33 +67,33 @@ const ShippingPolicy = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <Clock className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">Delivery Time</h2>
+              <h2 className="text-2xl font-black">Delivery Time</h2>
             </div>
             <div className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <h3 className="font-semibold">Standard Delivery</h3>
+                  <h3 className="font-black">Standard Delivery</h3>
                   <div className="space-y-3 text-muted-foreground">
                     <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
                       <span>Metro Cities</span>
-                      <span className="font-semibold">2-3 days</span>
+                      <span className="font-black">2-3 days</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
                       <span>Other Cities</span>
-                      <span className="font-semibold">4-6 days</span>
+                      <span className="font-black">4-6 days</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
                       <span>Remote Areas</span>
-                      <span className="font-semibold">7-10 days</span>
+                      <span className="font-black">7-10 days</span>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <h3 className="font-semibold">Express Delivery</h3>
+                  <h3 className="font-black">Express Delivery</h3>
                   <div className="space-y-3 text-muted-foreground">
                     <div className="flex justify-between items-center p-3 bg-primary/10 border border-primary/20 rounded">
                       <span>Major Cities</span>
-                      <span className="font-semibold text-primary">1-2 days</span>
+                      <span className="font-black text-primary">1-2 days</span>
                     </div>
                     <p className="text-sm">Additional charges apply</p>
                     <p className="text-sm">Available for select pin codes</p>
@@ -105,28 +105,28 @@ const ShippingPolicy = () => {
 
           {/* Shipping Charges */}
           <div className="bg-card border border-border rounded-xl p-8">
-            <h2 className="text-2xl font-bold mb-6">Shipping Charges</h2>
+            <h2 className="text-2xl font-black mb-6">Shipping Charges</h2>
             <div className="space-y-4 text-muted-foreground">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-3">
-                  <h3 className="font-semibold text-foreground">Standard Shipping</h3>
+                  <h3 className="font-black text-foreground">Standard Shipping</h3>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
                       <span>Orders below ₹499</span>
-                      <span className="font-semibold">₹49</span>
+                      <span className="font-black">₹49</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-green-50 border border-green-200 rounded">
                       <span>Orders above ₹499</span>
-                      <span className="font-semibold text-green-600">FREE</span>
+                      <span className="font-black text-green-600">FREE</span>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <h3 className="font-semibold text-foreground">Express Shipping</h3>
+                  <h3 className="font-black text-foreground">Express Shipping</h3>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center p-3 bg-primary/10 border border-primary/20 rounded">
                       <span>All orders</span>
-                      <span className="font-semibold text-primary">₹99</span>
+                      <span className="font-black text-primary">₹99</span>
                     </div>
                     <p className="text-sm">Delivery within 1-2 days</p>
                   </div>
@@ -139,7 +139,7 @@ const ShippingPolicy = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <Package className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">Order Tracking</h2>
+              <h2 className="text-2xl font-black">Order Tracking</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>
@@ -147,7 +147,7 @@ const ShippingPolicy = () => {
                 updates via SMS and email.
               </p>
               <div className="bg-muted/50 rounded-lg p-4">
-                <h3 className="font-semibold text-foreground mb-3">Tracking Process:</h3>
+                <h3 className="font-black text-foreground mb-3">Tracking Process:</h3>
                 <ol className="space-y-2">
                   <li>1. Order confirmed and processed</li>
                   <li>2. Package dispatched from warehouse</li>
@@ -161,7 +161,7 @@ const ShippingPolicy = () => {
 
           {/* International Shipping */}
           <div className="bg-card border border-border rounded-xl p-8">
-            <h2 className="text-2xl font-bold mb-6">International Shipping</h2>
+            <h2 className="text-2xl font-black mb-6">International Shipping</h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
                 Currently, we only ship within India. We're working on expanding our delivery 
@@ -176,7 +176,7 @@ const ShippingPolicy = () => {
 
           {/* Contact */}
           <div className="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Shipping Questions?</h2>
+            <h2 className="text-2xl font-black mb-4">Shipping Questions?</h2>
             <p className="text-muted-foreground mb-6">
               Need help with delivery or have special shipping requirements? 
               Our team is here to assist you.

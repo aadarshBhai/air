@@ -5,7 +5,7 @@ import qrCode from '/qr.jpg';
 
 const Footer = () => {
   return (
-    <footer className="bg-muted/30 border-t border-border mt-20">
+    <footer className="bg-muted/50 border-t border-border mt-20 shadow-lg">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
           <div>
@@ -16,7 +16,7 @@ const Footer = () => {
                 className="h-10 w-auto"
                 style={{ height: '40px', width: 'auto' }}
               />
-              <h3 className="font-logo text-xl font-semibold text-primary">AirNex</h3>
+              <h3 className="font-logo text-2xl font-bold text-primary tracking-tight">AirNex</h3>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
               Premium anti-pollution products designed for a cleaner tomorrow.
@@ -50,7 +50,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <h4 className="font-bold mb-4 text-lg">Quick Links</h4>
             <div className="flex flex-col gap-2">
               <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                 Home
@@ -68,7 +68,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">Policies</h4>
+            <h4 className="font-bold mb-4 text-lg">Policies</h4>
             <div className="flex flex-col gap-2">
               <Link to="/return-policy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                 Return Policy
@@ -86,7 +86,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">Contact Us</h4>
+            <h4 className="font-bold mb-4 text-lg">Contact Us</h4>
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-4 w-4 text-primary" />

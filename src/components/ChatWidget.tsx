@@ -39,7 +39,7 @@ const ChatWidget = () => {
       {isOpen && (
         <div className="fixed bottom-6 right-6 w-80 h-96 bg-background border border-border rounded-2xl shadow-2xl z-50 flex flex-col">
           <div className="bg-primary text-primary-foreground p-4 rounded-t-2xl flex justify-between items-center">
-            <h3 className="font-semibold">Chat with AirNex</h3>
+            <h3 className="font-black">Chat with AirNex</h3>
             <Button
               variant="ghost"
               size="icon"

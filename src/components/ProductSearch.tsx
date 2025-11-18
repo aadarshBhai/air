@@ -123,7 +123,7 @@ const ProductSearch = ({
     const parts = text.split(regex);
     return parts.map((part, index) => 
       regex.test(part) ? (
-        <span key={index} className="font-semibold text-primary">{part}</span>
+        <span key={index} className="font-black text-primary">{part}</span>
       ) : (
         part
       )
@@ -174,13 +174,13 @@ const ProductSearch = ({
                   className="w-10 h-10 object-cover rounded-md"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-sm truncate">
+                  <div className="font-bold text-sm truncate">
                     {highlightMatch(product.name, query)}
                   </div>
                   <div className="text-xs text-muted-foreground truncate">
                     {highlightMatch(product.category, query)}
                   </div>
-                  <div className="text-xs text-primary font-semibold">
+                  <div className="text-xs text-primary font-black">
                     ₹{product.price.toLocaleString()}
                   </div>
                 </div>

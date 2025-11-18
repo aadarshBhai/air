@@ -22,7 +22,7 @@ export default function CheckoutPage() {
       <div className="min-h-screen bg-muted/30 py-12">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-3xl font-bold mb-4">Your Cart is Empty</h1>
+            <h1 className="text-3xl font-black mb-4">Your Cart is Empty</h1>
             <p className="text-muted-foreground mb-8">
               Add some products to your cart before checking out
             </p>
@@ -41,7 +41,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-muted/30 py-12">
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-center mb-8">Complete Your Purchase</h1>
+        <h1 className="text-3xl font-black text-center mb-8">Complete Your Purchase</h1>
         
         {/* WhatsApp Test Component - Remove in production */}
         <WhatsAppTest />
@@ -53,22 +53,22 @@ export default function CheckoutPage() {
           {/* Order Summary */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
             <div className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+              <h2 className="text-xl font-black mb-4">Order Summary</h2>
               <div className="space-y-3">
                 {items.map((item) => (
                   <div key={item.id} className="flex justify-between items-center py-2 border-b">
                     <div className="flex-1">
-                      <div className="font-medium">{item.name}</div>
+                      <div className="font-bold">{item.name}</div>
                       <div className="text-sm text-muted-foreground">
                         Quantity: {item.quantity} × ₹{item.price}
                       </div>
                     </div>
-                    <div className="font-semibold">
+                    <div className="font-bold">
                       ₹{item.price * item.quantity}
                     </div>
                   </div>
                 ))}
-                <div className="flex justify-between items-center pt-3 font-bold text-lg">
+                <div className="flex justify-between items-center pt-3 font-black text-lg">
                   <span>Total ({itemCount} items)</span>
                   <span>₹{total}</span>
                 </div>
@@ -87,7 +87,7 @@ export default function CheckoutPage() {
           </div>
           
           <div className="mt-6 p-4 bg-muted/30 rounded-lg">
-            <h3 className="font-medium mb-2">📞 Need help with your order?</h3>
+            <h3 className="font-bold mb-2">📞 Need help with your order?</h3>
             <p className="text-sm text-muted-foreground mb-2">
               Contact us at <a href="tel:+919876543210" className="text-primary hover:underline">+91 98765 43210</a>
             </p>

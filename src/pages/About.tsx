@@ -8,7 +8,7 @@ const About = () => {
       {/* Hero Section */}
       <section className="bg-muted/30 py-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6">About AirNex</h1>
+          <h1 className="text-5xl font-black mb-6">About AirNex</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Making clean air accessible to everyone through innovation and affordability
           </p>
@@ -18,7 +18,7 @@ const About = () => {
       {/* Our Story */}
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6">Our Story</h2>
+          <h2 className="text-3xl font-black mb-6">Our Story</h2>
           <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
             <p>
               AirNex was founded by a young entrepreneur with a vision to make clean air accessible
@@ -48,7 +48,7 @@ const About = () => {
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
                 <Target className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
+              <h3 className="text-2xl font-black mb-4">Our Mission</h3>
               <p className="text-muted-foreground">
                 To provide affordable, high-quality, and eco-friendly air protection solutions for
                 everyone. We're committed to making pollution protection accessible to all Indians,
@@ -59,7 +59,7 @@ const About = () => {
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
                 <Eye className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
+              <h3 className="text-2xl font-black mb-4">Our Vision</h3>
               <p className="text-muted-foreground">
                 To become India's most trusted brand for pollution protection products. We envision
                 a future where every Indian family has access to clean air and effective protection
@@ -73,7 +73,7 @@ const About = () => {
       {/* Brand Values */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Our Core Values</h2>
+          <h2 className="text-3xl font-black mb-4">Our Core Values</h2>
           <p className="text-muted-foreground text-lg">The principles that guide everything we do</p>
         </div>
         <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
@@ -81,7 +81,7 @@ const About = () => {
             <div className="w-20 h-20 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
               <Heart className="h-10 w-10 text-primary" />
             </div>
-            <h3 className="font-semibold text-xl">Sustainability</h3>
+            <h3 className="font-bold text-xl">Sustainability</h3>
             <p className="text-sm text-muted-foreground">
               Committed to eco-friendly practices and sustainable product development
             </p>
@@ -90,7 +90,7 @@ const About = () => {
             <div className="w-20 h-20 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
               <Award className="h-10 w-10 text-primary" />
             </div>
-            <h3 className="font-semibold text-xl">Innovation</h3>
+            <h3 className="font-bold text-xl">Innovation</h3>
             <p className="text-sm text-muted-foreground">
               Constantly improving our products with the latest filtration technology
             </p>
@@ -99,7 +99,7 @@ const About = () => {
             <div className="w-20 h-20 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
               <Target className="h-10 w-10 text-primary" />
             </div>
-            <h3 className="font-semibold text-xl">Trust</h3>
+            <h3 className="font-bold text-xl">Trust</h3>
             <p className="text-sm text-muted-foreground">
               Building lasting relationships through transparency and quality
             </p>
@@ -108,7 +108,7 @@ const About = () => {
             <div className="w-20 h-20 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
               <Heart className="h-10 w-10 text-primary" />
             </div>
-            <h3 className="font-semibold text-xl">Customer First</h3>
+            <h3 className="font-bold text-xl">Customer First</h3>
             <p className="text-sm text-muted-foreground">
               Your health and satisfaction are our top priorities
             </p>
@@ -119,7 +119,7 @@ const About = () => {
       {/* CTA Section */}
       <section className="bg-primary/5 py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Join the AirNex Family</h2>
+          <h2 className="text-3xl font-black mb-4">Join the AirNex Family</h2>
           <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
             Experience the difference of premium pollution protection at affordable prices
           </p>

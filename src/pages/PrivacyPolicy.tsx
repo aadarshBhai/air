@@ -14,7 +14,7 @@ const PrivacyPolicy = () => {
               Back to Home
             </Link>
           </Button>
-          <h1 className="text-4xl font-bold mb-4">Privacy Policy</h1>
+          <h1 className="text-4xl font-black mb-4">Privacy Policy</h1>
           <p className="text-lg text-muted-foreground max-w-3xl">
             Your privacy is important to us. This policy explains how we collect, use, 
             and protect your personal information when you use our services.
@@ -32,11 +32,11 @@ const PrivacyPolicy = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <Database className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">Information We Collect</h2>
+              <h2 className="text-2xl font-black">Information We Collect</h2>
             </div>
             <div className="space-y-6">
               <div className="space-y-4 text-muted-foreground">
-                <h3 className="font-semibold text-foreground">Personal Information</h3>
+                <h3 className="font-black text-foreground">Personal Information</h3>
                 <p>When you use our services, we may collect:</p>
                 <ul className="space-y-2 ml-6">
                   <li>• Name, email address, and phone number</li>
@@ -47,7 +47,7 @@ const PrivacyPolicy = () => {
               </div>
               
               <div className="space-y-4 text-muted-foreground">
-                <h3 className="font-semibold text-foreground">Technical Information</h3>
+                <h3 className="font-black text-foreground">Technical Information</h3>
                 <p>We automatically collect:</p>
                 <ul className="space-y-2 ml-6">
                   <li>• IP address and device information</li>
@@ -63,13 +63,13 @@ const PrivacyPolicy = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <Eye className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">How We Use Your Information</h2>
+              <h2 className="text-2xl font-black">How We Use Your Information</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>We use your information to:</p>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <h3 className="font-semibold text-foreground mb-2">Service Delivery</h3>
+                  <h3 className="font-black text-foreground mb-2">Service Delivery</h3>
                   <ul className="space-y-1 text-sm">
                     <li>• Process and fulfill orders</li>
                     <li>• Provide customer support</li>
@@ -78,7 +78,7 @@ const PrivacyPolicy = () => {
                   </ul>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <h3 className="font-semibold text-foreground mb-2">Communication</h3>
+                  <h3 className="font-black text-foreground mb-2">Communication</h3>
                   <ul className="space-y-1 text-sm">
                     <li>• Send promotional offers</li>
                     <li>• Share product updates</li>
@@ -88,7 +88,7 @@ const PrivacyPolicy = () => {
                 </div>
               </div>
               <div className="bg-muted/50 rounded-lg p-4">
-                <h3 className="font-semibold text-foreground mb-2">Business Operations</h3>
+                <h3 className="font-black text-foreground mb-2">Business Operations</h3>
                 <ul className="space-y-1 text-sm">
                   <li>• Improve our services</li>
                   <li>• Conduct market research</li>
@@ -103,7 +103,7 @@ const PrivacyPolicy = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <Shield className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">Data Protection & Security</h2>
+              <h2 className="text-2xl font-black">Data Protection & Security</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>
@@ -140,12 +140,12 @@ const PrivacyPolicy = () => {
 
           {/* Third-Party Sharing */}
           <div className="bg-card border border-border rounded-xl p-8">
-            <h2 className="text-2xl font-bold mb-6">Third-Party Sharing</h2>
+            <h2 className="text-2xl font-black mb-6">Third-Party Sharing</h2>
             <div className="space-y-4 text-muted-foreground">
               <p>We may share your information with:</p>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <h3 className="font-semibold text-foreground mb-2">Service Partners</h3>
+                  <h3 className="font-black text-foreground mb-2">Service Partners</h3>
                   <ul className="space-y-1 text-sm">
                     <li>• Payment processors</li>
                     <li>• Shipping carriers</li>
@@ -153,7 +153,7 @@ const PrivacyPolicy = () => {
                   </ul>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <h3 className="font-semibold text-foreground mb-2">Legal Requirements</h3>
+                  <h3 className="font-black text-foreground mb-2">Legal Requirements</h3>
                   <ul className="space-y-1 text-sm">
                     <li>• Law enforcement agencies</li>
                     <li>• Regulatory authorities</li>
@@ -171,7 +171,7 @@ const PrivacyPolicy = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <Users className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">Your Rights</h2>
+              <h2 className="text-2xl font-black">Your Rights</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>You have the right to:</p>
@@ -206,7 +206,7 @@ const PrivacyPolicy = () => {
 
           {/* Cookies */}
           <div className="bg-card border border-border rounded-xl p-8">
-            <h2 className="text-2xl font-bold mb-6">Cookies & Tracking</h2>
+            <h2 className="text-2xl font-black mb-6">Cookies & Tracking</h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
                 We use cookies and similar technologies to enhance your experience:
@@ -239,7 +239,7 @@ const PrivacyPolicy = () => {
 
           {/* Contact */}
           <div className="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Privacy Questions?</h2>
+            <h2 className="text-2xl font-black mb-4">Privacy Questions?</h2>
             <p className="text-muted-foreground mb-6">
               If you have questions about this privacy policy or how we handle your data, 
               please contact our privacy team.

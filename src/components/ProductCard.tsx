@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useCart } from "@/contexts/CartContext";
 import { Product } from "@/data/products";
-import BuyNowModal from "./BuyNowModal";
 import { toast } from "sonner";
 
 interface ProductCardProps {
@@ -22,7 +21,7 @@ interface ProductCardProps {
 
 const ProductCard = (props: ProductCardProps) => {
   const { addToCart } = useCart();
-  const [showBuyModal, setShowBuyModal] = useState(false);
+  const navigate = useNavigate();
   const discount = props.originalPrice ? Math.round(((props.originalPrice - props.price) / props.originalPrice) * 100) : 0;
 
   const handleAddToCart = () => {
@@ -33,56 +32,45 @@ const ProductCard = (props: ProductCardProps) => {
   };
 
   const handleBuyNow = () => {
-    setShowBuyModal(true);
+    navigate(`/product/${props.id}`);
   };
 
   return (
-    <>
-      <Card className="group overflow-hidden border-border hover:shadow-xl transition-all duration-300">
-        <Link to={`/product/${props.id}`}>
-          <div className="overflow-hidden bg-muted/20 aspect-square sm:aspect-[4/3] lg:aspect-square">
-            <img
-              src={props.image}
-              alt={props.name}
-              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-        </Link>
-        <CardContent className="p-4">
-          <Link to={`/product/${props.id}`}>
-            <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
-              {props.name}
-            </h3>
-          </Link>
-          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{props.description}</p>
+    <Card className="group overflow-hidden border-border bg-card shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+      <Link to={`/product/${props.id}`}>
+        <div className="overflow-hidden bg-muted/20 aspect-square sm:aspect-[4/3] lg:aspect-square">
+          <img
+            src={props.image}
+            alt={props.name}
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+      </Link>
+      <CardContent className="p-5">
+        <h3 className="font-black text-xl mb-3 group-hover:text-primary transition-colors">{props.name}</h3>
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <span className="text-xl font-bold text-primary">₹{props.price}</span>
-            {props.originalPrice && (
+            <span className="text-2xl font-black text-foreground">₹{props.price}</span>
+            {props.originalPrice && props.originalPrice > props.price && (
               <>
-                <span className="text-sm text-muted-foreground line-through">₹{props.originalPrice}</span>
-                <span className="text-xs font-semibold text-accent bg-accent/10 px-2 py-1 rounded">
+                <span className="text-lg text-muted-foreground line-through font-bold">₹{props.originalPrice}</span>
+                <span className="text-sm font-black text-red-600 bg-red-50 px-2 py-1 rounded border border-red-200">
                   {discount}% OFF
                 </span>
               </>
             )}
           </div>
-        </CardContent>
-        <CardFooter className="p-4 pt-0 flex gap-2">
-          <Button variant="outline" className="flex-1" onClick={handleAddToCart}>
-            Add to Cart
-          </Button>
-          <Button variant="cta" className="flex-1" onClick={handleBuyNow}>
-            Buy Now
-          </Button>
-        </CardFooter>
-      </Card>
-
-      <BuyNowModal
-        product={props as Product}
-        isOpen={showBuyModal}
-        onClose={() => setShowBuyModal(false)}
-      />
-    </>
+        </div>
+      </CardContent>
+      <CardFooter className="p-5 pt-0 flex gap-3">
+        <Button variant="outline" className="flex-1 h-13 text-base font-bold border-2 hover:bg-accent hover:text-accent-foreground transition-all duration-200" onClick={handleAddToCart}>
+          Add to Cart
+        </Button>
+        <Button variant="cta" className="flex-1 h-13 text-base font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200" onClick={handleBuyNow}>
+          Buy Now
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 

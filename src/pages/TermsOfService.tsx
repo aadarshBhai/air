@@ -14,7 +14,7 @@ const TermsOfService = () => {
               Back to Home
             </Link>
           </Button>
-          <h1 className="text-4xl font-bold mb-4">Terms of Service</h1>
+          <h1 className="text-4xl font-black mb-4">Terms of Service</h1>
           <p className="text-lg text-muted-foreground max-w-3xl">
             These terms govern your use of AirNex's website and services. By using our platform, 
             you agree to these terms and conditions.
@@ -32,7 +32,7 @@ const TermsOfService = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <FileText className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">Acceptance of Terms</h2>
+              <h2 className="text-2xl font-black">Acceptance of Terms</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>
@@ -49,10 +49,10 @@ const TermsOfService = () => {
 
           {/* Products and Services */}
           <div className="bg-card border border-border rounded-xl p-8">
-            <h2 className="text-2xl font-bold mb-6">Products and Services</h2>
+            <h2 className="text-2xl font-black mb-6">Products and Services</h2>
             <div className="space-y-6">
               <div className="space-y-4 text-muted-foreground">
-                <h3 className="font-semibold text-foreground">Product Information</h3>
+                <h3 className="font-black text-foreground">Product Information</h3>
                 <p>
                   We strive to provide accurate product descriptions, pricing, and availability. 
                   However, we do not warrant that product descriptions, colors, information, 
@@ -62,14 +62,14 @@ const TermsOfService = () => {
               </div>
               
               <div className="space-y-4 text-muted-foreground">
-                <h3 className="font-semibold text-foreground">Pricing</h3>
+                <h3 className="font-black text-foreground">Pricing</h3>
                 <p>
                   All prices are displayed in Indian Rupees (₹) and are inclusive of applicable taxes 
                   unless otherwise stated. We reserve the right to modify prices at any time without 
                   prior notice.
                 </p>
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <h4 className="font-semibold text-foreground mb-2">Price Changes</h4>
+                  <h4 className="font-black text-foreground mb-2">Price Changes</h4>
                   <p className="text-sm">
                     Prices for products are subject to change without notice. Orders placed at 
                     the current price will be honored, even if prices change after order placement.
@@ -83,7 +83,7 @@ const TermsOfService = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <Shield className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">User Responsibilities</h2>
+              <h2 className="text-2xl font-black">User Responsibilities</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>As a user of our services, you agree to:</p>
@@ -124,13 +124,13 @@ const TermsOfService = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <AlertCircle className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">Prohibited Activities</h2>
+              <h2 className="text-2xl font-black">Prohibited Activities</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>You are strictly prohibited from:</p>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <h3 className="font-semibold text-foreground mb-2">Technical Violations</h3>
+                  <h3 className="font-black text-foreground mb-2">Technical Violations</h3>
                   <ul className="space-y-1 text-sm">
                     <li>• Hacking or attempting to breach security</li>
                     <li>• Using automated tools to access the site</li>
@@ -139,7 +139,7 @@ const TermsOfService = () => {
                   </ul>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <h3 className="font-semibold text-foreground mb-2">Content Violations</h3>
+                  <h3 className="font-black text-foreground mb-2">Content Violations</h3>
                   <ul className="space-y-1 text-sm">
                     <li>• Posting offensive or illegal content</li>
                     <li>• Harassing other users</li>
@@ -153,10 +153,10 @@ const TermsOfService = () => {
 
           {/* Payment and Billing */}
           <div className="bg-card border border-border rounded-xl p-8">
-            <h2 className="text-2xl font-bold mb-6">Payment and Billing</h2>
+            <h2 className="text-2xl font-black mb-6">Payment and Billing</h2>
             <div className="space-y-6">
               <div className="space-y-4 text-muted-foreground">
-                <h3 className="font-semibold text-foreground">Payment Methods</h3>
+                <h3 className="font-black text-foreground">Payment Methods</h3>
                 <p>
                   We accept various payment methods including credit/debit cards, UPI, net banking, 
                   and digital wallets. All payment transactions are processed through secure 
@@ -165,7 +165,7 @@ const TermsOfService = () => {
               </div>
               
               <div className="space-y-4 text-muted-foreground">
-                <h3 className="font-semibold text-foreground">Billing Practices</h3>
+                <h3 className="font-black text-foreground">Billing Practices</h3>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
@@ -197,7 +197,7 @@ const TermsOfService = () => {
           <div className="bg-card border border-border rounded-xl p-8">
             <div className="flex items-center gap-3 mb-6">
               <Award className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-bold">Intellectual Property</h2>
+              <h2 className="text-2xl font-black">Intellectual Property</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>
@@ -207,7 +207,7 @@ const TermsOfService = () => {
                 copyright laws.
               </p>
               <div className="bg-muted/50 rounded-lg p-4">
-                <h3 className="font-semibold text-foreground mb-2">What You Cannot Do:</h3>
+                <h3 className="font-black text-foreground mb-2">What You Cannot Do:</h3>
                 <ul className="space-y-1 text-sm">
                   <li>• Use our trademarks without permission</li>
                   <li>• Copy or redistribute our content</li>
@@ -220,7 +220,7 @@ const TermsOfService = () => {
 
           {/* Limitation of Liability */}
           <div className="bg-card border border-border rounded-xl p-8">
-            <h2 className="text-2xl font-bold mb-6">Limitation of Liability</h2>
+            <h2 className="text-2xl font-black mb-6">Limitation of Liability</h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
                 In no event shall AirNex, its directors, employees, partners, agents, suppliers, 
@@ -229,7 +229,7 @@ const TermsOfService = () => {
                 goodwill, or other intangible losses.
               </p>
               <div className="bg-muted/50 rounded-lg p-4">
-                <h3 className="font-semibold text-foreground mb-2">Maximum Liability</h3>
+                <h3 className="font-black text-foreground mb-2">Maximum Liability</h3>
                 <p className="text-sm">
                   Our total liability to you for any cause of action whatsoever, and regardless 
                   of the form of the action, will at all times be limited to the amount paid, 
@@ -241,7 +241,7 @@ const TermsOfService = () => {
 
           {/* Termination */}
           <div className="bg-card border border-border rounded-xl p-8">
-            <h2 className="text-2xl font-bold mb-6">Termination</h2>
+            <h2 className="text-2xl font-black mb-6">Termination</h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
                 We may terminate or suspend your access immediately, without prior notice or 
@@ -259,7 +259,7 @@ const TermsOfService = () => {
 
           {/* Changes to Terms */}
           <div className="bg-card border border-border rounded-xl p-8">
-            <h2 className="text-2xl font-bold mb-6">Changes to Terms</h2>
+            <h2 className="text-2xl font-black mb-6">Changes to Terms</h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
                 We reserve the right to modify these terms at any time. If we make material 
@@ -275,7 +275,7 @@ const TermsOfService = () => {
 
           {/* Contact */}
           <div className="bg-primary/5 border border-primary/20 rounded-xl p-8 text-center">
-            <h2 className="text-2xl font-bold mb-4">Questions About Our Terms?</h2>
+            <h2 className="text-2xl font-black mb-4">Questions About Our Terms?</h2>
             <p className="text-muted-foreground mb-6">
               If you have any questions about these Terms of Service, please contact our legal team.
             </p>
