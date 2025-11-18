@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,6 +19,7 @@ interface BuyNowModalProps {
 
 const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
   const [step, setStep] = useState<"form" | "payment" | "upload" | "success">("form");
+  const [showCopyUPI, setShowCopyUPI] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -54,8 +55,12 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
     }
   };
 
+  // Generate UPI link function
+  const generateUpiLink = (productName: string, amount: number) => {
+    return `upi://pay?pa=9065588337ayush@ybl&pn=Ayush Store&am=${amount}&cu=INR&tn=${encodeURIComponent(productName)}`;
+  };
+
   const handleUpiAppClick = async (appName: string) => {
-    // Copy UPI ID first (works for both mobile and desktop)
     try {
       await navigator.clipboard.writeText(upiId);
       
@@ -68,122 +73,40 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
       console.log('Device detection:', { isMobile, isAndroid, isIOS, userAgent });
       
       if (isMobile) {
-        // Properly encode UPI parameters
-        const encodedUpiId = encodeURIComponent(upiId);
-        const encodedMerchantName = encodeURIComponent('AirNexPro');
-        const amount = product.price.toFixed(2); // UPI apps require decimal format like 2999.00
-        const encodedAmount = encodeURIComponent(amount);
-        const encodedTransactionNote = encodeURIComponent(`Payment for ${product.name}`);
+        // Generate UPI link with iOS-specific base URL
+        const price = product.price;
+        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
         
-        // App-specific UPI URLs with properly encoded parameters
-        let upiUrl = `upi://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
+        const baseURL = isIOS
+          ? "gpay://upi/pay"
+          : "upi://pay";
         
-        switch(appName.toLowerCase()) {
-          case 'google pay':
-            upiUrl = isAndroid 
-              ? `tez://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`
-              : `gpay://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
-            break;
-          case 'phonepe':
-            upiUrl = `phonepe://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
-            break;
-          case 'paytm':
-            upiUrl = `paytmmp://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
-            break;
-          case 'navi':
-            upiUrl = `navi://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
-            break;
-          case 'amazon pay':
-            upiUrl = `amazonpay://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
-            break;
-          case 'bhim upi':
-            upiUrl = `bhim://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
-            break;
-        }
+        const upiLink = `${baseURL}?pa=9065588337ayush@ybl&pn=Ayush Store&am=${price}&cu=INR&tn=${encodeURIComponent(product.name)}`;
         
-        console.log('Attempting to open URL:', upiUrl);
-        console.log('UPI Details:', { 
-          upiId, 
-          amount, 
-          encodedAmount,
-          merchantName: 'AirNexPro', 
-          product: product.name,
-          transactionNote: `Payment for ${product.name}`
-        });
-        console.log('URL Parameters:', {
-          pa: encodedUpiId,
-          pn: encodedMerchantName,
-          am: encodedAmount,
-          cu: 'INR',
-          tn: encodedTransactionNote
-        });
-        console.log('Amount format check:', {
-          originalPrice: product.price,
-          formattedAmount: amount,
-          isCorrectFormat: amount.includes('.') && amount.split('.')[1].length === 2
-        });
+        console.log('Generated UPI Link:', upiLink);
+        console.log('Amount parameter:', price);
+        console.log('Product name:', product.name);
+        console.log('Base URL:', baseURL);
         
-        // For iOS Safari, use direct window.location.href immediately
         if (isIOS) {
-          // iOS Safari requires immediate direct navigation
-          window.location.href = upiUrl;
-          
-          // Show toast with fallback instructions immediately
-          toast.success(`Opening ${appName}... Pay ₹${amount} to ${upiId}`, {
-            duration: 6000
-          });
-          
-          // Additional fallback: Show manual instructions if apps don't open
-          setTimeout(() => {
-            toast.error(`If ${appName} didn't open, please open it manually and pay ₹${amount} to ${upiId}`, {
-              duration: 8000
-            });
-          }, 5000);
-          
+          // Show copy UPI ID modal
+          alert("UPI apps are not supported on iPhone. Please copy the UPI ID: 9065588337ayush@ybl");
         } else {
-          // Android - try multiple methods
-          try {
-            // Method 1: Direct window.location.href
-            window.location.href = upiUrl;
-            
-            // Method 2: Try window.open as fallback after 500ms
-            setTimeout(() => {
-              window.open(upiUrl, '_blank');
-            }, 500);
-            
-            // Method 3: Create and click a hidden link as another fallback
-            setTimeout(() => {
-              const link = document.createElement('a');
-              link.href = upiUrl;
-              link.target = '_blank';
-              link.rel = 'noopener noreferrer';
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }, 1000);
-            
-          } catch (error) {
-            console.error('Error opening UPI app:', error);
-          }
+          // Open UPI link normally
+          window.location.href = upiLink;
           
-          // Show toast with fallback instructions
-          toast.success(`Opening ${appName}... Pay ₹${amount} to ${upiId}`, {
-            duration: 6000
+          // Show success message
+          toast.success(`Opening ${appName}... Pay ₹${price} to ${upiId}`, {
+            duration: 5000
           });
-          
-          // Fallback: try generic UPI URL after 2 seconds
-          setTimeout(() => {
-            const fallbackUrl = `upi://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
-            console.log('Trying fallback URL:', fallbackUrl);
-            window.location.href = fallbackUrl;
-          }, 2000);
         }
         
       } else {
-        // Desktop - show copy instructions
+        // Desktop - show copy instructions with mobile guidance
         console.log('Desktop detected, copying UPI ID');
-        toast.success(`UPI ID copied! Open ${appName} and pay ₹${product.price}`, {
-          duration: 5000
+        toast.success(`UPI ID copied! Please use your mobile to open ${appName} and pay ₹${product.price}`, {
+          description: "UPI apps work on mobile devices only",
+          duration: 6000
         });
       }
     } catch (error) {
@@ -288,6 +211,9 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
           <>
             <DialogHeader>
               <DialogTitle className="text-2xl">Shipping Details</DialogTitle>
+              <DialogDescription>
+                Please provide your shipping information to complete the order for {product.name}
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="bg-muted/30 p-4 rounded-lg">
@@ -376,7 +302,10 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
         {step === "payment" && (
           <>
             <DialogHeader>
-              <DialogTitle className="text-2xl">Complete Your Payment</DialogTitle>
+              <DialogTitle className="text-2xl">Complete Payment</DialogTitle>
+              <DialogDescription>
+                Choose your preferred UPI app to pay ₹{product.price} for {product.name}
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-6 py-4">
               {/* UPI ID Display */}
@@ -535,7 +464,10 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
         {step === "success" && (
           <>
             <DialogHeader>
-              <DialogTitle className="text-2xl text-center">Order Confirmed!</DialogTitle>
+              <DialogTitle className="text-2xl">Order Confirmed!</DialogTitle>
+              <DialogDescription>
+                Your order has been placed successfully. We'll send you a confirmation message shortly.
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-8 text-center">
               <div className="w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center mx-auto">
