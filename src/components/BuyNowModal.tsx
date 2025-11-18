@@ -7,7 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Product } from "@/data/products";
 import { toast } from "sonner";
 import { Upload, Copy, Smartphone, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
-import upiQR from "@/assets/upi-qr_backup.jpg";
+// QR code from public folder
+const upiQR = "/qr.jpg";
 import { upiApps } from "@/assets/upi-logos";
 import { FileUploadService } from "@/utils/fileUploadService";
 
@@ -31,7 +32,7 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
   const [screenshot, setScreenshot] = useState<File | null>(null);
 
   // UPI payment details
-  const upiId = "9065588337ayush@ybl"; // Your UPI ID
+  const upiId = "9065588337@upi"; // Your UPI ID
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -57,7 +58,7 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
 
   // Generate UPI link function
   const generateUpiLink = (productName: string, amount: number) => {
-    return `upi://pay?pa=9065588337ayush@ybl&pn=Ayush Store&am=${amount}&cu=INR&tn=${encodeURIComponent(productName)}`;
+    return `upi://pay?pa=9065588337@upi&pn=Ayush Store&am=${amount}&cu=INR&tn=${encodeURIComponent(productName)}`;
   };
 
   const handleUpiAppClick = async (appName: string) => {
@@ -67,7 +68,7 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
       const productName = product.name;
       
       // Generate UPI link using exact required format
-      const upiLink = `upi://pay?pa=9065588337ayush@ybl&pn=Ayush Store&am=${price}&cu=INR&tn=${encodeURIComponent(productName)}`;
+      const upiLink = `upi://pay?pa=9065588337@upi&pn=Ayush Store&am=${price}&cu=INR&tn=${encodeURIComponent(productName)}`;
       
       // Console logs for debugging
       console.log('Final UPI Link:', upiLink);
