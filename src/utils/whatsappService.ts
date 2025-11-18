@@ -17,7 +17,7 @@ interface OrderData {
 }
 
 export class WhatsAppService {
-  private static readonly WHATSAPP_NUMBER = "9185444635259"; // User's actual number
+  private static readonly WHATSAPP_NUMBER = "8544635259"; // User's actual number
   
   // Debug: Check if number is accessible
   static debugNumber() {

@@ -170,7 +170,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-bold mb-1">Phone</h3>
-                  <p className="text-muted-foreground">+91 8544635259</p>
+                  <p className="text-muted-foreground">8544635259</p>
                   <p className="text-sm text-muted-foreground">Available 9 AM - 9 PM, Monday to Saturday</p>
                 </div>
               </div>
@@ -181,7 +181,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-bold mb-1">WhatsApp</h3>
-                  <p className="text-muted-foreground">+91 8544635259</p>
+                  <p className="text-muted-foreground">8544635259</p>
                   <p className="text-sm text-muted-foreground">Click the floating button for instant chat</p>
                 </div>
               </div>
