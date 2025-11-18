@@ -30,7 +30,7 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
   const [screenshot, setScreenshot] = useState<File | null>(null);
 
   // UPI payment details
-  const upiId = "7050819323@naviaxis"; // Your UPI ID
+  const upiId = "9065588337ayush@ybl"; // Your UPI ID
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
