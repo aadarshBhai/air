@@ -71,36 +71,57 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
         // Properly encode UPI parameters
         const encodedUpiId = encodeURIComponent(upiId);
         const encodedMerchantName = encodeURIComponent('AirNexPro');
-        const amount = product.price.toString();
+        const amount = product.price.toFixed(2); // UPI apps require decimal format like 2999.00
+        const encodedAmount = encodeURIComponent(amount);
+        const encodedTransactionNote = encodeURIComponent(`Payment for ${product.name}`);
         
         // App-specific UPI URLs with properly encoded parameters
-        let upiUrl = `upi://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
+        let upiUrl = `upi://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
         
         switch(appName.toLowerCase()) {
           case 'google pay':
             upiUrl = isAndroid 
-              ? `tez://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`
-              : `gpay://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
+              ? `tez://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`
+              : `gpay://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
             break;
           case 'phonepe':
-            upiUrl = `phonepe://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
+            upiUrl = `phonepe://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
             break;
           case 'paytm':
-            upiUrl = `paytmmp://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
+            upiUrl = `paytmmp://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
             break;
           case 'navi':
-            upiUrl = `navi://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
+            upiUrl = `navi://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
             break;
           case 'amazon pay':
-            upiUrl = `amazonpay://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
+            upiUrl = `amazonpay://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
             break;
           case 'bhim upi':
-            upiUrl = `bhim://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
+            upiUrl = `bhim://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${encodedAmount}&cu=INR&tn=${encodedTransactionNote}`;
             break;
         }
         
         console.log('Attempting to open URL:', upiUrl);
-        console.log('UPI Details:', { upiId, amount, merchantName: 'AirNexPro', product: product.name });
+        console.log('UPI Details:', { 
+          upiId, 
+          amount, 
+          encodedAmount,
+          merchantName: 'AirNexPro', 
+          product: product.name,
+          transactionNote: `Payment for ${product.name}`
+        });
+        console.log('URL Parameters:', {
+          pa: encodedUpiId,
+          pn: encodedMerchantName,
+          am: encodedAmount,
+          cu: 'INR',
+          tn: encodedTransactionNote
+        });
+        console.log('Amount format check:', {
+          originalPrice: product.price,
+          formattedAmount: amount,
+          isCorrectFormat: amount.includes('.') && amount.split('.')[1].length === 2
+        });
         
         // For iOS Safari, use direct window.location.href immediately
         if (isIOS) {

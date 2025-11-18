@@ -15,7 +15,9 @@ export class FileUploadService {
       });
       
       if (!response.ok) {
-        throw new Error('Upload failed');
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.error || `Upload failed with status ${response.status}`;
+        throw new Error(errorMessage);
       }
       
       const result = await response.json();
@@ -23,7 +25,25 @@ export class FileUploadService {
       return `${this.UPLOAD_URL.replace('/api/upload', '')}/uploads/${result.filename}`;
     } catch (error) {
       console.error('Upload error:', error);
-      throw new Error('Failed to upload payment screenshot');
+      
+      // Handle specific error cases
+      if (error instanceof Error) {
+        const errorMessage = error.message.toLowerCase();
+        
+        if (errorMessage.includes('file too large') || errorMessage.includes('413')) {
+          throw new Error('Image file is too large. Please choose a smaller image (under 10MB) or compress it before uploading.');
+        }
+        
+        if (errorMessage.includes('invalid file type') || errorMessage.includes('only image files')) {
+          throw new Error('Only image files are allowed. Please choose a JPG, PNG, or other image format.');
+        }
+        
+        if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+          throw new Error('Network error. Please check your internet connection and try again.');
+        }
+      }
+      
+      throw new Error('Failed to upload payment screenshot. Please try again.');
     }
   }
 

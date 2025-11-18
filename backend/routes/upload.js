@@ -23,10 +23,50 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({ 
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    // Check file type
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'), false);
+    }
+  }
+});
+
+// Error handling middleware for multer
+const handleMulterError = (err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).json({ 
+        error: 'File too large. Please choose an image smaller than 10MB.',
+        code: 'FILE_TOO_LARGE'
+      });
+    }
+    if (err.code === 'LIMIT_FILE_COUNT') {
+      return res.status(400).json({ 
+        error: 'Too many files uploaded.',
+        code: 'TOO_MANY_FILES'
+      });
+    }
+  }
+  
+  if (err.message === 'Only image files are allowed') {
+    return res.status(400).json({ 
+      error: 'Only image files are allowed (JPG, PNG, etc.).',
+      code: 'INVALID_FILE_TYPE'
+    });
+  }
+  
+  next(err);
+};
 
 // Upload endpoint
-router.post('/', upload.single('file'), (req, res) => {
+router.post('/', handleMulterError, upload.single('file'), (req, res) => {
   try {
     console.log('📤 Upload request received:', { body: req.body, file: req.file });
     
