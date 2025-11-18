@@ -112,12 +112,19 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
             duration: 6000
           });
           
-          // Fallback: try generic UPI URL after 3 seconds (longer for iOS)
+          // Fallback: try universal UPI link after 3 seconds
           setTimeout(() => {
-            const fallbackUrl = `upi://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
-            console.log('Trying fallback URL:', fallbackUrl);
-            window.location.href = fallbackUrl;
+            const universalUrl = `https://upi.pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
+            console.log('Trying universal UPI URL:', universalUrl);
+            window.location.href = universalUrl;
           }, 3000);
+          
+          // Additional fallback: Show manual instructions if apps don't open
+          setTimeout(() => {
+            toast.error(`If ${appName} didn't open, please open it manually and pay ₹${amount} to ${upiId}`, {
+              duration: 8000
+            });
+          }, 5000);
           
         } else {
           // Android - try multiple methods
@@ -400,6 +407,35 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
                     </Button>
                   ))}
                 </div>
+
+                {/* Manual Payment Instructions */}
+                <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                  <p className="text-sm text-amber-800 font-medium mb-2">
+                    ⚠️ If UPI apps don't open automatically:
+                  </p>
+                  <ol className="text-xs text-amber-700 space-y-1 list-decimal list-inside">
+                    <li>Copy UPI ID: <span className="font-mono bg-amber-100 px-2 py-1 rounded">{upiId}</span></li>
+                    <li>Open your UPI app manually</li>
+                    <li>Send ₹{product.price} to <span className="font-mono">{upiId}</span></li>
+                    <li>Upload payment screenshot below</li>
+                  </ol>
+                </div>
+
+                {/* Copy UPI ID Button */}
+                <Button
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(upiId);
+                      toast.success(`UPI ID copied: ${upiId}`, { duration: 4000 });
+                    } catch (error) {
+                      console.error('Failed to copy UPI ID:', error);
+                      toast.error("Failed to copy UPI ID");
+                    }
+                  }}
+                  className="w-full mt-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+                >
+                  📋 Copy UPI ID: {upiId}
+                </Button>
               </div>
 
               {/* QR Code as backup */}

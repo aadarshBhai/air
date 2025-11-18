@@ -84,6 +84,23 @@
       "paymentScreenshot": "http://localhost:5000/uploads/1763225538581-3.png",
       "createdAt": "2025-11-15T16:52:21.186Z",
       "status": "pending"
+    },
+    {
+      "orderId": "ORD1763429156325",
+      "productName": "Wireless Bluetooth Earbuds",
+      "price": 2999,
+      "customerInfo": {
+        "fullName": "Aadarsh Kumar",
+        "email": "aadarshgolucky@gmail.com",
+        "phoneNumber": "07050819323",
+        "shippingAddress": "Patna, Bihar\nJehanabad , Bihar",
+        "city": "Patna",
+        "pincode": "804454"
+      },
+      "paymentMethod": "upi",
+      "paymentScreenshot": "http://localhost:5000/uploads/paymentORD1763429156325.jpg",
+      "createdAt": "2025-11-18T01:25:57.176Z",
+      "status": "pending"
     }
   ]
 }
