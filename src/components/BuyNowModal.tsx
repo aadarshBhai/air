@@ -59,55 +59,114 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
     try {
       await navigator.clipboard.writeText(upiId);
       
-      // Check if mobile device
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      // Enhanced mobile detection
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+      const isAndroid = /android/i.test(userAgent);
+      const isIOS = /iphone|ipad|ipod/i.test(userAgent);
+      
+      console.log('Device detection:', { isMobile, isAndroid, isIOS, userAgent });
       
       if (isMobile) {
-        // App-specific UPI URLs for better compatibility
-        let upiUrl = `upi://pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+        // Properly encode UPI parameters
+        const encodedUpiId = encodeURIComponent(upiId);
+        const encodedMerchantName = encodeURIComponent('AirNexPro');
+        const amount = product.price.toString();
+        
+        // App-specific UPI URLs with properly encoded parameters
+        let upiUrl = `upi://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
         
         switch(appName.toLowerCase()) {
           case 'google pay':
-            upiUrl = `tez://upi/pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            upiUrl = isAndroid 
+              ? `tez://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`
+              : `gpay://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
             break;
           case 'phonepe':
-            upiUrl = `phonepe://pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            upiUrl = `phonepe://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
             break;
           case 'paytm':
-            upiUrl = `paytmmp://pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            upiUrl = `paytmmp://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
             break;
           case 'navi':
-            upiUrl = `navi://upi/pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            upiUrl = `navi://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
             break;
           case 'amazon pay':
-            upiUrl = `amazonpay://upi/pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            upiUrl = `amazonpay://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
             break;
           case 'bhim upi':
-            upiUrl = `bhim://upi/pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
+            upiUrl = `bhim://upi/pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
             break;
         }
         
-        // Try to open the app-specific URL
-        window.location.href = upiUrl;
+        console.log('Attempting to open URL:', upiUrl);
+        console.log('UPI Details:', { upiId, amount, merchantName: 'AirNexPro', product: product.name });
         
-        // Show toast with fallback instructions
-        toast.success(`Opening ${appName}... If app doesn't open, UPI ID copied: ${upiId}`, {
-          duration: 6000
-        });
-        
-        // Fallback: try generic UPI URL after 2 seconds
-        setTimeout(() => {
-          const fallbackUrl = `upi://pay?pa=${upiId}&pn=AirNexPro&am=${product.price}&cu=INR`;
-          window.location.href = fallbackUrl;
-        }, 2000);
+        // For iOS Safari, use direct window.location.href immediately
+        if (isIOS) {
+          // iOS Safari requires immediate direct navigation
+          window.location.href = upiUrl;
+          
+          // Show toast with fallback instructions immediately
+          toast.success(`Opening ${appName}... Pay ₹${amount} to ${upiId}`, {
+            duration: 6000
+          });
+          
+          // Fallback: try generic UPI URL after 3 seconds (longer for iOS)
+          setTimeout(() => {
+            const fallbackUrl = `upi://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
+            console.log('Trying fallback URL:', fallbackUrl);
+            window.location.href = fallbackUrl;
+          }, 3000);
+          
+        } else {
+          // Android - try multiple methods
+          try {
+            // Method 1: Direct window.location.href
+            window.location.href = upiUrl;
+            
+            // Method 2: Try window.open as fallback after 500ms
+            setTimeout(() => {
+              window.open(upiUrl, '_blank');
+            }, 500);
+            
+            // Method 3: Create and click a hidden link as another fallback
+            setTimeout(() => {
+              const link = document.createElement('a');
+              link.href = upiUrl;
+              link.target = '_blank';
+              link.rel = 'noopener noreferrer';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }, 1000);
+            
+          } catch (error) {
+            console.error('Error opening UPI app:', error);
+          }
+          
+          // Show toast with fallback instructions
+          toast.success(`Opening ${appName}... Pay ₹${amount} to ${upiId}`, {
+            duration: 6000
+          });
+          
+          // Fallback: try generic UPI URL after 2 seconds
+          setTimeout(() => {
+            const fallbackUrl = `upi://pay?pa=${encodedUpiId}&pn=${encodedMerchantName}&am=${amount}&cu=INR&tn=Payment for ${encodeURIComponent(product.name)}`;
+            console.log('Trying fallback URL:', fallbackUrl);
+            window.location.href = fallbackUrl;
+          }, 2000);
+        }
         
       } else {
         // Desktop - show copy instructions
+        console.log('Desktop detected, copying UPI ID');
         toast.success(`UPI ID copied! Open ${appName} and pay ₹${product.price}`, {
           duration: 5000
         });
       }
     } catch (error) {
+      console.error('Error in UPI app click:', error);
       toast.error("Failed to copy UPI ID");
     }
   };
