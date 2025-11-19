@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ProductProvider } from "./contexts/ProductContext";
@@ -24,6 +24,16 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, [pathname]);
+
+  return null;
+};
+
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -34,6 +44,7 @@ const App = () => {
               <CartProvider>
                 <Toaster />
                 <Sonner />
+                <ScrollToTop />
                 <div className="flex flex-col min-h-screen">
                   <Navbar />
                   <main className="flex-1">
