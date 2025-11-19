@@ -121,9 +121,9 @@ const ProductDetail = () => {
             <div className="flex flex-col sm:flex-row gap-4 pt-6">
               <Button 
                 onClick={handleAddToCart} 
-                variant="outline" 
+                variant="default" 
                 size="lg" 
-                className="w-full sm:w-auto flex-1 h-16 text-xl font-black border-2 border-primary text-primary bg-primary/10 rounded-full shadow-md"
+                className="w-full sm:w-auto flex-1 h-16 text-xl font-black bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-xl"
               >
                 Add to Cart
               </Button>
