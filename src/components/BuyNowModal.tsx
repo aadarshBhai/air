@@ -8,7 +8,7 @@ import { Product } from "@/data/products";
 import { toast } from "sonner";
 import { Copy, Smartphone, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
 // QR code from public folder
-const upiQR = "/qr.jpg";
+const upiQR = import.meta.env.BASE_URL + "qr.jpg";
 import { upiApps } from "@/assets/upi-logos";
 
 interface BuyNowModalProps {
