@@ -91,13 +91,13 @@ const Footer = () => {
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-4 w-4 text-primary" />
                 <a href="tel:+919876543210" className="hover:text-primary transition-colors">
-                  +91 98765 43210
+                  +91 8544635259
                 </a>
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="h-4 w-4 text-primary" />
                 <a href="mailto:support@airnex.com" className="hover:text-primary transition-colors">
-                  support@airnex.com
+                  theairnexpro@gmail.com
                 </a>
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">

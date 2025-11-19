@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Star, CheckCircle } from "lucide-react";
 import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
-import ReviewCard from "@/components/ReviewCard";
 import BuyNowModal from "@/components/BuyNowModal";
 import { toast } from "sonner";
 
@@ -146,27 +145,6 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Reviews Section */}
-        <div className="border-t border-border pt-12">
-          <h2 className="text-3xl font-black mb-8">Customer Reviews</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ReviewCard
-              name="Amit Kumar"
-              rating={5}
-              comment="Excellent product! Works exactly as described. Very happy with my purchase."
-            />
-            <ReviewCard
-              name="Sneha Reddy"
-              rating={5}
-              comment="Great quality and fast delivery. Would definitely recommend AirNex to everyone."
-            />
-            <ReviewCard
-              name="Vikram Singh"
-              rating={4}
-              comment="Good product overall. Comfortable to wear and effective protection."
-            />
-          </div>
-        </div>
       </div>
 
       <BuyNowModal
