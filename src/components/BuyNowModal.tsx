@@ -115,33 +115,45 @@ const BuyNowModal = ({ product, isOpen, onClose }: BuyNowModalProps) => {
       // Extract product details
       const price = halfPaymentAmount; // Use half payment amount
       const productName = product.name;
-      
-      // Generate UPI link using exact required format
-      const upiLink = `upi://pay?pa=9065588337@upi&pn=Ayush Store&am=${price}&cu=INR&tn=${encodeURIComponent(productName)}`;
-      
-      // Console logs for debugging
-      console.log('Final UPI Link:', upiLink);
-      console.log('Product Name:', productName);
-      console.log('Half Payment Amount:', price);
-      console.log('Remaining Amount:', remainingAmount);
-      console.log('Encoded Product Name:', encodeURIComponent(productName));
+
+      // Common UPI parameters
+      const upiParams = `pa=9065588337@upi&pn=Ayush Store&am=${price}&cu=INR&tn=${encodeURIComponent(productName)}`;
+      const genericUpiLink = `upi://pay?${upiParams}`;
       
       // Device detection
       const userAgent = navigator.userAgent.toLowerCase();
       const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-      
-      console.log('Device detection:', { isMobile, userAgent });
-      
+      const isAndroid = /android/i.test(userAgent);
+
+      let targetUrl = genericUpiLink;
+
+      // On Android, try app-specific UPI schemes when possible
+      if (isMobile && isAndroid) {
+        switch (appName) {
+          case "Google Pay":
+            // Google Pay (Tez) custom scheme
+            targetUrl = `tez://upi/pay?${upiParams}`;
+            break;
+          case "PhonePe":
+            targetUrl = `phonepe://upi/pay?${upiParams}`;
+            break;
+          case "Paytm":
+            targetUrl = `paytmmp://upi/pay?${upiParams}`;
+            break;
+          default:
+            // For Navi, Amazon Pay, BHIM etc., use the generic UPI link
+            targetUrl = genericUpiLink;
+        }
+      }
+
       if (isMobile) {
-        // Mobile: Open UPI link directly
-        window.location.href = upiLink;
-        
-        // Show success message
-        toast.success(`Opening UPI app... Pay ₹${price}`, {
+        // Mobile: attempt to open the selected UPI app (or generic UPI handler)
+        window.location.href = targetUrl;
+        toast.success(`Opening ${appName}... Pay ${price}`, {
           duration: 5000
         });
       } else {
-        // Desktop: Show QR or copy UPI ID message
+        // Desktop: show QR / copy instructions (existing behavior)
         toast.info("Scan QR code or copy UPI ID to make payment", {
           description: "UPI apps work on mobile devices only",
           duration: 6000
