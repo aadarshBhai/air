@@ -118,12 +118,12 @@ const ProductDetail = () => {
               </ul>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <div className="flex flex-col sm:flex-row gap-4 pt-6">
               <Button 
                 onClick={handleAddToCart} 
                 variant="outline" 
                 size="lg" 
-                className="w-full sm:w-auto flex-1 h-12 sm:h-14 text-base sm:text-lg"
+                className="w-full sm:w-auto flex-1 h-16 text-xl font-black border-2 border-primary text-primary bg-primary/10 rounded-full shadow-md"
               >
                 Add to Cart
               </Button>
@@ -131,7 +131,7 @@ const ProductDetail = () => {
                 onClick={handleBuyNow} 
                 variant="cta"
                 size="lg" 
-                className="w-full sm:w-auto flex-1 h-12 sm:h-14 text-base sm:text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                className="w-full sm:w-auto flex-1 h-16 text-xl font-black bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-2xl hover:shadow-[0_15px_40px_rgba(37,99,235,0.6)] transform hover:scale-105 transition-all duration-200 rounded-full"
               >
                 Buy Now
               </Button>
