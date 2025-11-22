@@ -26,7 +26,7 @@ const ProductManager = () => {
     price: '',
     originalPrice: '',
     discountPercentage: '',
-    image: '',
+    images: [] as string[],
     category: '',
     rating: '5',
     features: '',
@@ -50,7 +50,7 @@ const ProductManager = () => {
       price: '',
       originalPrice: '',
       discountPercentage: '',
-      image: '',
+      images: [],
       category: '',
       rating: '5',
       features: '',
@@ -60,23 +60,34 @@ const ProductManager = () => {
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setIsUploading(true);
     try {
-      // Create a preview URL for the selected image
-      const previewUrl = URL.createObjectURL(file);
-      setUploadedImage(previewUrl);
+      const newImages = [];
+      
+      // Process each selected file
+      for (let i = 0; i < Math.min(files.length, 6); i++) {
+        const file = files[i];
+        // Create a preview URL for the selected image
+        const previewUrl = URL.createObjectURL(file);
+        newImages.push(previewUrl);
+      }
 
-      // For now, we'll use the preview URL as the image source
-      // In production, you would upload this to your server
-      // const uploadedUrl = await uploadImageToServer(file);
-      setFormData({ ...formData, image: previewUrl });
+      // Update form data with new images, keeping existing ones and limiting to 6 total
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, ...newImages].slice(0, 6)
+      }));
+      
+      // Set the first uploaded image as the main preview
+      if (newImages.length > 0) {
+        setUploadedImage(newImages[0]);
+      }
     } catch (error) {
       console.error('Image upload failed:', error);
-      // Fallback to placeholder
-      setFormData({ ...formData, image: '/placeholder-product.jpg' });
+      toast.error('Failed to upload one or more images');
     } finally {
       setIsUploading(false);
     }
@@ -85,6 +96,15 @@ const ProductManager = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Ensure at least one image is uploaded
+    if (formData.images.length === 0) {
+      toast.error('Please upload at least one image for the product');
+      return;
+    }
+    
+    // Ensure we're only sending the first image until backend is updated
+    const firstImage = formData.images[0];
+    
     const productData = {
       name: formData.name,
       description: formData.description,
@@ -92,7 +112,8 @@ const ProductManager = () => {
       price: parseFloat(formData.price),
       originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : undefined,
       discountPercentage: formData.discountPercentage ? parseFloat(formData.discountPercentage) : undefined,
-      image: formData.image || '/placeholder-product.jpg',
+      image: firstImage, // Temporarily using the first image for backward compatibility
+      images: formData.images, // This will be used once backend is updated
       category: formData.category,
       rating: parseFloat(formData.rating),
       features: formData.features.split(',').map(f => f.trim()).filter(f => f),
@@ -161,12 +182,16 @@ const ProductManager = () => {
       price: product.price.toString(),
       originalPrice: product.originalPrice?.toString() || '',
       discountPercentage: product.discountPercentage?.toString() || '',
-      image: product.image,
+      images: product.images || [],
       category: product.category,
       rating: product.rating.toString(),
       features: product.features ? product.features.join(', ') : '',
       inStock: product.inStock
     });
+    // Set the first image as preview if available
+    if (product.images?.[0]) {
+      setUploadedImage(product.images[0]);
+    }
     setIsAddDialogOpen(true);
   };
 
@@ -343,47 +368,62 @@ const ProductManager = () => {
                     </Select>
                   </div>
 
-                  <div className="col-span-2">
-                    <Label htmlFor="image">Product Image</Label>
+                  <div className="space-y-2">
+                    <Label>Product Images (Max 6)</Label>
                     <div className="space-y-4">
-                      {/* Image Upload */}
-                      <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <Upload className="h-4 w-4" />
-                          <span className="text-sm font-medium">Upload from Computer/Mobile</span>
-                        </div>
-                        <input
-                          type="file"
-                          id="image-upload"
-                          accept="image/*"
-                          onChange={handleImageUpload}
-                          className="hidden"
-                        />
-                        <label
-                          htmlFor="image-upload"
-                          className="flex items-center justify-center w-full h-32 border-2 border-dashed border-muted-foreground/25 rounded-lg cursor-pointer hover:border-muted-foreground/50 transition-colors"
-                        >
-                          {isUploading ? (
-                            <div className="flex items-center gap-2">
-                              <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-primary"></div>
-                              <span className="text-sm">Uploading...</span>
+                      {/* Hidden file input */}
+                      <input
+                        type="file"
+                        id="images"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                      
+                      {/* Image preview grid */}
+                      <div className="grid grid-cols-3 gap-4">
+                        {formData.images.map((img, index) => (
+                          <div key={index} className="relative group">
+                            <div className="aspect-square border rounded-md overflow-hidden">
+                              <img 
+                                src={img} 
+                                alt={`Preview ${index + 1}`} 
+                                className="w-full h-full object-cover"
+                              />
                             </div>
-                          ) : uploadedImage ? (
-                            <img 
-                              src={uploadedImage} 
-                              alt="Preview" 
-                              className="h-full w-full object-cover rounded-lg"
-                            />
-                          ) : (
-                            <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                              <ImageIcon className="h-8 w-8" />
-                              <span className="text-sm">Click to upload image</span>
+                            <button
+                              type="button"
+                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setFormData(prev => ({
+                                  ...prev,
+                                  images: prev.images.filter((_, i) => i !== index)
+                                }));
+                              }}
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))}
+                        
+                        {formData.images.length < 6 && (
+                          <label 
+                            htmlFor="images"
+                            className="aspect-square border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer hover:border-primary/50 transition-colors"
+                          >
+                            <div className="text-center p-4">
+                              <Plus className="w-6 h-6 mx-auto text-muted-foreground" />
+                              <span className="text-xs text-muted-foreground">
+                                {formData.images.length === 0 ? 'Add Images' : 'Add More'}
+                              </span>
                             </div>
-                          )}
-                        </label>
+                          </label>
+                        )}
                       </div>
 
-                      {/* OR Image URL */}
+                      {/* OR Image URL - Removed as we're focusing on file upload */}
                       <div className="relative">
                         <div className="absolute inset-0 flex items-center">
                           <span className="w-full border-t border-muted-foreground/20" />
@@ -393,21 +433,6 @@ const ProductManager = () => {
                         </div>
                       </div>
 
-                      <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <ImageIcon className="h-4 w-4" />
-                          <span className="text-sm font-medium">Image URL</span>
-                        </div>
-                        <Input
-                          id="image-url"
-                          value={formData.image}
-                          onChange={(e) => {
-                            setFormData({ ...formData, image: e.target.value });
-                            setUploadedImage(null); // Clear uploaded image when URL is changed
-                          }}
-                          placeholder="https://example.com/image.jpg"
-                        />
-                      </div>
                     </div>
                   </div>
 
@@ -454,18 +479,14 @@ const ProductManager = () => {
             <Card key={product.id}>
               <CardContent className="p-6">
                 <div className="flex gap-6">
-                  <div className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center">
-                    {product.image ? (
-                      <img 
-                        src={product.image} 
-                        alt={product.name}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
+                  <div className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
+                    {product.images && product.images.length > 0 ? (
+                      <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
                     ) : (
                       <ImageIcon className="h-8 w-8 text-muted-foreground" />
                     )}
                   </div>
-                  
+
                   <div className="flex-1">
                     <div className="flex justify-between items-start mb-2">
                       <div>

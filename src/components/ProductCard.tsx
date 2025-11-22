@@ -65,14 +65,14 @@ const ProductCard = (props: ProductCardProps) => {
       <CardFooter className="p-5 pt-0 flex gap-3">
         <Button
           variant="outline"
-          className="flex-1 h-12 sm:h-14 text-base sm:text-lg font-bold border-2 hover:bg-accent hover:text-accent-foreground transition-all duration-200"
+          className="flex-1 h-14 text-lg font-bold border-2 hover:bg-accent hover:text-accent-foreground transition-all duration-200"
           onClick={handleAddToCart}
         >
           Add to Cart
         </Button>
         <Button
           variant="cta"
-          className="flex-1 h-12 sm:h-14 text-base sm:text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+          className="flex-1 h-14 text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
           onClick={handleBuyNow}
         >
           Buy Now

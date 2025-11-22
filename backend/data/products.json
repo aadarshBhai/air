@@ -237,5 +237,74 @@
     "id": "1763224015417",
     "createdAt": "2025-11-15T16:26:55.417Z",
     "updatedAt": "2025-11-15T16:26:55.418Z"
+  },
+  {
+    "name": "Nice",
+    "description": "hehe",
+    "fullDescription": "dfg",
+    "price": 500,
+    "image": "blob:http://localhost:8080/cc84e5da-3aa0-449a-9160-4226c8407ea9",
+    "category": "",
+    "rating": 5,
+    "features": [],
+    "inStock": true,
+    "id": "1763789146461",
+    "createdAt": "2025-11-22T05:25:46.462Z",
+    "updatedAt": "2025-11-22T05:25:46.462Z"
+  },
+  {
+    "name": "yaar",
+    "description": "ha",
+    "fullDescription": "nice to",
+    "price": 481,
+    "image": "blob:http://localhost:8080/7b73fd60-65c5-4e82-9054-feea5c1c5dc8",
+    "category": "",
+    "rating": 5,
+    "features": [],
+    "inStock": true,
+    "id": "1763789198105",
+    "createdAt": "2025-11-22T05:26:38.105Z",
+    "updatedAt": "2025-11-22T05:26:38.105Z"
+  },
+  {
+    "name": "Aadarsh Kumar",
+    "description": "sd",
+    "fullDescription": "sdf",
+    "price": 500,
+    "image": "blob:http://localhost:8080/cfa2fcd9-9b54-4690-8eaa-3e953949a8f4",
+    "images": [
+      "blob:http://localhost:8080/cfa2fcd9-9b54-4690-8eaa-3e953949a8f4",
+      "blob:http://localhost:8080/c4afa415-6c1a-4ebe-aa7a-7bd5a2407f35",
+      "blob:http://localhost:8080/b9160a41-de05-4823-95c9-30ba02ade289",
+      "blob:http://localhost:8080/4c040ce4-b5ab-4cbe-812c-83bbb8264207",
+      "blob:http://localhost:8080/6d47a6fd-6c17-47ec-b43c-9ba98fb54271",
+      "blob:http://localhost:8080/c942926a-e754-4013-b0d6-a83d093b724d"
+    ],
+    "category": "",
+    "rating": 5,
+    "features": [],
+    "inStock": true,
+    "id": "1763790325292",
+    "createdAt": "2025-11-22T05:45:25.292Z",
+    "updatedAt": "2025-11-22T05:45:25.292Z"
+  },
+  {
+    "name": "Aadarsh Kumar",
+    "description": "hehe",
+    "fullDescription": "rfhd",
+    "price": 500,
+    "image": "blob:http://localhost:8080/5b8d2a32-a47a-4752-8cea-31de66260529",
+    "images": [
+      "blob:http://localhost:8080/5b8d2a32-a47a-4752-8cea-31de66260529",
+      "blob:http://localhost:8080/d0877ace-fe83-48e5-8a9f-07d23279f3c3",
+      "blob:http://localhost:8080/0aff49df-41be-4e6c-8e08-efcc09f1dc5d"
+    ],
+    "category": "",
+    "rating": 5,
+    "features": [],
+    "inStock": true,
+    "id": "1763790491081",
+    "createdAt": "2025-11-22T05:48:11.081Z",
+    "updatedAt": "2025-11-22T05:48:11.081Z"
   }
 ]

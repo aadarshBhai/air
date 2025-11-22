@@ -10,7 +10,7 @@ export interface Product {
   price: number;
   originalPrice?: number;
   discountPercentage?: number;
-  image: string;
+  images: string[];
   category: string;
   rating: number;
   features: string[];
@@ -27,7 +27,7 @@ export const products: Product[] = [
     fullDescription: "Our flagship N95 mask provides superior protection against PM2.5, PM10, and harmful pollutants. Features a comfortable fit with adjustable straps and a replaceable filter system.",
     price: 499,
     originalPrice: 799,
-    image: productMask,
+    images: [productMask, productPurifier, productRespirator],
     category: "Masks",
     rating: 5,
     features: [
@@ -48,7 +48,7 @@ export const products: Product[] = [
     fullDescription: "Experience clean air with our smart air purifier featuring HEPA H13 filtration, air quality monitoring, and app control. Perfect for bedrooms and small offices.",
     price: 3999,
     originalPrice: 5999,
-    image: productPurifier,
+    images: [productPurifier, productMask, productRespirator],
     category: "Air Purifiers",
     rating: 5,
     features: [
@@ -69,7 +69,7 @@ export const products: Product[] = [
     fullDescription: "Designed for maximum protection in high-pollution environments. Features dual filtration cartridges and a comfortable silicone face seal.",
     price: 1299,
     originalPrice: 1899,
-    image: productRespirator,
+    images: [productRespirator, productMask, productPurifier],
     category: "Masks",
     rating: 5,
     features: [
@@ -90,7 +90,7 @@ export const products: Product[] = [
     fullDescription: "Keep your children safe with our specially designed kids' mask. Features fun colors, comfortable fit, and high-efficiency filtration.",
     price: 349,
     originalPrice: 549,
-    image: productMask,
+    images: [productMask, productPurifier, productRespirator],
     category: "Masks",
     rating: 5,
     features: [
@@ -111,7 +111,7 @@ export const products: Product[] = [
     fullDescription: "Compact car air purifier that fits in your cup holder. Features USB charging and effective air cleaning for your daily commute.",
     price: 1499,
     originalPrice: 2299,
-    image: productPurifier,
+    images: [productPurifier, productMask, productRespirator],
     category: "Air Purifiers",
     rating: 4,
     features: [
@@ -132,7 +132,7 @@ export const products: Product[] = [
     fullDescription: "High-quality replacement filters compatible with all AirNex masks. Pack includes 10 filters for extended protection.",
     price: 299,
     originalPrice: 499,
-    image: productMask,
+    images: [productMask, productPurifier, productRespirator],
     category: "Accessories",
     rating: 5,
     features: [
@@ -153,7 +153,7 @@ export const products: Product[] = [
     fullDescription: "Our premium N99 mask offers the highest level of protection with 99.9% filtration efficiency. Perfect for extreme pollution conditions.",
     price: 699,
     originalPrice: 999,
-    image: productMask,
+    images: [productMask, productPurifier, productRespirator],
     category: "Masks",
     rating: 5,
     features: [
@@ -174,7 +174,7 @@ export const products: Product[] = [
     fullDescription: "Powerful air purifier designed for large rooms up to 500 sq ft. Features multiple filtration stages and smart sensors.",
     price: 7999,
     originalPrice: 11999,
-    image: productPurifier,
+    images: [productPurifier, productMask, productRespirator],
     category: "Air Purifiers",
     rating: 5,
     features: [
@@ -195,7 +195,7 @@ export const products: Product[] = [
     fullDescription: "Stay protected during workouts with our sports mask. Features enhanced breathability and moisture-wicking material.",
     price: 599,
     originalPrice: 899,
-    image: productMask,
+    images: [productMask, productPurifier, productRespirator],
     category: "Masks",
     rating: 4,
     features: [
@@ -216,7 +216,7 @@ export const products: Product[] = [
     fullDescription: "Personal air purifier ideal for your desk or bedside table. Quiet operation with effective filtration.",
     price: 1999,
     originalPrice: 2999,
-    image: productPurifier,
+    images: [productPurifier, productMask, productRespirator],
     category: "Air Purifiers",
     rating: 4,
     features: [
@@ -237,7 +237,7 @@ export const products: Product[] = [
     fullDescription: "Stock up with our 20-pack premium filter set. Compatible with all AirNex mask models.",
     price: 549,
     originalPrice: 899,
-    image: productMask,
+    images: [productMask, productPurifier, productRespirator],
     category: "Accessories",
     rating: 5,
     features: [
@@ -258,7 +258,7 @@ export const products: Product[] = [
     fullDescription: "Combine style with safety. Available in multiple trendy designs while maintaining high filtration standards.",
     price: 449,
     originalPrice: 699,
-    image: productMask,
+    images: [productMask, productPurifier, productRespirator],
     category: "Masks",
     rating: 5,
     features: [
@@ -279,7 +279,7 @@ export const products: Product[] = [
     fullDescription: "Innovative wearable air purifier that creates a clean air zone around you. Perfect for travel and outdoor activities.",
     price: 2499,
     originalPrice: 3999,
-    image: productPurifier,
+    images: [productPurifier, productMask, productRespirator],
     category: "Air Purifiers",
     rating: 4,
     features: [
@@ -300,7 +300,7 @@ export const products: Product[] = [
     fullDescription: "Certified medical-grade N95 masks. Bulk pack of 50 masks ideal for healthcare settings and extended protection needs.",
     price: 2999,
     originalPrice: 4999,
-    image: productMask,
+    images: [productMask, productPurifier, productRespirator],
     category: "Masks",
     rating: 5,
     features: [
@@ -321,7 +321,7 @@ export const products: Product[] = [
     fullDescription: "Monitor your indoor air quality with precision. Tracks PM2.5, PM10, CO2, temperature, and humidity levels.",
     price: 3499,
     originalPrice: 5499,
-    image: productPurifier,
+    images: [productPurifier, productMask, productRespirator],
     category: "Accessories",
     rating: 5,
     features: [

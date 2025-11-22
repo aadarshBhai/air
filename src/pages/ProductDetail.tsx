@@ -1,13 +1,44 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Star, CheckCircle } from "lucide-react";
+import { Star, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
 import BuyNowModal from "@/components/BuyNowModal";
 import { toast } from "sonner";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+// Custom arrow components for the slider
+const NextArrow = (props: any) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} !right-2 z-10`}
+      style={{ ...style, display: 'block' }}
+      onClick={onClick}
+    >
+      <ChevronRight className="w-8 h-8 text-white drop-shadow-lg" />
+    </div>
+  );
+};
+
+const PrevArrow = (props: any) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} !left-2 z-10`}
+      style={{ ...style, display: 'block' }}
+      onClick={onClick}
+    >
+      <ChevronLeft className="w-8 h-8 text-white drop-shadow-lg" />
+    </div>
+  );
+};
 
 const ProductDetail = () => {
+  const sliderRef = useRef<Slider>(null);
   const { id } = useParams();
   const { products } = useProducts();
   const { addToCart } = useCart();
@@ -57,13 +88,46 @@ const ProductDetail = () => {
 
         {/* Product Details */}
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
-          {/* Product Image */}
-          <div className="bg-muted/20 rounded-2xl overflow-hidden">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-full object-cover"
-            />
+          {/* Product Image Slider */}
+          <div className="relative">
+            <Slider
+              dots={true}
+              infinite={true}
+              speed={300}
+              slidesToShow={1}
+              slidesToScroll={1}
+              className="rounded-2xl overflow-hidden"
+              prevArrow={<PrevArrow />}
+              nextArrow={<NextArrow />}
+              dotsClass="slick-dots !bottom-4"
+            >
+              {product.images.map((image, index) => (
+                <div key={index} className="aspect-square bg-muted/20 rounded-2xl overflow-hidden">
+                  <img
+                    src={image}
+                    alt={`${product.name} - ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </Slider>
+            
+            {/* Thumbnail Navigation */}
+            <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
+              {product.images.map((image, index) => (
+                <button
+                  key={index}
+                  className="flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 border-transparent hover:border-primary transition-colors"
+                  onClick={() => sliderRef.current?.slickGoTo(index)}
+                >
+                  <img
+                    src={image}
+                    alt={`${product.name} - Thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Product Info */}
