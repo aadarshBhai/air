@@ -98,49 +98,311 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    @apply scroll-smooth;
+    /* Fluid typography */
+    font-size: clamp(0.9rem, 0.8rem + 0.5vw, 1rem);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-weight: 500;
-    line-height: 1.6;
+    @apply bg-background text-foreground antialiased text-base leading-relaxed;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-heading;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.25;
+  /* Responsive containers */
+  .container {
+    @apply px-4 sm:px-6 lg:px-8 2xl:max-w-7xl 2xl:px-0 mx-auto w-full;
   }
 
-  h1 { font-size: 2.5rem; }
-  h2 { font-size: 2rem; }
-  h3 { font-size: 1.75rem; }
-  h4 { font-size: 1.5rem; }
-  h5 { font-size: 1.25rem; }
-  h6 { font-size: 1.125rem; }
-
-  strong, b {
-    font-weight: 700;
+  /* Responsive typography */
+  @media (min-width: 640px) {
+    h2, .text-3xl {
+      font-size: 1.875rem; /* text-3xl */
+      line-height: 2.25rem;
+    }
+    h3, .text-2xl {
+      font-size: 1.5rem; /* text-2xl */
+      line-height: 2rem;
+    }
+    h4, .text-xl {
+      font-size: 1.25rem; /* text-xl */
+      line-height: 1.75rem;
+    }
   }
 
+  @media (min-width: 768px) {
+    h1, .text-4xl {
+      font-size: 3rem; /* text-5xl */
+      line-height: 1;
+    }
+    h2, .text-3xl {
+      font-size: 2.25rem; /* text-4xl */
+      line-height: 2.5rem;
+    }
+    h3, .text-2xl {
+      font-size: 1.875rem; /* text-3xl */
+      line-height: 2.25rem;
+    }
+    h4, .text-xl {
+      font-size: 1.5rem; /* text-2xl */
+      line-height: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    h1, .text-4xl {
+      font-size: 3.75rem; /* text-6xl */
+      line-height: 1;
+    }
+    h2, .text-3xl {
+      font-size: 3rem; /* text-5xl */
+      line-height: 1;
+    }
+    h3, .text-2xl {
+      font-size: 2.25rem; /* text-4xl */
+      line-height: 2.5rem;
+    }
+    h4, .text-xl {
+      font-size: 1.875rem; /* text-3xl */
+      line-height: 2.25rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    h1, .text-4xl {
+      font-size: 4.5rem; /* text-7xl */
+      line-height: 1;
+    }
+    h2, .text-3xl {
+      font-size: 3.75rem; /* text-6xl */
+      line-height: 1;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    h1, .text-4xl {
+      font-size: 6rem; /* text-8xl */
+      line-height: 1;
+    }
+  }
+
+  /* Responsive spacing */
+  .section-padding {
+    @apply py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28;
+  }
+
+  .section-margin {
+    @apply my-12 sm:my-16 md:my-20 lg:my-24 xl:my-28;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Better focus states */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background rounded;
+  }
+
+  /* Selection styles */
+  ::selection {
+    @apply bg-primary/20 text-primary;
+  }
+
+  /* Scrollbar styles */
+  ::-webkit-scrollbar {
+    @apply w-2.5 h-2.5;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-foreground/10 rounded-full hover:bg-foreground/20 transition-colors;
+  }
+
+  /* Remove default button styles */
   button {
-    font-weight: 600;
-    letter-spacing: 0.025em;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+
+  /* Links */
+  a {
+    @apply transition-all duration-200 hover:opacity-90;
+  }
+
+  /* Images */
+  img, video {
+    @apply max-w-full h-auto align-middle object-cover;
+  }
+
+  /* Responsive images */
+  .responsive-image {
+    @apply w-full h-auto max-h-[80vh] object-cover object-center;
+  }
+
+  /* Forms */
+  input, textarea, select {
+    @apply w-full px-4 py-2.5 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground/60 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-none transition-all duration-200 text-base;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-card text-card-foreground rounded-xl border shadow-sm transition-all duration-300 hover:shadow-md overflow-hidden;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none px-6 py-2.5 text-base sm:px-8 sm:py-3;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-sm sm:px-5 sm:py-2.5;
+  }
+
+  .btn-lg {
+    @apply px-8 py-3.5 text-lg sm:px-10 sm:py-4;
   }
 
   .btn-primary {
-    @apply bg-primary text-primary-foreground font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg;
   }
 
-  .card {
-    @apply bg-card text-card-foreground rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300;
-    border: 1px solid hsl(var(--border));
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm;
   }
 
-  .input {
-    @apply bg-background text-foreground border border-input rounded-md px-3 py-2 text-sm font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200;
+  .btn-outline {
+    @apply border border-input bg-transparent hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .btn-ghost {
+    @apply hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .btn-link {
+    @apply underline-offset-4 hover:underline text-primary p-0 h-auto leading-none;
+  }
+
+  /* Grid system */
+  .grid-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+  }
+
+  /* Aspect ratios */
+  .aspect-video {
+    @apply relative w-full pt-[56.25%]; /* 16:9 */
+  }
+
+  .aspect-square {
+    @apply relative w-full pt-[100%];
+  }
+
+  /* Utility classes */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+
+  /* Print styles */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    
+    body {
+      font-size: 12pt;
+      line-height: 1.5;
+    }
+    
+    .print\:w-full {
+      width: 100% !important;
+    }
   }
 }
 
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Responsive tables */
+.table-responsive {
+  @apply w-full overflow-x-auto -mx-4 sm:mx-0;
+}
+
+table {
+  @apply w-full border-collapse;
+}
+
+th, td {
+  @apply px-4 py-3 text-left border-b border-border;
+}
+
+th {
+  @apply font-semibold bg-muted/30;
+}
+
+/* Custom scrollbar for specific elements */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground)/0.3) transparent;
+}
+
+/* Custom Scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  @apply w-1.5 h-1.5;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  @apply bg-foreground/20 rounded-full hover:bg-foreground/30;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Utility Classes */
 @layer utilities {
   .animate-fade-in {
     animation: fadeIn 0.6s ease-out;
@@ -148,25 +410,5 @@ All colors MUST be HSL.
 
   .animate-slide-up {
     animation: slideUp 0.6s ease-out;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 }

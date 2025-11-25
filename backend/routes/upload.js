@@ -1,134 +1,42 @@
+// backend/routes/upload.js
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const { v2: cloudinary } = require('cloudinary');
+const streamifier = require('streamifier');
+
 const router = express.Router();
+const upload = multer();
 
-// Create uploads directory if it doesn't exist
-const uploadsDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-  console.log('📁 Created uploads directory:', uploadsDir);
-}
-
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
-  filename: (req, file, cb) => {
-    // Use timestamp + original name initially, will be renamed later
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
-  }
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
-
-const upload = multer({ 
-  storage,
-  limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB limit
-  },
-  fileFilter: (req, file, cb) => {
-    // Check file type
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'), false);
-    }
-  }
-});
-
-// Error handling middleware for multer
-const handleMulterError = (err, req, res, next) => {
-  if (err instanceof multer.MulterError) {
-    if (err.code === 'LIMIT_FILE_SIZE') {
-      return res.status(413).json({ 
-        error: 'File too large. Please choose an image smaller than 10MB.',
-        code: 'FILE_TOO_LARGE'
-      });
-    }
-    if (err.code === 'LIMIT_FILE_COUNT') {
-      return res.status(400).json({ 
-        error: 'Too many files uploaded.',
-        code: 'TOO_MANY_FILES'
-      });
-    }
-  }
-  
-  if (err.message === 'Only image files are allowed') {
-    return res.status(400).json({ 
-      error: 'Only image files are allowed (JPG, PNG, etc.).',
-      code: 'INVALID_FILE_TYPE'
-    });
-  }
-  
-  next(err);
-};
 
 // Upload endpoint
-router.post('/', handleMulterError, upload.single('file'), (req, res) => {
+router.post('/', upload.single('file'), async (req, res) => {
   try {
-    console.log('📤 Upload request received:', { body: req.body, file: req.file });
-    
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-    const { orderId, type } = req.body;
-    let finalFilename = req.file.filename;
-    let fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const streamUpload = (fileBuffer) => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: 'products' },
+          (error, result) => {
+            if (result) resolve(result);
+            else reject(error);
+          }
+        );
+        streamifier.createReadStream(fileBuffer).pipe(stream);
+      });
+    };
 
-    // Rename file if it's a payment screenshot
-    if (type === 'payment_screenshot' && orderId) {
-      const oldPath = path.join(uploadsDir, req.file.filename);
-      finalFilename = `payment${orderId}.jpg`;
-      const newPath = path.join(uploadsDir, finalFilename);
-      
-      // Rename the file
-      fs.renameSync(oldPath, newPath);
-      fileUrl = `${req.protocol}://${req.get('host')}/uploads/${finalFilename}`;
-      console.log('📤 File renamed to:', finalFilename);
-    }
-
-    console.log('📤 Upload successful:', { filename: finalFilename, url: fileUrl });
-    
-    res.status(200).json({
-      message: 'File uploaded successfully',
-      filename: finalFilename,
-      url: fileUrl
-    });
-  } catch (error) {
-    console.error('📤 Upload error:', error);
-    res.status(500).json({ error: 'Failed to upload file' });
-  }
-});
-
-// Serve uploaded files
-router.get('/:filename', (req, res) => {
-  const filePath = path.join(uploadsDir, req.params.filename);
-  
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    // If file doesn't exist, return a placeholder image
-    if (req.params.filename.startsWith('payment')) {
-      // Return a simple placeholder for payment screenshots
-      const svgPlaceholder = `
-        <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100%" height="100%" fill="#f0f0f0"/>
-          <text x="50%" y="50%" text-anchor="middle" dy=".3em" font-family="Arial" font-size="16" fill="#666">
-            Payment Screenshot Uploaded
-          </text>
-          <text x="50%" y="60%" text-anchor="middle" dy=".3em" font-family="Arial" font-size="12" fill="#999">
-            ${req.params.filename}
-          </text>
-        </svg>
-      `;
-      res.setHeader('Content-Type', 'image/svg+xml');
-      res.send(svgPlaceholder);
-    } else {
-      res.status(404).json({ error: 'File not found' });
-    }
+    const result = await streamUpload(req.file.buffer);
+    res.json({ url: result.secure_url });
+  } catch (err) {
+    console.error('Cloudinary upload failed:', err);
+    res.status(500).json({ error: 'Cloudinary upload failed' });
   }
 });
 

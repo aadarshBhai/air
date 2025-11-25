@@ -1,20 +1,5 @@
 [
   {
-    "id": "1",
-    "name": "Wireless Bluetooth Earbuds",
-    "description": "Premium quality wireless earbuds with noise cancellation and 24-hour battery life",
-    "fullDescription": "Experience true wireless freedom with our premium Bluetooth earbuds. Features advanced noise cancellation, crystal-clear audio quality, and an impressive 24-hour battery life with the charging case. IPX5 water resistance makes them perfect for workouts and outdoor activities.",
-    "price": 2999,
-    "originalPrice": 3999,
-    "image": "https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?w=800&q=80",
-    "category": "Electronics",
-    "rating": 4.5,
-    "reviews": 234,
-    "inStock": true,
-    "createdAt": "2025-01-01T00:00:00Z",
-    "updatedAt": "2025-01-01T00:00:00Z"
-  },
-  {
     "id": "2",
     "name": "Smart Fitness Watch",
     "description": "Track your health and fitness goals with this advanced smartwatch",
@@ -27,7 +12,11 @@
     "reviews": 189,
     "inStock": true,
     "createdAt": "2025-01-01T00:00:00Z",
-    "updatedAt": "2025-01-01T00:00:00Z"
+    "updatedAt": "2025-11-24T03:07:06.777Z",
+    "images": [
+      "http://localhost:5000/uploads/1763953623281-648723413.png"
+    ],
+    "features": []
   },
   {
     "id": "3",
@@ -42,7 +31,12 @@
     "reviews": 92,
     "inStock": true,
     "createdAt": "2025-01-01T00:00:00Z",
-    "updatedAt": "2025-01-01T00:00:00Z"
+    "updatedAt": "2025-11-24T01:42:06.909Z",
+    "images": [
+      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800&q=80",
+      "http://localhost:5000/uploads/1763948523854-176050142.png"
+    ],
+    "features": []
   },
   {
     "id": "4",
@@ -57,7 +51,11 @@
     "reviews": 156,
     "inStock": true,
     "createdAt": "2025-01-01T00:00:00Z",
-    "updatedAt": "2025-01-01T00:00:00Z"
+    "updatedAt": "2025-11-24T03:15:40.832Z",
+    "images": [
+      "http://localhost:5000/uploads/1763954138499-589697444.png"
+    ],
+    "features": []
   },
   {
     "id": "5",
@@ -72,7 +70,11 @@
     "reviews": 312,
     "inStock": true,
     "createdAt": "2025-01-01T00:00:00Z",
-    "updatedAt": "2025-01-01T00:00:00Z"
+    "updatedAt": "2025-11-24T01:40:18.046Z",
+    "images": [
+      "http://localhost:5000/uploads/1763948416380-861965060.png"
+    ],
+    "features": []
   },
   {
     "id": "6",
@@ -87,7 +89,12 @@
     "reviews": 78,
     "inStock": true,
     "createdAt": "2025-01-01T00:00:00Z",
-    "updatedAt": "2025-01-01T00:00:00Z"
+    "updatedAt": "2025-11-24T01:40:02.086Z",
+    "images": [
+      "http://localhost:5000/uploads/1763948394729-830469238.png",
+      "http://localhost:5000/uploads/1763948399376-642507320.png"
+    ],
+    "features": []
   },
   {
     "id": "7",
@@ -117,7 +124,11 @@
     "reviews": 203,
     "inStock": true,
     "createdAt": "2025-01-01T00:00:00Z",
-    "updatedAt": "2025-01-01T00:00:00Z"
+    "updatedAt": "2025-11-24T03:16:06.833Z",
+    "images": [
+      "http://localhost:5000/uploads/1763954161505-359822539.png"
+    ],
+    "features": []
   },
   {
     "id": "9",
@@ -147,7 +158,11 @@
     "reviews": 124,
     "inStock": true,
     "createdAt": "2025-01-01T00:00:00Z",
-    "updatedAt": "2025-01-01T00:00:00Z"
+    "updatedAt": "2025-11-24T03:16:20.046Z",
+    "images": [
+      "http://localhost:5000/uploads/1763954178200-204570643.png"
+    ],
+    "features": []
   },
   {
     "id": "11",
@@ -192,22 +207,11 @@
     "reviews": 289,
     "inStock": true,
     "createdAt": "2025-01-01T00:00:00Z",
-    "updatedAt": "2025-01-01T00:00:00Z"
-  },
-  {
-    "id": "14",
-    "name": "Stainless Steel Water Bottle",
-    "description": "Insulated stainless steel water bottle keeps drinks cold for 24 hours",
-    "fullDescription": "Stay hydrated in style with our insulated water bottle. Double-wall vacuum insulation keeps drinks cold for 24 hours or hot for 12 hours. BPA-free, leak-proof design with wide mouth.",
-    "price": 899,
-    "originalPrice": 1299,
-    "image": "https://images.unsplash.com/photo-1602143407151-71124268d691?w=800&q=80",
-    "category": "Sports",
-    "rating": 4.2,
-    "reviews": 412,
-    "inStock": true,
-    "createdAt": "2025-01-01T00:00:00Z",
-    "updatedAt": "2025-01-01T00:00:00Z"
+    "updatedAt": "2025-11-24T01:40:30.871Z",
+    "images": [
+      "http://localhost:5000/uploads/1763948429246-194816329.png"
+    ],
+    "features": []
   },
   {
     "id": "15",
@@ -222,71 +226,11 @@
     "reviews": 176,
     "inStock": true,
     "createdAt": "2025-01-01T00:00:00Z",
-    "updatedAt": "2025-01-01T00:00:00Z"
-  },
-  {
-    "name": "tum",
-    "description": "sdf",
-    "fullDescription": "sdf",
-    "price": 500,
-    "image": "blob:http://localhost:8080/77bac96d-5b9a-4336-ba1c-514da1500a30",
-    "category": "",
-    "rating": 5,
-    "features": [],
-    "inStock": true,
-    "id": "1763224015417",
-    "createdAt": "2025-11-15T16:26:55.417Z",
-    "updatedAt": "2025-11-15T16:26:55.418Z"
-  },
-  {
-    "name": "Nice",
-    "description": "hehe",
-    "fullDescription": "dfg",
-    "price": 500,
-    "image": "blob:http://localhost:8080/cc84e5da-3aa0-449a-9160-4226c8407ea9",
-    "category": "",
-    "rating": 5,
-    "features": [],
-    "inStock": true,
-    "id": "1763789146461",
-    "createdAt": "2025-11-22T05:25:46.462Z",
-    "updatedAt": "2025-11-22T05:25:46.462Z"
-  },
-  {
-    "name": "yaar",
-    "description": "ha",
-    "fullDescription": "nice to",
-    "price": 481,
-    "image": "blob:http://localhost:8080/7b73fd60-65c5-4e82-9054-feea5c1c5dc8",
-    "category": "",
-    "rating": 5,
-    "features": [],
-    "inStock": true,
-    "id": "1763789198105",
-    "createdAt": "2025-11-22T05:26:38.105Z",
-    "updatedAt": "2025-11-22T05:26:38.105Z"
-  },
-  {
-    "name": "Aadarsh Kumar",
-    "description": "sd",
-    "fullDescription": "sdf",
-    "price": 500,
-    "image": "blob:http://localhost:8080/cfa2fcd9-9b54-4690-8eaa-3e953949a8f4",
+    "updatedAt": "2025-11-24T03:16:41.865Z",
     "images": [
-      "blob:http://localhost:8080/cfa2fcd9-9b54-4690-8eaa-3e953949a8f4",
-      "blob:http://localhost:8080/c4afa415-6c1a-4ebe-aa7a-7bd5a2407f35",
-      "blob:http://localhost:8080/b9160a41-de05-4823-95c9-30ba02ade289",
-      "blob:http://localhost:8080/4c040ce4-b5ab-4cbe-812c-83bbb8264207",
-      "blob:http://localhost:8080/6d47a6fd-6c17-47ec-b43c-9ba98fb54271",
-      "blob:http://localhost:8080/c942926a-e754-4013-b0d6-a83d093b724d"
+      "http://localhost:5000/uploads/1763954199954-583153709.png"
     ],
-    "category": "",
-    "rating": 5,
-    "features": [],
-    "inStock": true,
-    "id": "1763790325292",
-    "createdAt": "2025-11-22T05:45:25.292Z",
-    "updatedAt": "2025-11-22T05:45:25.292Z"
+    "features": []
   },
   {
     "name": "Aadarsh Kumar",
@@ -306,5 +250,99 @@
     "id": "1763790491081",
     "createdAt": "2025-11-22T05:48:11.081Z",
     "updatedAt": "2025-11-22T05:48:11.081Z"
+  },
+  {
+    "name": "Nice",
+    "description": "szss",
+    "fullDescription": "szss",
+    "price": 500,
+    "images": [
+      "http://localhost:5000/uploads/1763948439414-883487353.png"
+    ],
+    "category": "Sports",
+    "rating": 5,
+    "features": [],
+    "inStock": true,
+    "id": "1763880358702",
+    "createdAt": "2025-11-23T06:45:58.702Z",
+    "updatedAt": "2025-11-24T01:40:59.000Z",
+    "discountPercentage": 0
+  },
+  {
+    "name": "Customer",
+    "description": "dshdf nice to meet ",
+    "fullDescription": "sdfsd",
+    "price": 500,
+    "originalPrice": 569,
+    "images": [
+      "http://localhost:5000/uploads/1763948469788-843031507.png"
+    ],
+    "category": "Air Purifiers",
+    "rating": 5,
+    "features": [
+      "asd"
+    ],
+    "inStock": true,
+    "id": "1763884132886",
+    "createdAt": "2025-11-23T07:48:52.886Z",
+    "updatedAt": "2025-11-24T01:41:11.054Z"
+  },
+  {
+    "name": "Pal",
+    "description": "dssd",
+    "fullDescription": "sdfsd",
+    "price": 500,
+    "originalPrice": 60,
+    "discountPercentage": 39,
+    "images": [
+      "http://localhost:5000/uploads/1763888674398-622922376-Screenshot (107).png",
+      "http://localhost:5000/uploads/1763888678324-9286544-Screenshot (109).png"
+    ],
+    "category": "Air Purifiers",
+    "rating": 5,
+    "features": [],
+    "inStock": true,
+    "id": "1763888722461",
+    "createdAt": "2025-11-23T09:05:22.461Z",
+    "updatedAt": "2025-11-23T09:05:22.461Z"
+  },
+  {
+    "name": "Tujhe",
+    "description": "nice",
+    "fullDescription": "wow",
+    "price": 500,
+    "originalPrice": 491,
+    "images": [
+      "http://localhost:5000/uploads/1763945541948-299779525-Screenshot (105).png",
+      "http://localhost:5000/uploads/1763945547320-142343573-Screenshot (108).png"
+    ],
+    "category": "Air Purifiers",
+    "rating": 5,
+    "features": [],
+    "inStock": true,
+    "id": "1763945550818",
+    "createdAt": "2025-11-24T00:52:30.818Z",
+    "updatedAt": "2025-11-24T00:52:30.818Z"
+  },
+  {
+    "name": "Test Product 1763953159195",
+    "description": "Automated test product created by scripts/create_product_test.js",
+    "fullDescription": "Full description for automated test product",
+    "price": 99.99,
+    "originalPrice": 129.99,
+    "discountPercentage": 23,
+    "images": [
+      "http://localhost:5000/uploads/1763948416380-861965060.png"
+    ],
+    "category": "Test",
+    "rating": 4.5,
+    "features": [
+      "auto-created",
+      "script-test"
+    ],
+    "inStock": true,
+    "id": "1763953159542",
+    "createdAt": "2025-11-24T02:59:19.542Z",
+    "updatedAt": "2025-11-24T02:59:19.544Z"
   }
 ]

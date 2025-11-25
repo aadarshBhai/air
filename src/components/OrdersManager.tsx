@@ -44,20 +44,26 @@ const OrdersManager = () => {
 
   const fetchOrders = async () => {
     try {
-      console.log('📋 Fetching orders from:', `${import.meta.env.VITE_API_URL || 'https://air-couq.onrender.com'}/api/orders`);
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://air-couq.onrender.com'}/api/orders`);
+      // Ensure the API URL ends with /api
+      const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/+$/, '') + '/api';
+      console.log('📋 Fetching orders from:', `${API_URL}/orders`);
+      
+      const response = await fetch(`${API_URL}/orders`);
       console.log('📋 Orders response status:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
         console.log('📋 Orders data received:', data);
-        setOrders(data.orders || []);
-        console.log('📋 Orders set:', data.orders?.length || 0);
+        setOrders(data.orders || data || []); // Handle both formats: { orders: [...] } or [...]
+        console.log('📋 Orders set:', (data.orders || data || []).length);
       } else {
-        toast.error('Failed to fetch orders');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Error response:', errorData);
+        toast.error(errorData.message || 'Failed to fetch orders');
       }
     } catch (error) {
       console.error('Error fetching orders:', error);
-      toast.error('Failed to fetch orders');
+      toast.error('Failed to connect to the server. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -65,7 +71,10 @@ const OrdersManager = () => {
 
   const updateOrderStatus = async (orderId: string, status: string) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://air-couq.onrender.com'}/api/orders/${orderId}/status`, {
+      // Ensure the API URL ends with /api
+      const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/+$/, '') + '/api';
+      
+      const response = await fetch(`${API_URL}/orders/${orderId}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

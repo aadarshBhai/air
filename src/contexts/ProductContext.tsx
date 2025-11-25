@@ -107,8 +107,15 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
   };
 
   const addProduct = (newProduct: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const product: Product = {
+    // Ensure we're not storing blob URLs
+    const sanitizedProduct = {
       ...newProduct,
+      // Filter out any blob URLs from images array
+      images: (newProduct.images || []).filter((img: string) => !img.startsWith('blob:'))
+    };
+
+    const product: Product = {
+      ...sanitizedProduct,
       id: Date.now().toString(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -120,9 +127,22 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
   };
 
   const updateProduct = (id: string, updates: Partial<Omit<Product, 'id' | 'createdAt' | 'updatedAt'>>) => {
+    // Ensure we're not storing blob URLs
+    const sanitizedUpdates = {
+      ...updates,
+      // Filter out any blob URLs from images array if it exists in updates
+      ...(updates.images && {
+        images: updates.images.filter((img: string) => !img.startsWith('blob:'))
+      })
+    };
+
     const updatedProducts = products.map(product =>
       product.id === id
-        ? { ...product, ...updates, updatedAt: new Date().toISOString() }
+        ? { 
+            ...product, 
+            ...sanitizedUpdates, 
+            updatedAt: new Date().toISOString() 
+          }
         : product
     );
     setProducts(updatedProducts);

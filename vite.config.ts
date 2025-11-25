@@ -23,12 +23,20 @@ export default defineConfig(({ mode }) => {
           target: 'http://localhost:5000',
           changeOrigin: true,
           secure: false,
+          ws: true, // Enable WebSocket proxy
+        },
+        // WebSocket proxy
+        '/ws': {
+          target: 'ws://localhost:5000',
+          ws: true,
+          changeOrigin: true,
         }
       } : undefined,
     },
     define: {
       // Make environment variables available at build time
       'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 'http://localhost:5000'),
+      'import.meta.env.VITE_WS_URL': JSON.stringify(process.env.VITE_WS_URL || 'ws://localhost:5000'),
     },
   };
 });

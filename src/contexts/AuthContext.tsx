@@ -18,17 +18,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Check authentication status on initial load
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem('adminToken');
+      // Prefer server-issued JWT stored under `token` or legacy `adminToken`
+      const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
       if (token) {
-        // Simple token validation (in production, validate with server)
         try {
-          const decoded = atob(token);
-          const [email] = decoded.split(':');
-          if (email) {
+          // Try to detect JWT and decode payload to extract email
+          const parts = token.split('.');
+          if (parts.length === 3) {
+            const payload = parts[1];
+            // base64url -> base64
+            const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+            const json = decodeURIComponent(atob(base64).split('').map(function(c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            const obj = JSON.parse(json);
+            if (obj && (obj.email || obj.id)) {
+              setIsAuthenticated(true);
+            }
+          } else {
+            // Fallback: if token exists and isn't a JWT, consider authenticated (dev mode)
             setIsAuthenticated(true);
           }
         } catch (error) {
           // Invalid token, remove it
+          localStorage.removeItem('token');
           localStorage.removeItem('adminToken');
         }
       }

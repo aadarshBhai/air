@@ -21,27 +21,28 @@ const AdminLogin = () => {
     setIsLoading(true);
 
     try {
-      // Use actual admin credentials from .env file
-      const ADMIN_EMAIL = 'thevolvoro@gmail.com';
-      const ADMIN_PASSWORD = 'Aa12Aa12';
+      // Call backend admin login to get a JWT token
+      const API = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/+$/, '');
+      const resp = await fetch(`${API}/api/admin/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
 
-      console.log('🔍 Debug - Entered email:', email);
-      console.log('🔍 Debug - Entered password:', password);
-      console.log('🔍 Debug - Expected email:', ADMIN_EMAIL);
-      console.log('🔍 Debug - Expected password:', ADMIN_PASSWORD);
-
-      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-        // Generate a simple token (in production, use JWT from server)
-        const token = btoa(`${email}:${Date.now()}`);
-        
-        // Store token in localStorage for persistence
-        localStorage.setItem('adminToken', token);
-        
-        login(token);
-        navigate('/admin');
-      } else {
-        throw new Error('Invalid credentials');
+      const data = await resp.json();
+      if (!resp.ok) {
+        throw new Error(data.message || 'Login failed');
       }
+
+      const token = data.token;
+      if (!token) throw new Error('No token returned from server');
+
+      // Store token in localStorage for API use and AuthContext checks
+      localStorage.setItem('token', token);
+      localStorage.setItem('adminToken', token);
+
+      login(token);
+      navigate('/admin');
     } catch (err) {
       console.error('Login error:', err);
       setError('Invalid email or password');

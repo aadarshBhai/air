@@ -40,8 +40,10 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <TooltipProvider>
-          <ProductProvider>
-            <AuthProvider>
+
+          {/* ✅ FIX: AuthProvider moved ABOVE ProductProvider */}
+          <AuthProvider>
+            <ProductProvider>
               <CartProvider>
                 <Toaster />
                 <Sonner />
@@ -49,41 +51,48 @@ const App = () => {
                 <div className="flex flex-col min-h-screen">
                   <Navbar />
                   <main className="flex-1">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/shop" element={<Shop />} />
-                    <Route path="/product/:id" element={<ProductDetail />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<Contact />} />
-                    
-                    {/* Policy Pages */}
-                    <Route path="/return-policy" element={<ReturnPolicy />} />
-                    <Route path="/shipping-policy" element={<ShippingPolicy />} />
-                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                    <Route path="/terms-of-service" element={<TermsOfService />} />
-                    
-                    {/* Admin Routes */}
-                    <Route path="/admin/login" element={
-                      <PublicRoute>
-                        <AdminLogin />
-                      </PublicRoute>
-                    } />
-                    <Route path="/admin" element={
-                      <ProtectedRoute>
-                        <Admin />
-                      </ProtectedRoute>
-                    } />
-                    
-                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </main>
-                <Footer />
-                <WhatsAppButton />
-              </div>
-            </CartProvider>
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/shop" element={<Shop />} />
+                      <Route path="/product/:id" element={<ProductDetail />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/contact" element={<Contact />} />
+
+                      {/* Policy Pages */}
+                      <Route path="/return-policy" element={<ReturnPolicy />} />
+                      <Route path="/shipping-policy" element={<ShippingPolicy />} />
+                      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                      <Route path="/terms-of-service" element={<TermsOfService />} />
+
+                      {/* Admin Routes */}
+                      <Route
+                        path="/admin/login"
+                        element={
+                          <PublicRoute>
+                            <AdminLogin />
+                          </PublicRoute>
+                        }
+                      />
+                      <Route
+                        path="/admin"
+                        element={
+                          <ProtectedRoute>
+                            <Admin />
+                          </ProtectedRoute>
+                        }
+                      />
+
+                      {/* Catch-All */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                  <WhatsAppButton />
+                </div>
+              </CartProvider>
+            </ProductProvider>
           </AuthProvider>
-        </ProductProvider>
+
         </TooltipProvider>
       </BrowserRouter>
     </QueryClientProvider>

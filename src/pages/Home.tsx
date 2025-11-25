@@ -7,7 +7,7 @@ import ReviewCard from "@/components/ReviewCard";
 import { useProducts } from "@/contexts/ProductContext";
 
 const Home = () => {
-  const { products } = useProducts();
+  const { products, loading } = useProducts();
   const featuredProducts = products.slice(0, 6);
 
   return (
@@ -121,6 +121,7 @@ const Home = () => {
             title="Featured Products"
             subtitle="Discover our premium range of pollution protection solutions"
             itemsPerPage={4}
+            isLoading={loading}
           />
           <div className="text-center mt-8">
             <Button asChild variant="outline" size="lg">

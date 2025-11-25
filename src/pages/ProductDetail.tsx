@@ -1,56 +1,119 @@
-import { useState, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Star, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
-import { useProducts } from "@/contexts/ProductContext";
+import { Star, CheckCircle, Loader2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useProducts } from "@/contexts/ProductContext";
+import { Product } from "@/data/products";
+import ReviewCard from "@/components/ReviewCard";
 import BuyNowModal from "@/components/BuyNowModal";
 import { toast } from "sonner";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
-// Custom arrow components for the slider
-const NextArrow = (props: any) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={`${className} !right-2 z-10`}
-      style={{ ...style, display: 'block' }}
-      onClick={onClick}
-    >
-      <ChevronRight className="w-8 h-8 text-white drop-shadow-lg" />
-    </div>
-  );
-};
-
-const PrevArrow = (props: any) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={`${className} !left-2 z-10`}
-      style={{ ...style, display: 'block' }}
-      onClick={onClick}
-    >
-      <ChevronLeft className="w-8 h-8 text-white drop-shadow-lg" />
-    </div>
-  );
-};
+// Extend the Product type to include _id
+interface ProductWithId extends Product {
+  _id?: string;
+}
 
 const ProductDetail = () => {
-  const sliderRef = useRef<Slider>(null);
   const { id } = useParams();
-  const { products } = useProducts();
+  const { products, loading: productsLoading, error: productsError } = useProducts();
   const { addToCart } = useCart();
-  const product = products.find(p => p.id === id);
-
+  const [product, setProduct] = useState<ProductWithId | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [showBuyModal, setShowBuyModal] = useState(false);
+  const navigate = useNavigate();
 
-  if (!product) {
+  // ✅ Image base and processing
+  const apiBase = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
+  const placeholderImage = `${import.meta.env.BASE_URL}placeholder-product.png`;
+
+  const processImageUrl = (url?: string): string => {
+    if (!url) return placeholderImage;
+    const trimmedUrl = url.trim();
+    if (!trimmedUrl || trimmedUrl.toLowerCase() === "null") return placeholderImage;
+    if (trimmedUrl.startsWith("http://") || trimmedUrl.startsWith("https://")) return trimmedUrl;
+    if (trimmedUrl.startsWith("/uploads/")) return `${apiBase}${trimmedUrl}`;
+    if (trimmedUrl.startsWith("uploads/")) return `${apiBase}/${trimmedUrl}`;
+    return placeholderImage;
+  };
+
+  useEffect(() => {
+    if (!id) {
+      console.error("No product ID provided");
+      toast.error("Invalid product");
+      navigate("/shop");
+      return;
+    }
+
+    if (productsLoading) return;
+
+    if (productsError) {
+      console.error("Error loading products:", productsError);
+      toast.error("Failed to load products");
+      return;
+    }
+
+    if (products.length > 0) {
+      let foundProduct = products.find((p) => {
+        const prod = p as ProductWithId;
+        const possibleIds = [prod.id?.toString(), prod._id?.toString(), prod.id, prod._id].filter(Boolean);
+        return possibleIds.includes(id?.toString());
+      });
+
+      if (!foundProduct) {
+        const idNum = Number(id);
+        if (!isNaN(idNum)) {
+          foundProduct =
+            products.find((p) => Number((p as any).id) === idNum || Number((p as any)._id) === idNum) ||
+            products[idNum - 1];
+        }
+      }
+
+      if (foundProduct) {
+        const productWithDefaults: ProductWithId = {
+          id: foundProduct.id || (foundProduct as any)._id,
+          name: foundProduct.name || "Untitled Product",
+          description: foundProduct.description || "",
+          fullDescription: foundProduct.fullDescription || foundProduct.description || "",
+          price: foundProduct.price || 0,
+          originalPrice: foundProduct.originalPrice,
+          discountPercentage: foundProduct.discountPercentage,
+          images: foundProduct.images || [],
+          category: foundProduct.category || "uncategorized",
+          rating: foundProduct.rating || 0,
+          features: foundProduct.features || [],
+          inStock: foundProduct.inStock !== undefined ? foundProduct.inStock : true,
+          createdAt: foundProduct.createdAt || new Date().toISOString(),
+          updatedAt: foundProduct.updatedAt || new Date().toISOString(),
+          _id: (foundProduct as any)._id,
+        };
+        setProduct(productWithDefaults);
+        setIsLoading(false);
+      } else {
+        console.error("Product not found:", id);
+        toast.error("Product not found");
+        navigate("/shop");
+      }
+    } else {
+      console.error("No products available");
+      toast.error("No products available");
+      navigate("/shop");
+    }
+  }, [products, productsLoading, productsError, id, navigate]);
+
+  if (productsLoading || isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (productsError || !product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Product not found</h1>
+          <h1 className="text-2xl font-bold mb-4">{productsError || "Product not found"}</h1>
           <Button asChild>
             <Link to="/shop">Back to Shop</Link>
           </Button>
@@ -62,7 +125,7 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     addToCart(product);
     toast.success("Added to cart!", {
-      description: `${product.name} has been added to your cart.`
+      description: `${product.name} has been added to your cart.`,
     });
   };
 
@@ -70,63 +133,42 @@ const ProductDetail = () => {
     setShowBuyModal(true);
   };
 
-  const discount = product.originalPrice 
+  const discount = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
+
+  const mainImage = processImageUrl(product.images?.[0]);
 
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-12">
         {/* Breadcrumb */}
         <div className="text-sm text-muted-foreground mb-8">
-          <Link to="/" className="hover:text-primary">Home</Link>
-          {" / "}
-          <Link to="/shop" className="hover:text-primary">Shop</Link>
-          {" / "}
+          <Link to="/" className="hover:text-primary">
+            Home
+          </Link>{" "}
+          / <Link to="/shop" className="hover:text-primary">Shop</Link> /{" "}
           <span className="text-foreground">{product.name}</span>
         </div>
 
         {/* Product Details */}
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
-          {/* Product Image Slider */}
-          <div className="relative">
-            <Slider
-              dots={true}
-              infinite={true}
-              speed={300}
-              slidesToShow={1}
-              slidesToScroll={1}
-              className="rounded-2xl overflow-hidden"
-              prevArrow={<PrevArrow />}
-              nextArrow={<NextArrow />}
-              dotsClass="slick-dots !bottom-4"
-            >
-              {product.images.map((image, index) => (
-                <div key={index} className="aspect-square bg-muted/20 rounded-2xl overflow-hidden">
-                  <img
-                    src={image}
-                    alt={`${product.name} - ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </Slider>
-            
-            {/* Thumbnail Navigation */}
-            <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
-              {product.images.map((image, index) => (
-                <button
-                  key={index}
-                  className="flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 border-transparent hover:border-primary transition-colors"
-                  onClick={() => sliderRef.current?.slickGoTo(index)}
-                >
-                  <img
-                    src={image}
-                    alt={`${product.name} - Thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
+          {/* Product Image */}
+          <div className="bg-muted/20 rounded-2xl overflow-hidden">
+            <img
+              src={mainImage}
+              alt={product.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.src = placeholderImage;
+                e.currentTarget.onerror = null;
+              }}
+            />
+            {/* Debug Info */}
+            <div className="mt-2 p-2 bg-gray-100 text-xs text-gray-600">
+              <p>Processed Image URL: {mainImage}</p>
+              <p>Original Image URL: {product.images?.[0] || "No image"}</p>
+              <p>Images array length: {product.images?.length || 0}</p>
             </div>
           </div>
 
@@ -136,15 +178,13 @@ const ProductDetail = () => {
               <div className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm rounded-full mb-4">
                 {product.category}
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-4">{product.name}</h1>
+              <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-5 w-5 ${
-                        i < product.rating ? "fill-accent text-accent" : "text-muted-foreground"
-                      }`}
+                      className={`h-5 w-5 ${i < product.rating ? "fill-accent text-accent" : "text-muted-foreground"}`}
                     />
                   ))}
                 </div>
@@ -152,16 +192,12 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <div className="flex items-baseline gap-2 sm:gap-4">
-              <span className="text-3xl sm:text-4xl font-black text-primary">₹{product.price}</span>
+            <div className="flex items-baseline gap-4">
+              <span className="text-4xl font-bold text-primary">₹{product.price}</span>
               {product.originalPrice && (
                 <>
-                  <span className="text-lg sm:text-xl text-muted-foreground line-through">
-                    ₹{product.originalPrice}
-                  </span>
-                  <span className="text-sm sm:text-lg font-black text-red-600 bg-red-50 px-2 sm:px-3 py-1 rounded border border-red-200">
-                    {discount}% OFF
-                  </span>
+                  <span className="text-xl text-muted-foreground line-through">₹{product.originalPrice}</span>
+                  <span className="text-lg font-semibold text-accent bg-accent/10 px-3 py-1 rounded">{discount}% OFF</span>
                 </>
               )}
             </div>
@@ -169,34 +205,22 @@ const ProductDetail = () => {
             <p className="text-muted-foreground text-lg">{product.fullDescription}</p>
 
             <div className="space-y-3">
-              <h3 className="font-bold text-lg">Key Features:</h3>
+              <h3 className="font-semibold text-lg">Key Features:</h3>
               <ul className="space-y-2">
-                {product.features ? product.features.map((feature, index) => (
+                {product.features.map((feature, index) => (
                   <li key={index} className="flex items-start gap-2">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <span className="text-muted-foreground">{feature}</span>
                   </li>
-                )) : (
-                  <li className="text-muted-foreground">No features available</li>
-                )}
+                ))}
               </ul>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-6">
-              <Button 
-                onClick={handleAddToCart} 
-                variant="default" 
-                size="lg" 
-                className="w-full sm:w-auto flex-1 h-16 text-xl font-black bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-xl"
-              >
+            <div className="flex gap-4 pt-4">
+              <Button onClick={handleAddToCart} variant="outline" size="lg" className="flex-1">
                 Add to Cart
               </Button>
-              <Button 
-                onClick={handleBuyNow} 
-                variant="cta"
-                size="lg" 
-                className="w-full sm:w-auto flex-1 h-16 text-xl font-black bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-2xl hover:shadow-[0_15px_40px_rgba(37,99,235,0.6)] transform hover:scale-105 transition-all duration-200 rounded-full"
-              >
+              <Button onClick={handleBuyNow} variant="cta" size="lg" className="flex-1">
                 Buy Now
               </Button>
             </div>
@@ -209,13 +233,18 @@ const ProductDetail = () => {
           </div>
         </div>
 
+        {/* Reviews Section */}
+        <div className="border-t border-border pt-12">
+          <h2 className="text-3xl font-bold mb-8">Customer Reviews</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <ReviewCard name="Amit Kumar" rating={5} comment="Excellent product! Works exactly as described. Very happy with my purchase." />
+            <ReviewCard name="Sneha Reddy" rating={5} comment="Great quality and fast delivery. Would definitely recommend AirNex to everyone." />
+            <ReviewCard name="Vikram Singh" rating={4} comment="Good product overall. Comfortable to wear and effective protection." />
+          </div>
+        </div>
       </div>
 
-      <BuyNowModal
-        product={product}
-        isOpen={showBuyModal}
-        onClose={() => setShowBuyModal(false)}
-      />
+      <BuyNowModal product={product} isOpen={showBuyModal} onClose={() => setShowBuyModal(false)} />
     </div>
   );
 };

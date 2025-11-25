@@ -1,83 +1,191 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useCart } from "@/contexts/CartContext";
-import { Product } from "@/data/products";
-import { toast } from "sonner";
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { useCart } from '@/contexts/CartContext';
+import { toast } from 'sonner';
+import BuyNowModal from '@/components/BuyNowModal';
+import { Product } from '@/data/products';
 
-interface ProductCardProps {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  category: string;
-  rating: number;
-  features: string[];
-  fullDescription: string;
+interface ProductCardProps extends Partial<Product> {
+  className?: string;
+  image?: string;
 }
 
-const ProductCard = (props: ProductCardProps) => {
+const ProductCard: React.FC<ProductCardProps> = ({
+  id,
+  name = 'Unnamed Product',
+  description = 'No description available',
+  price = 0,
+  originalPrice = 0,
+  images: propImages = [],
+  image,
+  features = [],
+  rating = 0,
+  className = '',
+  inStock = true
+}) => {
   const { addToCart } = useCart();
-  const navigate = useNavigate();
-  const discount = props.originalPrice ? Math.round(((props.originalPrice - props.price) / props.originalPrice) * 100) : 0;
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isBuyOpen, setIsBuyOpen] = useState(false);
 
-  const handleAddToCart = () => {
-    addToCart(props as Product);
-    toast.success("Added to cart!", {
-      description: `${props.name} has been added to your cart.`
-    });
+  const apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+  const placeholderImage = `${import.meta.env.BASE_URL}placeholder-product.png`;
+
+  const processImageUrl = (url?: string) => {
+    if (!url) return placeholderImage;
+
+    const trimmed = url.trim();
+
+    if (trimmed.startsWith("http")) return trimmed;
+    if (trimmed.startsWith("/uploads")) return `${apiBase}${trimmed}`;
+    if (trimmed.startsWith("uploads")) return `${apiBase}/${trimmed}`;
+
+    return `${apiBase}/uploads/${trimmed}`;
   };
 
-  const handleBuyNow = () => {
-    navigate(`/product/${props.id}`);
+  const processedImages = useMemo(() => {
+    const unique = new Set<string>();
+
+    propImages.forEach((i) => i && unique.add(processImageUrl(i)));
+    if (image) unique.add(processImageUrl(image));
+
+    if (unique.size === 0) unique.add(placeholderImage);
+
+    return [...unique];
+  }, [propImages, image]);
+
+  const currentImage = processedImages[currentImageIndex];
+
+  const handleImageError = () => {
+    if (currentImageIndex < processedImages.length - 1) {
+      setCurrentImageIndex((prev) => prev + 1);
+    }
   };
+
+  const handleAddToCart = (e: any) => {
+    e.preventDefault();
+    addToCart({
+      id: id || `${Date.now()}`,
+      name,
+      price,
+      images: processedImages,
+      quantity: 1,
+      inStock,
+      description,
+      originalPrice: originalPrice || price,
+      features,
+      rating,
+      category: ''
+    } as any);
+    toast.success('Added to cart');
+  };
+
+  const hasDiscount = originalPrice > price;
+  const discount = hasDiscount ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
 
   return (
-    <Card className="group overflow-hidden border-border bg-card shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-      <Link to={`/product/${props.id}`}>
-        <div className="overflow-hidden bg-muted/20 aspect-square sm:aspect-[4/3] lg:aspect-square">
+    <Card className={`group overflow-hidden border bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow h-full flex flex-col ${className}`}>
+      <Link to={`/product/${id}`} className="block h-full flex flex-col">
+
+        {/* FIXED IMAGE CONTAINER */}
+        <div className="relative bg-gray-50 w-full aspect-square overflow-hidden">
+
           <img
-            src={props.image}
-            alt={props.name}
-            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+            src={currentImage}
+            alt={name}
+            onError={handleImageError}
+            className="w-full h-full object-cover"
           />
+
+          {hasDiscount && (
+            <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+              {discount}% OFF
+            </div>
+          )}
+
+          {!inStock && (
+            <div className="absolute top-2 right-2 bg-gray-700 text-white text-xs font-bold px-2 py-1 rounded">
+              Out of Stock
+            </div>
+          )}
         </div>
-      </Link>
-      <CardContent className="p-5">
-        <h3 className="font-black text-xl mb-3 group-hover:text-primary transition-colors">{props.name}</h3>
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-black text-foreground">₹{props.price}</span>
-            {props.originalPrice && props.originalPrice > props.price && (
-              <>
-                <span className="text-lg text-muted-foreground line-through font-bold">₹{props.originalPrice}</span>
-                <span className="text-sm font-black text-red-600 bg-red-50 px-2 py-1 rounded border border-red-200">
-                  {discount}% OFF
-                </span>
-              </>
+
+        {/* THUMBNAILS */}
+        {processedImages.length > 1 && (
+          <div className="px-4 pt-3 pb-1 flex gap-2 overflow-x-auto">
+            {processedImages.map((img, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentImageIndex(idx);
+                }}
+                className={`h-12 w-12 rounded-md overflow-hidden border ${
+                  idx === currentImageIndex ? "border-primary ring-2 ring-primary/30" : "border-gray-200"
+                }`}
+              >
+                <img src={img} className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+        )}
+
+        <CardContent className="p-4 flex-1 flex flex-col">
+          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 h-12">
+            {name}
+          </h3>
+
+          {/* PRICE */}
+          <div className="flex items-center mt-auto">
+            <span className="text-lg font-bold text-gray-900">${price.toFixed(2)}</span>
+            {hasDiscount && (
+              <span className="ml-2 text-sm line-through text-gray-500">
+                ${originalPrice.toFixed(2)}
+              </span>
             )}
           </div>
-        </div>
-      </CardContent>
-      <CardFooter className="p-5 pt-0 flex gap-3">
-        <Button
-          variant="outline"
-          className="flex-1 h-14 text-lg font-bold border-2 hover:bg-accent hover:text-accent-foreground transition-all duration-200"
-          onClick={handleAddToCart}
-        >
-          Add to Cart
-        </Button>
-        <Button
-          variant="cta"
-          className="flex-1 h-14 text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
-          onClick={handleBuyNow}
-        >
-          Buy Now
-        </Button>
-      </CardFooter>
+
+          {/* BUTTONS */}
+          <div className="mt-4 flex space-x-2">
+            <Button variant="outline" size="sm" className="flex-1" onClick={handleAddToCart}>
+              Add to Cart
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              className="flex-1"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsBuyOpen(true);
+              }}
+            >
+              Buy Now
+            </Button>
+          </div>
+        </CardContent>
+      </Link>
+
+      <BuyNowModal
+        product={{
+          id: id || '',
+          name,
+          description,
+          price,
+          originalPrice: originalPrice || price,
+          images: processedImages,
+          features,
+          rating,
+          inStock,
+          category: '',
+          fullDescription: description,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }}
+        isOpen={isBuyOpen}
+        onClose={() => setIsBuyOpen(false)}
+      />
     </Card>
   );
 };
